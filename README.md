@@ -3,7 +3,7 @@ Human Final
 
 ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 ***
-###MES 스마트폰 제조 공정 관리
+### MES 스마트폰 제조 공정 관리
 
 ##### Team1-Final
 + 팀원
