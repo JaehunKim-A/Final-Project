@@ -1,7 +1,6 @@
 package com.team1.team1project.customer.controller;
 
 import com.team1.team1project.customer.domain.Customer;
-import com.team1.team1project.customer.repository.CustomerRepository;
 import com.team1.team1project.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -9,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.persistence.EntityManager;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.SingularAttribute;
-import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -22,50 +21,64 @@ import java.util.List;
 public class CustomerController {
 
 	@Autowired
-	private CustomerService customerService;
+	private final CustomerService customerService;
 
-	@Autowired
-	private CustomerRepository customerRepository;
-
-	@Autowired
-	private EntityManager entityManager;
-
+	// 고객 목록을 보여주는 메서드
 	@GetMapping("/table/customer")
 	public String showCustomerList(Model model) {
 		// 컬럼명을 직접 순서대로 설정
-		List<String> columnNames = new ArrayList<>();
-		columnNames.add("customerId");
-		columnNames.add("customerName");
-		columnNames.add("address");
-		columnNames.add("contactInfo");
-		columnNames.add("reg_date");
-		columnNames.add("mod_date");
+		List<String> columnNames = List.of(
+				"customerId", "customerName", "address", "contactInfo", "reg_date", "mod_date"
+		);
 
 		// 고객 목록 가져오기
-		model.addAttribute("customers", customerService.getAllCustomers());
+		List<Customer> customers = customerService.getAllCustomers();
 
-		// 컬럼명 정보를 모델에 전달
+		// 고객 목록과 컬럼명 정보를 모델에 전달
+		model.addAttribute("customers", customers);
 		model.addAttribute("columns", columnNames);
 
 		return "dist/customer/table"; // 고객 목록을 표시할 HTML 템플릿
 	}
 
 
-	// JPA를 통해 엔티티의 컬럼명 가져오기
-	private List<String> getColumnNames() {
-		List<String> columnNames = new ArrayList<>();
-		EntityType<Customer> entityType = entityManager.getMetamodel().entity(Customer.class);
 
-		// 엔티티의 속성 이름을 가져와서 컬럼명으로 사용
-		for (SingularAttribute<? super Customer, ?> attribute : entityType.getSingularAttributes()) {
-			columnNames.add(attribute.getName());
-		}
 
-		return columnNames;
+	// 고객 등록 폼을 표시하는 메서드
+	@GetMapping("/table/customer/register")
+	public String showRegistrationForm(Model model) {
+		model.addAttribute("customer", new Customer()); // 새 고객 객체를 모델에 추가
+		return "dist/customer/register"; // 고객 등록 페이지로 이동
 	}
 
-	public List<Customer> getAllCustomers() {
-		return customerRepository.findAll(); // findAll() 메서드가 데이터를 제대로 반환하는지 확인
+	// 고객 등록 처리 메서드
+	@PostMapping("/table/customer/register")
+	public String registerCustomer(@ModelAttribute Customer customer) {
+		customerService.createCustomer(customer); // 고객 등록
+		return "redirect:/table/customer"; // 고객 목록 페이지로 리다이렉트
+	}
+
+	// 고객 수정 폼을 표시하는 메서드
+	@GetMapping("/table/customer/edit/{customerId}")
+	public String showEditForm(@PathVariable("customerId") int customerId, Model model) {
+		Customer customer = customerService.getCustomerById(customerId)
+				.orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" + customerId));
+		model.addAttribute("customer", customer); // 수정할 고객 정보 모델에 추가
+		return "dist/customer/edit"; // 고객 수정 페이지로 이동
+	}
+
+	// 고객 수정 처리 메서드
+	@PostMapping("/table/customer/edit/{customerId}")
+	public String updateCustomer(@PathVariable("customerId") int customerId, @ModelAttribute Customer customer) {
+		customerService.updateCustomer(customerId, customer); // 고객 정보 수정
+		return "redirect:/table/customer"; // 고객 목록 페이지로 리다이렉트
+	}
+
+	// 고객 삭제 처리 메서드
+	@GetMapping("/table/customer/delete/{customerId}")
+	public String deleteCustomer(@PathVariable("customerId") int customerId) {
+		customerService.deleteCustomer(customerId); // 고객 삭제
+		return "redirect:/table/customer"; // 고객 목록 페이지로 리다이렉트
 	}
 
 }
