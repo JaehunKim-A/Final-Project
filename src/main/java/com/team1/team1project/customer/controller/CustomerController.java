@@ -5,12 +5,13 @@ import com.team1.team1project.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -25,20 +26,24 @@ public class CustomerController {
 
 	// 고객 목록을 보여주는 메서드
 	@GetMapping("/table/customer")
-	public String showCustomerList(Model model) {
-		// 컬럼명을 직접 순서대로 설정
+	public String showCustomerList(Model model,
+	                               @RequestParam(value = "page", defaultValue = "1") int page,
+	                               @PageableDefault(size = 10) Pageable pageableRaw) {
+
+		int pageIndex = page - 1;
+		Pageable pageable = PageRequest.of(pageIndex, pageableRaw.getPageSize(), pageableRaw.getSort());
+		Page<Customer> customerPage = customerService.getCustomerPage(pageable);
+
+		model.addAttribute("page", customerPage);
+		model.addAttribute("pageNumber", page); // 현재 페이지 (1부터 시작)
+		model.addAttribute("customers", customerPage.getContent());
+
 		List<String> columnNames = List.of(
 				"customerId", "customerName", "address", "contactInfo", "reg_date", "mod_date"
 		);
-
-		// 고객 목록 가져오기
-		List<Customer> customers = customerService.getAllCustomers();
-
-		// 고객 목록과 컬럼명 정보를 모델에 전달
-		model.addAttribute("customers", customers);
 		model.addAttribute("columns", columnNames);
 
-		return "dist/customer/table"; // 고객 목록을 표시할 HTML 템플릿
+		return "dist/customer/table";
 	}
 
 
