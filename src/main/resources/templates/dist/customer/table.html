@@ -753,24 +753,31 @@
                                     <!-- 페이지네이션 -->
                                     <nav>
                                         <ul class="pagination justify-content-end mt-3">
+
+                                            <!-- 이전 버튼 -->
                                             <li class="page-item" th:if="${pageNumber > 10}">
-                                                <a class="page-link"
-                                                   th:href="@{/table/customer(page=${((pageNumber - 1) / 10) * 10})}">이전</a>
+                                                <a class="page-link" th:href="@{/table/customer(page=${((pageNumber - 1) / 10) * 10})}">이전</a>
                                             </li>
 
+                                            <!-- 페이지 번호 -->
                                             <li class="page-item"
-                                                th:each="i : ${#numbers.sequence(((pageNumber - 1) / 10) * 10 + 1, T(java.lang.Math).min(((pageNumber - 1) / 10 + 1) * 10, page.totalPages))}"
-                                                th:classappend="${i == pageNumber} ? 'active'">
-                                                <a class="page-link" th:href="@{/table/customer(page=${i})}" th:text="${i}">1</a>
+                                                th:each="i : ${#numbers.sequence(((pageNumber - 1) / 10) * 10 + 1,
+                                                T(java.lang.Math).min(((pageNumber - 1) / 10 + 1) * 10, page.totalPages))}"
+                                                th:classappend="${i.equals(pageNumber)} ? ' active'">
+                                                <a class="page-link" th:href="@{/table/customer(page=${i})}" th:text="${i}"></a>
                                             </li>
 
+
+
+                                            <!-- 다음 버튼 -->
                                             <li class="page-item"
                                                 th:if="${((pageNumber - 1) / 10 + 1) * 10 < page.totalPages}">
-                                                <a class="page-link"
-                                                   th:href="@{/table/customer(page=${((pageNumber - 1) / 10 + 1) * 10 + 1})}">다음</a>
+                                                <a class="page-link" th:href="@{/table/customer(page=${((pageNumber - 1) / 10 + 1) * 10 + 1})}">다음</a>
                                             </li>
                                         </ul>
                                     </nav>
+
+
 
 
                                 </div>
