@@ -753,8 +753,8 @@
                                                         th:data-contact="${supplier.contactInfo}"
                                                         th:data-email="${supplier.email}"
                                                         th:data-phone="${supplier.phone_number}"
-                                                        th:data-reg="${supplier.formattedRegDate}"
-                                                        th:data-mod="${supplier.formattedModDate}">Edit</button>
+                                                        th:data-reg="${supplier.reg_date}"
+                                                        th:data-mod="${supplier.mod_date}">Edit</button>
                                                 <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" th:data-id="${supplier.supplierId}">Delete</button>
                                             </td>
                                         </tr>
@@ -764,8 +764,8 @@
                                     <nav>
                                         <ul class="pagination justify-content-end mt-3">
                                             <!-- 이전 버튼 -->
-                                            <li class="page-item" th:if="${pageNumber > 1}">
-                                                <a class="page-link" th:href="@{/table/raw_material_supplier(page=${pageNumber - 1})}">이전</a>
+                                            <li class="page-item" th:if="${pageNumber > 10}">
+                                                <a class="page-link" th:href="@{/table/raw_material_supplier(page=${((pageNumber - 1) / 10) * 10})}">이전</a>
                                             </li>
 
                                             <!-- 페이지 번호 -->
@@ -871,6 +871,16 @@
                                     <label for="editPhoneNumber" class="form-label">Phone Number</label>
                                     <input type="text" class="form-control" id="editPhoneNumber" name="phone_number" required>
                                 </div>
+
+                                <div class="mb-3">
+                                    <label for="editRegDate" class="form-label">Registration Date</label>
+                                    <input type="text" class="form-control" id="editRegDate" name="regDate" readonly>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="editModDate" class="form-label">Modification Date</label>
+                                    <input type="text" class="form-control" id="editModDate" name="modDate" readonly>
+                                </div>
                             </div>
 
                             <div class="modal-footer">
@@ -929,10 +939,10 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-         // Edit modal data insertion
+         // 수정 모달에 데이터 삽입
          const editModal = document.getElementById('editModal');
          editModal.addEventListener('show.bs.modal', function(event) {
-             const button = event.relatedTarget; // Button that triggered the modal
+             const button = event.relatedTarget;
              const supplierId = button.getAttribute('data-id');
              const supplierName = button.getAttribute('data-name');
              const address = button.getAttribute('data-address');
@@ -942,19 +952,21 @@
              const regDate = button.getAttribute('data-reg');
              const modDate = button.getAttribute('data-mod');
 
-             // Set values in the modal
+             // 데이터 삽입
              document.getElementById('editSupplierId').value = supplierId;
              document.getElementById('editSupplierName').value = supplierName;
              document.getElementById('editAddress').value = address;
              document.getElementById('editContactInfo').value = contactInfo;
              document.getElementById('editEmail').value = email;
              document.getElementById('editPhoneNumber').value = phone;
+             document.getElementById('editRegDate').value = regDate;
+             document.getElementById('editModDate').value = modDate;
 
              const form = document.getElementById('editSupplierForm');
-             form.action = '/table/raw_material_supplier/edit/' + supplierId;  // Dynamically set action URL
+             form.action = '/table/raw_material_supplier/edit/' + supplierId;
          });
 
-         // Delete modal data insertion
+         // 삭제 모달에 고객 ID 삽입
          const deleteModal = document.getElementById('deleteModal');
          deleteModal.addEventListener('show.bs.modal', function(event) {
              const button = event.relatedTarget;

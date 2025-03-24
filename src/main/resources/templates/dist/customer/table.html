@@ -743,7 +743,13 @@
                                             <td th:text="${customer.formattedModDate}"></td>
                                             <!-- 수정 및 삭제 버튼 추가 -->
                                             <td>
-                                                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" th:data-id="${customer.customerId}" th:data-name="${customer.customerName}" th:data-address="${customer.address}" th:data-contact="${customer.contactInfo}" th:data-reg="${customer.reg_date}" th:data-mod="${customer.mod_date}">Edit</button>
+                                                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal"
+                                                        th:data-id="${customer.customerId}"
+                                                        th:data-name="${customer.customerName}"
+                                                        th:data-address="${customer.address}"
+                                                        th:data-contact="${customer.contactInfo}"
+                                                        th:data-reg="${customer.reg_date}"
+                                                        th:data-mod="${customer.mod_date}">Edit</button>
                                                 <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" th:data-id="${customer.customerId}">Delete</button>
                                             </td>
                                         </tr>

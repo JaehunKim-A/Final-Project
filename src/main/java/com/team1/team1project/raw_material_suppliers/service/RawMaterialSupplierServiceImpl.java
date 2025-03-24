@@ -15,6 +15,7 @@ public class RawMaterialSupplierServiceImpl implements RawMaterialSupplierServic
 
 	@Autowired
 	private RawMaterialSupplierRepository rawMaterialSupplierRepository;
+
 	@Override
 	public List<RawMaterialSupplier> getAllRawMaterialSuppliers() {
 		return rawMaterialSupplierRepository.findAll();

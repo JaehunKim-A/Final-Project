@@ -29,21 +29,12 @@ public class RawMaterialSupplierController {
 	                                          @RequestParam(value = "page", defaultValue = "1") int page,
 	                                          @PageableDefault(size = 10) Pageable pageableRaw) {
 
-		// page가 0 이하로 넘어가지 않도록 보장 (최소 1부터 시작)
-		int pageIndex = Math.max(page - 1, 0); // 최소 0 이상이 되도록 처리
+		int pageIndex = page - 1; // 최소 0 이상이 되도록 처리
 		Pageable pageable = PageRequest.of(pageIndex, pageableRaw.getPageSize(), pageableRaw.getSort());
-
-		// 페이지네이션을 위한 데이터 조회
 		Page<RawMaterialSupplier> rawMaterialSupplierPage = rawMaterialSupplierService.getRawMaterialSupplierPage(pageable);
 
-		// 페이지 번호가 1보다 작은 경우 방어 코드 추가
-		if (rawMaterialSupplierPage.getTotalPages() == 0) {
-			model.addAttribute("pageNumber", 1); // 데이터가 없으면 페이지 번호를 1로 설정
-		} else {
-			model.addAttribute("pageNumber", page); // 현재 페이지 (1부터 시작)
-		}
-
 		model.addAttribute("page", rawMaterialSupplierPage);
+		model.addAttribute("pageNumber", page); // 현재 페이지 (1부터 시작)
 		model.addAttribute("suppliers", rawMaterialSupplierPage.getContent());
 
 		List<String> columnNames = List.of(
