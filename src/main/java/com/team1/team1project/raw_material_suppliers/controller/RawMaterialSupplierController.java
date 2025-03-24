@@ -1,5 +1,6 @@
 package com.team1.team1project.raw_material_suppliers.controller;
 
+import com.team1.team1project.controller.PageController;
 import com.team1.team1project.raw_material_suppliers.domain.RawMaterialSupplier;
 import com.team1.team1project.raw_material_suppliers.service.RawMaterialSupplierService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.List;
 @Controller
 @Log4j2
 @RequiredArgsConstructor
-public class RawMaterialSupplierController {
+public class RawMaterialSupplierController extends PageController {
 
 	@Autowired
 	private final RawMaterialSupplierService rawMaterialSupplierService;
@@ -27,20 +28,15 @@ public class RawMaterialSupplierController {
 	@GetMapping("/table/raw_material_supplier")
 	public String showRawMaterialSupplierList(Model model,
 	                                          @RequestParam(value = "page", defaultValue = "1") int page,
-	                                          @PageableDefault(size = 10) Pageable pageableRaw) {
+	                                          Pageable pageableRaw) {
 
-		int pageIndex = page - 1; // 최소 0 이상이 되도록 처리
-		Pageable pageable = PageRequest.of(pageIndex, pageableRaw.getPageSize(), pageableRaw.getSort());
+		Pageable pageable = getPageable(page, pageableRaw);
 		Page<RawMaterialSupplier> rawMaterialSupplierPage = rawMaterialSupplierService.getRawMaterialSupplierPage(pageable);
-
-		model.addAttribute("page", rawMaterialSupplierPage);
-		model.addAttribute("pageNumber", page); // 현재 페이지 (1부터 시작)
-		model.addAttribute("suppliers", rawMaterialSupplierPage.getContent());
 
 		List<String> columnNames = List.of(
 				"supplierId", "supplierName", "contactInfo", "address", "email", "phone_number", "reg_date", "mod_date"
 		);
-		model.addAttribute("columns", columnNames);
+		addPagination(model, rawMaterialSupplierPage, page, columnNames);
 
 		return "dist/raw_material_supplier/table";
 	}

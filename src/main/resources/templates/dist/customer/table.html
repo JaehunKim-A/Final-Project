@@ -331,14 +331,22 @@
 
                     </li>
 
-                    <li
-                            class="sidebar-item active ">
-                        <a href="/table/customer" class='sidebar-link'>
-                            <i class="bi bi-grid-1x2-fill"></i>
+                    <li class="sidebar-item has-sub">
+                        <a href="#" class='sidebar-link'>
+                            <i class="bi bi-pen-fill"></i>
                             <span>Table</span>
                         </a>
 
-
+                        <ul class="submenu">
+                            <!-- Customer 메뉴 -->
+                            <li class="submenu-item">
+                                <a href="/table/customer" class="submenu-link">Customer</a>
+                            </li>
+                            <!-- Supplier 메뉴 -->
+                            <li class="submenu-item">
+                                <a href="/table/raw_material_supplier" class="submenu-link">Supplier</a>
+                            </li>
+                        </ul>
                     </li>
 
                     <li
@@ -718,71 +726,64 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Customer Table</h4>
-                                <!-- 버튼 추가 -->
+                                <h4 class="card-title">Customer List</h4>
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Add New Customer</button>
                             </div>
-                            <div class="card-content">
-                                <div class="card-body">
-                                    <p class="card-text">Add <code>.table-bordered</code> for borders on all sides of the table and cells.</p>
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered mb-0">
-                                        <thead>
-                                        <tr>
-                                            <th th:each="col : ${columns}" th:text="${col}"></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="customer : ${customers}">
-                                            <td th:text="${customer.customerId}"></td>
-                                            <td th:text="${customer.customerName}"></td>
-                                            <td th:text="${customer.address}"></td>
-                                            <td th:text="${customer.contactInfo}"></td>
-                                            <td th:text="${customer.formattedRegDate}"></td>
-                                            <td th:text="${customer.formattedModDate}"></td>
-                                            <!-- 수정 및 삭제 버튼 추가 -->
-                                            <td>
-                                                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal"
-                                                        th:data-id="${customer.customerId}"
-                                                        th:data-name="${customer.customerName}"
-                                                        th:data-address="${customer.address}"
-                                                        th:data-contact="${customer.contactInfo}"
-                                                        th:data-reg="${customer.reg_date}"
-                                                        th:data-mod="${customer.mod_date}">Edit</button>
-                                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" th:data-id="${customer.customerId}">Delete</button>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <!-- 페이지네이션 -->
-                                    <nav>
-                                        <ul class="pagination justify-content-end mt-3">
+                            <div class="card-body">
+                                <p class="card-text">This table shows the list of customers</p>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th th:each="col : ${columns}" th:text="${col}"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="customer : ${page.content}">
+                                        <td th:text="${customer.customerId}"></td>
+                                        <td th:text="${customer.customerName}"></td>
+                                        <td th:text="${customer.address}"></td>
+                                        <td th:text="${customer.contactInfo}"></td>
+                                        <td th:text="${customer.formattedRegDate}"></td>
+                                        <td th:text="${customer.formattedModDate}"></td>
+                                        <td>
+                                            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal"
+                                                    th:data-id="${customer.customerId}"
+                                                    th:data-name="${customer.customerName}"
+                                                    th:data-address="${customer.address}"
+                                                    th:data-contact="${customer.contactInfo}"
+                                                    th:data-reg="${customer.reg_date}"
+                                                    th:data-mod="${customer.mod_date}">Edit</button>
+                                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" th:data-id="${customer.customerId}">Delete</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
 
-                                            <!-- 이전 버튼 -->
-                                            <li class="page-item" th:if="${pageNumber > 10}">
-                                                <a class="page-link" th:href="@{/table/customer(page=${((pageNumber - 1) / 10) * 10})}">이전</a>
-                                            </li>
+                                <nav>
+                                    <ul class="pagination justify-content-end mt-3">
+                                        <!-- Previous Button -->
+                                        <li class="page-item" th:if="${pageNumber > 10}">
+                                            <a class="page-link" th:href="@{/table/customer(page=${((pageNumber - 1) / 10) * 10})}">이전</a>
+                                        </li>
 
-                                            <!-- 페이지 번호 -->
-                                            <li class="page-item"
-                                                th:each="i : ${#numbers.sequence(((pageNumber - 1) / 10) * 10 + 1,
+                                        <!-- 페이지 번호 -->
+                                        <li class="page-item"
+                                            th:each="i : ${#numbers.sequence(((pageNumber - 1) / 10) * 10 + 1,
                                                 T(java.lang.Math).min(((pageNumber - 1) / 10 + 1) * 10, page.totalPages))}"
-                                                th:classappend="${i.equals(pageNumber)} ? ' active'">
-                                                <a class="page-link" th:href="@{/table/customer(page=${i})}" th:text="${i}"></a>
-                                            </li>
+                                            th:classappend="${i.equals(pageNumber)} ? ' active'">
+                                            <a class="page-link" th:href="@{/table/customer(page=${i})}" th:text="${i}"></a>
+                                        </li>
 
+                                        <!-- '다음' 버튼 -->
+                                        <li class="page-item"
+                                            th:if="${((pageNumber - 1) / 10 + 1) * 10 < page.totalPages}">
+                                            <a class="page-link" th:href="@{/table/customer(page=${((pageNumber - 1) / 10 + 1) * 10 + 1})}">다음</a>
+                                        </li>
+                                    </ul>
+                                </nav>
 
-
-                                            <!-- 다음 버튼 -->
-                                            <li class="page-item"
-                                                th:if="${((pageNumber - 1) / 10 + 1) * 10 < page.totalPages}">
-                                                <a class="page-link" th:href="@{/table/customer(page=${((pageNumber - 1) / 10 + 1) * 10 + 1})}">다음</a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -881,12 +882,6 @@
                 </div>
             </div>
 
-
-
-
-
-
-
             <!-- Bordered table end -->
         </div>
 
@@ -903,52 +898,50 @@
         </footer>
     </div>
 </div>
+
 <script src="/assets/static/js/components/dark.js"></script>
 <script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 
 
 <script src="/assets/compiled/js/app.js"></script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // 수정 모달에 데이터 삽입
-        const editModal = document.getElementById('editModal');
-        editModal.addEventListener('show.bs.modal', function(event) {
-            const button = event.relatedTarget; // 버튼에서 데이터를 가져옴
-            const customerId = button.getAttribute('data-id');
-            const customerName = button.getAttribute('data-name');
-            const address = button.getAttribute('data-address');
-            const contactInfo = button.getAttribute('data-contact');
-            const regDate = button.getAttribute('data-reg');
-            const modDate = button.getAttribute('data-mod');
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Edit and delete modals logic
+            const editModal = document.getElementById('editModal');
+            editModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget; // Button that triggered the modal
+                const customerId = button.getAttribute('data-id');
+                const customerName = button.getAttribute('data-name');
+                const address = button.getAttribute('data-address');
+                const contactInfo = button.getAttribute('data-contact');
+                const regDate = button.getAttribute('data-reg');
+                const modDate = button.getAttribute('data-mod');
 
-            // 데이터 삽입
-            document.getElementById('editCustomerId').value = customerId;
-            document.getElementById('editCustomerName').value = customerName;
-            document.getElementById('editAddress').value = address;
-            document.getElementById('editContactInfo').value = contactInfo;
-            document.getElementById('editRegDate').value = regDate;
-            document.getElementById('editModDate').value = modDate;
+                // Fill the form with customer data
+                document.getElementById('editCustomerId').value = customerId;
+                document.getElementById('editCustomerName').value = customerName;
+                document.getElementById('editAddress').value = address;
+                document.getElementById('editContactInfo').value = contactInfo;
+                document.getElementById('editRegDate').value = regDate;
+                document.getElementById('editModDate').value = modDate;
 
-            const form = document.getElementById('editCustomerForm');
-            form.action = '/table/customer/edit/' + customerId;
+                const form = document.getElementById('editCustomerForm');
+                form.action = '/table/customer/edit/' + customerId;
+            });
+
+            // Delete modal
+            const deleteModal = document.getElementById('deleteModal');
+            deleteModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const customerId = button.getAttribute('data-id');
+                document.getElementById('deleteCustomerId').value = customerId;
+
+                const form = document.getElementById('deleteCustomerForm');
+                form.action = '/table/customer/delete/' + customerId;
+            });
         });
-
-        // 삭제 모달에 고객 ID 삽입
-        const deleteModal = document.getElementById('deleteModal');
-        deleteModal.addEventListener('show.bs.modal', function(event) {
-            const button = event.relatedTarget;
-            const customerId = button.getAttribute('data-id');
-            document.getElementById('deleteCustomerId').value = customerId;
-
-            // 폼의 action URL을 동적으로 변경
-            const form = document.getElementById('deleteCustomerForm');
-            form.action = '/table/customer/delete/' + customerId;  // 실제 삭제 URL 설정
-        });
-    });
-
-
-</script>
+    </script>
 
 </body>
 

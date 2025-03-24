@@ -331,14 +331,22 @@
 
                     </li>
 
-                    <li
-                            class="sidebar-item active ">
-                        <a href="/table/raw_meterial_supplier" class='sidebar-link'>
-                            <i class="bi bi-grid-1x2-fill"></i>
+                    <li class="sidebar-item has-sub">
+                        <a href="#" class='sidebar-link'>
+                            <i class="bi bi-pen-fill"></i>
                             <span>Table</span>
                         </a>
 
-
+                        <ul class="submenu">
+                            <!-- Customer 메뉴 -->
+                            <li class="submenu-item">
+                                <a href="/table/customer" class="submenu-link">Customer</a>
+                            </li>
+                            <!-- Supplier 메뉴 -->
+                            <li class="submenu-item">
+                                <a href="/table/raw_material_supplier" class="submenu-link">Supplier</a>
+                            </li>
+                        </ul>
                     </li>
 
                     <li
@@ -719,7 +727,6 @@
                         <div class="card">
                             <div class="card-header">
                                 <h4 class="card-title">Supplier Table</h4>
-                                <!-- 버튼 추가 -->
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Add New Supplier</button>
                             </div>
                             <div class="card-content">
@@ -734,7 +741,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="supplier : ${suppliers}">
+                                        <tr th:each="supplier : ${page.content}">
                                             <td th:text="${supplier.supplierId}"></td>
                                             <td th:text="${supplier.supplierName}"></td>
                                             <td th:text="${supplier.address}"></td>
@@ -744,7 +751,6 @@
                                             <td th:text="${supplier.formattedRegDate}"></td>
                                             <td th:text="${supplier.formattedModDate}"></td>
 
-                                            <!-- 수정 및 삭제 버튼 추가 -->
                                             <td>
                                                 <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal"
                                                         th:data-id="${supplier.supplierId}"

@@ -1,5 +1,6 @@
 package com.team1.team1project.customer.controller;
 
+import com.team1.team1project.controller.PageController;
 import com.team1.team1project.customer.domain.Customer;
 import com.team1.team1project.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -18,35 +19,26 @@ import java.util.List;
 @Controller
 @Log4j2
 @RequiredArgsConstructor
-public class CustomerController {
+public class CustomerController extends PageController {
 
 	@Autowired
-	private final CustomerService customerService;
+	private CustomerService customerService;
 
-	// 고객 목록을 보여주는 메서드
 	@GetMapping("/table/customer")
 	public String showCustomerList(Model model,
 	                               @RequestParam(value = "page", defaultValue = "1") int page,
-	                               @PageableDefault(size = 10) Pageable pageableRaw) {
+	                               Pageable pageableRaw) {
 
-		int pageIndex = page - 1;
-		Pageable pageable = PageRequest.of(pageIndex, pageableRaw.getPageSize(), pageableRaw.getSort());
+		Pageable pageable = getPageable(page, pageableRaw);  // PageController에서 상속받은 메서드 사용
 		Page<Customer> customerPage = customerService.getCustomerPage(pageable);
-
-		model.addAttribute("page", customerPage);
-		model.addAttribute("pageNumber", page); // 현재 페이지 (1부터 시작)
-		model.addAttribute("customers", customerPage.getContent());
 
 		List<String> columnNames = List.of(
 				"customerId", "customerName", "address", "contactInfo", "reg_date", "mod_date"
 		);
-		model.addAttribute("columns", columnNames);
+		addPagination(model, customerPage, page, columnNames);  // PageController에서 상속받은 메서드 사용
 
 		return "dist/customer/table";
 	}
-
-
-
 
 	// 고객 등록 폼을 표시하는 메서드
 	@GetMapping("/table/customer/register")
