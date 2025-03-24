@@ -5,18 +5,24 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class FinishedProductsDTO {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer productId; // 제품 id
-    private Integer codeId;  // 코드 id
-    private String productDescription;  // 제품 정보
-    private Date productionDate;    // 제품만들어진 날짜
+
+    private String productCode;  // 코드 id
+    private String productDescription;  // 제품 기타사항
+    private LocalDate[] productionDate;    // 제품만들어진 날짜
     private String status;
     private LocalDateTime regDate;
     private LocalDateTime modDate;

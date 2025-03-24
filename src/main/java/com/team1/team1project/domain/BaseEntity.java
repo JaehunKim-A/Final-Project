@@ -21,17 +21,4 @@ public class BaseEntity {
     @LastModifiedDate
     @Column(name = "modDate")
     private LocalDateTime modDate;
-
-    @PreUpdate
-    public void preUpdate() {
-        this.modDate = LocalDateTime.now();
-    }
-
-    // 생성 및 수정 시간 자동 처리
-    @PrePersist
-    public void prePersist() {
-        LocalDateTime now = LocalDateTime.now();
-        this.regDate = now;
-        this.modDate = now;
-    }
 }

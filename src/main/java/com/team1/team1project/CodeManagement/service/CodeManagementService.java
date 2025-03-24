@@ -1,14 +1,10 @@
 package com.team1.team1project.CodeManagement.service;
 
-import com.team1.team1project.CodeManagement.repository.CodeManagementRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.team1.team1project.dto.CodeManagementDTO;
 
-@Service
-@RequiredArgsConstructor
-public class CodeManagementService {
-
-    private final CodeManagementRepository codeManagementRepository;
-
-    // 비즈니스 로직 추가
+public interface CodeManagementService{
+    Long registers(CodeManagementDTO codeManagementDTO);
+    CodeManagementDTO readOne(Long codeId);
+    void modifyOne(CodeManagementDTO codeManagementDTO);
+    void removeOne(Long codeId);
 }

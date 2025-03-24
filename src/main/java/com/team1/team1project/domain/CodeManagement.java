@@ -13,22 +13,25 @@ import javax.persistence.*;
 public class CodeManagement {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "code_id")
-    private Long codeId;  // 코드 ID
+    private Long codeId; // 코드 id
+    private String codeValue;  // 예 RM1001
+    private String codeName; // 코드 이름
+    private String codeDescription; // 코드 기타사항
+    private String category; // 코드 구분
+    private String codeType; // 코드 타입 예) 원자재, 완제품
+    private String registeredBy; //등록자
+    private String updatedBy;   // 수정자
 
-    @Column(name = "code_type", nullable = false)
-    private String codeType;  // 코드 타입 (예: 원자재, 완제품 등)
-
-    @Column(name = "code_value", nullable = false)
-    private String codeValue;  // 코드 값 (예: RM001, FP001 등)
-
-    @Column(name = "code_description")
-    private String codeDescription;  // 코드 설명
-
-    public void codeManagementChange(String codeDescription, String codeValue, String codeType){
-        this.codeDescription = codeDescription;
+    public void codeChange(String codeValue,
+                           String codeName,
+                           String codeDescription,
+                           String category,
+                           String codeType)
+    {
         this.codeValue = codeValue;
+        this.codeName = codeName;
+        this.codeDescription = codeDescription;
+        this.category = category;
         this.codeType = codeType;
     }
 }

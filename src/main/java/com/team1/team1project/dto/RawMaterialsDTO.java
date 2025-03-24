@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class RawMaterialsDTO {
 
     private Integer materialId; // 원자재 아이디
-    private Integer[] codeId; // 원자재 코드
+    private Integer[] materialCode; // 원자재 코드
     private String materialDescription; // 원자재 정보사항
     private String unit; // 원자재 규격
 

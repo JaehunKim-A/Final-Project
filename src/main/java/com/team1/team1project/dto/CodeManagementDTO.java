@@ -12,10 +12,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CodeManagementDTO {
-    private Integer comboId;    // 콤보 id
-    private Integer codeId;     // 코드 Id
-    private String comboDescription;    // 콤보 정보
-    private Long comboQuantity; // 콤보 수량
-    private LocalDateTime regDate;  // 등록일
-    private LocalDateTime modDate;  // 수정일
+    private Long codeId;
+    private String codeValue; // 예 RM1001
+    private String codeName; // 코드 이름
+    private String codeDescription; // 코드 기타사항
+    private String category; // 코드 구분
+    private String codeType; // 코드 타입 예) 원자재, 완제품
+    private String registeredBy; //등록자
+    private String updatedBy;   // 수정자
 }
