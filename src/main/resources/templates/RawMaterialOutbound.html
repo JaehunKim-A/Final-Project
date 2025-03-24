@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>원자재 출고 목록</title>
+</head>
+<body>
+
+<h1>원자재 출고 목록</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>출고 ID</th>
+        <th>출고 코드</th>
+        <th>출고 날짜</th>
+        <th>원자재 ID</th>
+        <th>수량</th>
+        <th>상태</th>
+        <th>창고</th>
+        <th>등록일시</th>
+        <th>수정일시</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 타임리프를 사용하여 데이터 반복 -->
+    <tr th:each="outbounds : ${outbounds}">
+        <td th:text="${outbounds.outboundId}"></td>
+        <td th:text="${outbounds.outboundCode}"></td>
+        <td th:text="${outbounds.outboundDate}"></td>
+        <td th:text="${outbounds.materialId}"></td>
+        <td th:text="${outbounds.quantity}"></td>
+        <td th:text="${outbounds.status}"></td>
+        <td th:text="${outbounds.warehouse}"></td>
+        <td th:text="${outbounds.regDate}"></td>
+        <td th:text="${outbounds.modDate}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
+
+<!--raw_material_outbound 테이블 연결 html-->
