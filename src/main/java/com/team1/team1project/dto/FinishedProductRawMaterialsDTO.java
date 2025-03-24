@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 // 콤보에 대한 관련 테이블 dto
 public class FinishedProductRawMaterialsDTO {
-    private int comboId;    // 콤보 id
-    private int materialId; // 원자재 id
-    private int materialQuantity;   // 콤보에 사용된 원자재 수량
+    private Integer comboId;    // 콤보 id
+    private Integer materialId; // 원자재 id
+    private Integer materialQuantity;   // 콤보에 사용된 원자재 수량
 }

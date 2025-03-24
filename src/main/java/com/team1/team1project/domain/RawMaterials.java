@@ -1,17 +1,15 @@
 package com.team1.team1project.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
+import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@ToString
 public class RawMaterials extends BaseEntity {
 
     @Id
@@ -19,9 +17,7 @@ public class RawMaterials extends BaseEntity {
     @Column(name = "material_id")
     private Long materialId;  // 원자재 ID
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "code_id", referencedColumnName = "code_id")
-    private CodeManagement codeManagement;  // 코드 ID (외래키)
+    private Integer codeId;
 
     @Column(name = "material_description")
     private String materialDescription;  // 원자재 설명
@@ -29,14 +25,9 @@ public class RawMaterials extends BaseEntity {
     @Column(name = "unit")
     private String unit;  // 단위 (예: kg, pcs)
 
-    @Column(name = "stock", nullable = false)
-    private Long stock;  // 원자재 재고
-
-    // 수정할 사항 *코
-    public void rawMaterialsChange(String materialDescription, String unit, Long stock) {
+    //수정할 사항 * 원자재 ID 랑 코드 ID 는 변경 불가하게 하고 설명, 단위만 변경 가능하게
+    public void rawMaterialsChange(String materialDescription, String unit) {
         this.materialDescription = materialDescription;
         this.unit = unit;
-        this.stock = stock;
     }
-
 }

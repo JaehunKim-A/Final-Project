@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CodeManagementDTO {
-    private int comboId;    // 콤보 id
-    private int codeId;     // 코드 Id
+    private Integer comboId;    // 콤보 id
+    private Integer codeId;     // 코드 Id
     private String comboDescription;    // 콤보 정보
     private Long comboQuantity; // 콤보 수량
     private LocalDateTime regDate;  // 등록일

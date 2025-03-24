@@ -1,17 +1,15 @@
 package com.team1.team1project.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
+import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
-@Entity
-@Data
+@Entity // jpa 에서 관리하는 entity 지정
 @NoArgsConstructor
+@ToString
 @AllArgsConstructor
+@Getter
+@Builder
 public class CodeManagement {
 
     @Id
@@ -28,22 +26,9 @@ public class CodeManagement {
     @Column(name = "code_description")
     private String codeDescription;  // 코드 설명
 
-    @Column(name = "reg_date", updatable = false)
-    private LocalDateTime regDate;  // 생성 일시
-
-    @Column(name = "mod_date")
-    private LocalDateTime modDate;  // 수정 일시
-
-    // 생성 및 수정 시간 자동 처리
-    @PrePersist
-    public void prePersist() {
-        LocalDateTime now = LocalDateTime.now();
-        this.regDate = now;
-        this.modDate = now;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        this.modDate = LocalDateTime.now();
+    public void codeManagementChange(String codeDescription, String codeValue, String codeType){
+        this.codeDescription = codeDescription;
+        this.codeValue = codeValue;
+        this.codeType = codeType;
     }
 }
