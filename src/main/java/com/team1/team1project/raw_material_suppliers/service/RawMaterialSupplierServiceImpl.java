@@ -13,8 +13,12 @@ import java.util.Optional;
 @Service
 public class RawMaterialSupplierServiceImpl implements RawMaterialSupplierService {
 
+	private final RawMaterialSupplierRepository rawMaterialSupplierRepository;
+
 	@Autowired
-	private RawMaterialSupplierRepository rawMaterialSupplierRepository;
+	public RawMaterialSupplierServiceImpl(RawMaterialSupplierRepository rawMaterialSupplierRepository) {
+		this.rawMaterialSupplierRepository = rawMaterialSupplierRepository;
+	}
 
 	@Override
 	public List<RawMaterialSupplier> getAllRawMaterialSuppliers() {
@@ -44,6 +48,7 @@ public class RawMaterialSupplierServiceImpl implements RawMaterialSupplierServic
 	public boolean deleteRawMaterialSupplier(int supplierId) {
 		if(rawMaterialSupplierRepository.existsById(supplierId)) {
 			rawMaterialSupplierRepository.deleteById(supplierId);
+			return true;
 		}
 
 		return false;

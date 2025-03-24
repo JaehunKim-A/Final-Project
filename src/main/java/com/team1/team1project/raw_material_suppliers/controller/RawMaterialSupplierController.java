@@ -27,15 +27,22 @@ public class RawMaterialSupplierController extends PageController {
 	// 고객 목록을 보여주는 메서드
 	@GetMapping("/table/raw_material_supplier")
 	public String showRawMaterialSupplierList(Model model,
-	                                          @RequestParam(value = "page", defaultValue = "1") int page,
-	                                          Pageable pageableRaw) {
+	                                          @RequestParam(defaultValue = "1") int page,
+	                                          @RequestParam(defaultValue = "10") int size
+    ) {
 
-		Pageable pageable = getPageable(page, pageableRaw);
+		// 페이지 번호를 0부터 시작하도록 처리
+		Pageable pageable = getPageable(page, size, Pageable.unpaged());
+
+		// 원자재 공급자 페이지 데이터 가져오기
 		Page<RawMaterialSupplier> rawMaterialSupplierPage = rawMaterialSupplierService.getRawMaterialSupplierPage(pageable);
 
+		// 컬럼 이름 리스트
 		List<String> columnNames = List.of(
 				"supplierId", "supplierName", "contactInfo", "address", "email", "phone_number", "reg_date", "mod_date"
 		);
+
+		// 페이지네이션 처리
 		addPagination(model, rawMaterialSupplierPage, page, columnNames);
 
 		return "dist/raw_material_supplier/table";

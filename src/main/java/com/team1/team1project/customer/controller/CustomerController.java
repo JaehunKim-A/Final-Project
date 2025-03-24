@@ -26,16 +26,23 @@ public class CustomerController extends PageController {
 
 	@GetMapping("/table/customer")
 	public String showCustomerList(Model model,
-	                               @RequestParam(value = "page", defaultValue = "1") int page,
-	                               Pageable pageableRaw) {
+	                               @RequestParam(defaultValue = "1") int page,
+	                               @RequestParam(defaultValue = "10") int size
+	) {
 
-		Pageable pageable = getPageable(page, pageableRaw);  // PageController에서 상속받은 메서드 사용
+		// Pageable 객체 생성, getPageable 메서드를 호출하여 페이지 번호 및 크기 설정
+		Pageable pageable = getPageable(page, size, Pageable.unpaged());
+
+		// 고객 페이지 데이터 가져오기
 		Page<Customer> customerPage = customerService.getCustomerPage(pageable);
 
+		// 컬럼 이름 리스트
 		List<String> columnNames = List.of(
 				"customerId", "customerName", "address", "contactInfo", "reg_date", "mod_date"
 		);
-		addPagination(model, customerPage, page, columnNames);  // PageController에서 상속받은 메서드 사용
+
+		// 페이지네이션 처리
+		addPagination(model, customerPage, page, columnNames);
 
 		return "dist/customer/table";
 	}
