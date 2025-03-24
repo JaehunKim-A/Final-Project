@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>완제품 입고 목록</title>
+</head>
+<body>
+
+<h1>완제품 입고 목록</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>입고 ID</th>
+        <th>완제품 ID</th>
+        <th>수량</th>
+        <th>입고 코드</th>
+        <th>입고 완료 시간</th>
+        <th>상태</th>
+        <th>공급업체 ID</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 타임리프를 사용하여 데이터 반복 -->
+    <tr th:each="inbound : ${inbounds}">
+        <td th:text="${inbound.inboundId}"></td>
+        <td th:text="${inbound.productId}"></td>
+        <td th:text="${inbound.quantity}"></td>
+        <td th:text="${inbound.inboundCode}"></td>
+        <td th:text="${inbound.inboundCompleteTime}"></td>
+        <td th:text="${inbound.status}"></td>
+        <td th:text="${inbound.supplierId}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
+
+<!--Finished_Product_Inbound 테이블 연결 html-->

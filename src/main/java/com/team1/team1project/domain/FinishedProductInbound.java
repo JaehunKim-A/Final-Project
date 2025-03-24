@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "finished_product_inbounds")
 public class FinishedProductInbound {
 
     @Id

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>원자재 입고 목록</title>
+</head>
+<body>
+
+<h1>원자재 입고 목록</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>입고 ID</th>
+        <th>원자재 ID</th>
+        <th>수량</th>
+        <th>입고 날짜</th>
+        <th>입고 코드</th>
+        <th>공급업체 ID</th>
+        <th>상태</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 타임리프를 사용하여 데이터 반복 -->
+    <tr th:each="inbound : ${inbounds}">
+        <td th:text="${inbound.inboundId}"></td>
+        <td th:text="${inbound.materialId}"></td>
+        <td th:text="${inbound.quantity}"></td>
+        <td th:text="${inbound.inboundDate}"></td>
+        <td th:text="${inbound.inboundCode}"></td>
+        <td th:text="${inbound.supplierId}"></td>
+        <td th:text="${inbound.status}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
+
+<!--raw_material_inbound 테이블 연결 html-->
