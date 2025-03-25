@@ -25,8 +25,8 @@ public class CodeManagementController {
     @GetMapping("/codeManagement")
     public void list(PageRequestDTO pageRequestDTO,
                      Model model){
-        PageResponseDTO<CodeManagementDTO> responseDTO = codeManagementService.list(pageRequestDTO);
-        model.addAttribute("responseDTO", responseDTO);
+//        PageResponseDTO<CodeManagementDTO> responseDTO = codeManagementService.list(pageRequestDTO);
+//        model.addAttribute("responseDTO", responseDTO);
         model.addAttribute("pageRequestDTO", pageRequestDTO);
     }
 

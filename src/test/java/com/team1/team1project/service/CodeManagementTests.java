@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.stream.IntStream;
+
 @SpringBootTest
 @Log4j2
 public class CodeManagementTests{
@@ -16,18 +18,18 @@ public class CodeManagementTests{
 
     @Test
     public void testRegister(){
-
-        CodeManagementDTO codeManagementDTO = CodeManagementDTO.builder()
-                .codeType("완제품")
-                .codeName("iPhone1")
-                .codeDescription("iPhone")
-                .category("iPhone")
-                .registeredBy("tester")
-                .updatedBy("tester")
-                .codeValue("I1001")
-                .build();
-        Long codeId = codeManagementService.registers(codeManagementDTO);
-
+        IntStream.rangeClosed(1,20).forEach(i ->{
+            CodeManagementDTO codeManagementDTO = CodeManagementDTO.builder()
+                    .codeType("완제품")
+                    .codeName("iPhone" + i)
+                    .codeDescription("iPhone")
+                    .category("iPhone")
+                    .registeredBy("tester")
+                    .updatedBy("tester")
+                    .codeValue("I1001" + i)
+                    .build();
+            Long codeId = codeManagementService.registers(codeManagementDTO);
+        });
     }
 
     @Test
