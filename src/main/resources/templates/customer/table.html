@@ -191,6 +191,7 @@
 </div>
 
 <script src="/assets/static/js/initTheme.js"></script>
+<script src="/assets/static/js/components/dark.js"></script>
 <script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 <script src="/assets/compiled/js/app.js"></script>
 <script src="/assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
@@ -198,6 +199,8 @@
 
 
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+
     const tableBody = document.querySelector("#table1");
     const myDataTable = new simpleDatatables.DataTable(tableBody, {
         perPage: 10,
@@ -276,6 +279,7 @@
         }
 
         location.href = `/table/customer/delete/${customerId}`;
+        });
     });
 </script>
 
