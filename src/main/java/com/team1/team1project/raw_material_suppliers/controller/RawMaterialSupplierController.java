@@ -33,7 +33,7 @@ public class RawMaterialSupplierController {
 		model.addAttribute("rawMaterialSuppliers", rawMaterialSuppliers);
 		model.addAttribute("columns", columnNames);
 
-		return "dist/raw_material_supplier/table";
+		return "raw_material_supplier/table";
 	}
 
 
@@ -42,7 +42,7 @@ public class RawMaterialSupplierController {
 	@GetMapping("/table/raw_material_supplier/register")
 	public String showRegistrationForm(Model model) {
 		model.addAttribute("raw_material_supplier", new RawMaterialSupplier()); // 새 고객 객체를 모델에 추가
-		return "dist/raw_material_supplier/register"; // 고객 등록 페이지로 이동
+		return "raw_material_supplier/register"; // 고객 등록 페이지로 이동
 	}
 
 	// 고객 등록 처리 메서드
@@ -58,7 +58,7 @@ public class RawMaterialSupplierController {
 		RawMaterialSupplier rawMaterialSupplier = rawMaterialSupplierService.getRawMaterialSupplierById(supplierId)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid supplier Id:" + supplierId));
 		model.addAttribute("raw_material_supplier", rawMaterialSupplier); // 수정할 고객 정보 모델에 추가
-		return "dist/raw_material_supplier/edit"; // 고객 수정 페이지로 이동
+		return "raw_material_supplier/edit"; // 고객 수정 페이지로 이동
 	}
 
 	// 고객 수정 처리 메서드

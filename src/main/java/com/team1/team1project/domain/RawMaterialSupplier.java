@@ -36,26 +36,26 @@ public class RawMaterialSupplier extends BaseEntity {
 
 	// reg_date와 mod_date는 LocalDateTime으로 저장
 	@Override
-	public LocalDateTime getReg_date() {
-		return super.getReg_date();
+	public LocalDateTime getRegDate() {
+		return super.getRegDate();
 	}
 
 	@Override
-	public LocalDateTime getMod_date() {
-		return super.getMod_date();
+	public LocalDateTime getModDate() {
+		return super.getModDate();
 	}
 
 	// 날짜 포맷팅을 UI에서 사용하기 위해 추가된 메서드
 	public String getFormattedRegDate() {
-		if (getReg_date() != null) {
-			return getReg_date().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		if (getRegDate() != null) {
+			return getRegDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 		}
 		return null;
 	}
 
 	public String getFormattedModDate() {
-		if (getMod_date() != null) {
-			return getMod_date().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		if (getModDate() != null) {
+			return getModDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 		}
 		return null;
 	}

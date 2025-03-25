@@ -16,7 +16,7 @@
 <body>
 <script src="/assets/static/js/initTheme.js"></script>
 <div id="app">
-    <div th:replace="~{/dist/index :: sidebar}"></div>
+    <div th:replace="~{dist/index :: sidebar}"></div>
     <div id="main">
         <header class="mb-3">
             <a href="#" class="burger-btn d-block d-xl-none">
@@ -44,79 +44,43 @@
 
             <!-- Bordered table start -->
             <section class="section">
-                <div class="row" id="table-bordered">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Supplier Table</h4>
-                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Add New Supplier</button>
-                            </div>
-                            <div class="card-content">
-                                <div class="card-body">
-                                    <p class="card-text">Add <code>.table-bordered</code> for borders on all sides of the table and cells.</p>
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered mb-0">
-                                        <thead>
-                                        <tr>
-                                            <th th:each="col : ${columns}" th:text="${col}"></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="supplier : ${page.content}">
-                                            <td th:text="${supplier.supplierId}"></td>
-                                            <td th:text="${supplier.supplierName}"></td>
-                                            <td th:text="${supplier.address}"></td>
-                                            <td th:text="${supplier.contactInfo}"></td>
-                                            <td th:text="${supplier.email}"></td>
-                                            <td th:text="${supplier.phone_number}"></td>
-                                            <td th:text="${supplier.formattedRegDate}"></td>
-                                            <td th:text="${supplier.formattedModDate}"></td>
-
-                                            <td>
-                                                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal"
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Supplier Table</h4>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Add New Supplier</button>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped" id="table1">
+                           <thead>
+                                <tr>
+                                    <th th:each="col : ${columns}" th:text="${col}"></th>
+                                </tr>
+                           </thead>
+                            <tbody>
+                                <tr th:each="supplier : ${suppliers}">
+                                    <td th:text="${supplier.supplierId}"></td>
+                                    <td th:text="${supplier.supplierName}"></td>
+                                    <td th:text="${supplier.address}"></td>
+                                    <td th:text="${supplier.contactInfo}"></td>
+                                    <td th:text="${supplier.email}"></td>
+                                    <td th:text="${supplier.phone_number}"></td>
+                                    <td th:text="${supplier.formattedRegDate}"></td>
+                                    <td th:text="${supplier.formattedModDate}"></td>
+                                    <td>
+                                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal"
                                                         th:data-id="${supplier.supplierId}"
                                                         th:data-name="${supplier.supplierName}"
                                                         th:data-address="${supplier.address}"
                                                         th:data-contact="${supplier.contactInfo}"
                                                         th:data-email="${supplier.email}"
                                                         th:data-phone="${supplier.phone_number}"
-                                                        th:data-reg="${supplier.reg_date}"
-                                                        th:data-mod="${supplier.mod_date}">Edit</button>
-                                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" th:data-id="${supplier.supplierId}">Delete</button>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <!-- 페이지네이션 -->
-                                    <!-- Raw Material Supplier Table -->
-                                    <!-- Pagination Section -->
-                                    <nav>
-                                        <ul class="pagination justify-content-end mt-3">
-                                            <!-- Previous Button -->
-                                            <li class="page-item" th:if="${pageNumber > 10}">
-                                                <a class="page-link" th:href="@{/table/raw_material_supplier(page=${((pageNumber - 1) / 10) * 10})}">이전</a>
-                                            </li>
-
-                                            <!-- Page Numbers -->
-                                            <li class="page-item"
-                                                th:each="i : ${#numbers.sequence(((pageNumber - 1) / 10) * 10 + 1,
-                                                T(java.lang.Math).min(((pageNumber - 1) / 10 + 1) * 10, page.totalPages))}"
-                                                th:classappend="${i.equals(pageNumber)} ? ' active'">
-                                                <a class="page-link" th:href="@{/table/raw_material_supplier(page=${i})}" th:text="${i}"></a>
-                                            </li>
-
-                                            <!-- Next Button -->
-                                            <li class="page-item"
-                                                th:if="${((pageNumber - 1) / 10 + 1) * 10 < page.totalPages}">
-                                                <a class="page-link" th:href="@{/table/raw_material_supplier(page=${((pageNumber - 1) / 10 + 1) * 10 + 1})}">다음</a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-
-                                </div>
-                            </div>
-                        </div>
+                                                        th:data-reg="${supplier.regDate}"
+                                                        th:data-mod="${supplier.modDate}">Edit</button>
+                                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" th:data-id="${supplier.supplierId}">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </section>
@@ -245,8 +209,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Bordered table end -->
         </div>
 
         <footer>
@@ -264,12 +226,25 @@
 </div>
 <script src="/assets/static/js/components/dark.js"></script>
 <script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-
-
 <script src="/assets/compiled/js/app.js"></script>
+<script src="/assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
+<script src="/assets/static/js/pages/simple-datatables.js"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+
+     const table = new DataTable("#table1", {
+          perPage: 10,  // 페이지당 개수
+          perPageSelect: [5, 10, 20, 50, 100],  // 페이지당 개수 선택
+          searchable: true,
+          labels: {
+              placeholder: "Search...",
+              perPage: "{select} items per page",
+              noRows: "No data available in table",
+              info: "Showing {start} to {end} of {rows} entries"
+          }
+      });
+
          // 수정 모달에 데이터 삽입
          const editModal = document.getElementById('editModal');
          editModal.addEventListener('show.bs.modal', function(event) {

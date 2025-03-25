@@ -35,14 +35,14 @@ public class CustomerController {
 		model.addAttribute("customers", customers);
 		model.addAttribute("columns", columnNames);  // 컬럼 이름도 전달
 
-		return "dist/customer/table"; // 데이터 테이블 템플릿으로 이동
+		return "customer/table"; // 데이터 테이블 템플릿으로 이동
 	}
 
 	// 고객 등록 폼을 표시하는 메서드
 	@GetMapping("/table/customer/register")
 	public String showRegistrationForm(Model model) {
 		model.addAttribute("customer", new Customer()); // 새 고객 객체를 모델에 추가
-		return "dist/customer/register"; // 고객 등록 페이지로 이동
+		return "customer/register"; // 고객 등록 페이지로 이동
 	}
 
 	// 고객 등록 처리 메서드
@@ -58,7 +58,7 @@ public class CustomerController {
 		Customer customer = customerService.getCustomerById(customerId)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" + customerId));
 		model.addAttribute("customer", customer); // 수정할 고객 정보 모델에 추가
-		return "dist/customer/edit"; // 고객 수정 페이지로 이동
+		return "customer/edit"; // 고객 수정 페이지로 이동
 	}
 
 	// 고객 수정 처리 메서드
