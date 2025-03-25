@@ -1,6 +1,6 @@
-package com.team1.team1project.CodeManagement.controller;
+package com.team1.team1project.codeManagement.controller;
 
-import com.team1.team1project.CodeManagement.service.CodeManagementService;
+import com.team1.team1project.codeManagement.service.CodeManagementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

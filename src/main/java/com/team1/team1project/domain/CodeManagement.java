@@ -13,6 +13,7 @@ import javax.persistence.*;
 public class CodeManagement {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codeId; // 코드 id
     private String codeValue;  // 예 RM1001
     private String codeName; // 코드 이름

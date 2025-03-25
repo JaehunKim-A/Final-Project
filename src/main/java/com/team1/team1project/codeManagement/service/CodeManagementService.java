@@ -1,4 +1,4 @@
-package com.team1.team1project.CodeManagement.service;
+package com.team1.team1project.codeManagement.service;
 
 import com.team1.team1project.dto.CodeManagementDTO;
 

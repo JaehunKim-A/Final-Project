@@ -1,6 +1,6 @@
-package com.team1.team1project.CodeManagement.service;
+package com.team1.team1project.codeManagement.service;
 
-import com.team1.team1project.CodeManagement.repository.CodeManagementRepository;
+import com.team1.team1project.codeManagement.repository.CodeManagementRepository;
 import com.team1.team1project.domain.CodeManagement;
 import com.team1.team1project.dto.CodeManagementDTO;
 import lombok.RequiredArgsConstructor;
