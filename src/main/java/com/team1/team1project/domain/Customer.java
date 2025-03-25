@@ -1,6 +1,5 @@
-package com.team1.team1project.raw_material_suppliers.domain;
+package com.team1.team1project.domain;
 
-import com.team1.team1project.domain.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,30 +9,24 @@ import java.time.format.DateTimeFormatter;
 @Getter
 @Setter
 @Entity
-@Table(name = "raw_material_suppliers")
+@Table(name = "customers")
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class RawMaterialSupplier extends BaseEntity {
+public class Customer extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int supplierId;
+	private int customerId;
 
-	@Column(name = "supplier_name")
-	private String supplierName;
+	@Column(name = "customer_name")
+	private String customerName;
 
 	@Column(name = "contact_info")
 	private String contactInfo;
 
 	@Column(name = "address")
 	private String address;
-
-	@Column(name = "email")
-	private String email;
-
-	@Column(name = "phone_number")
-	private String phone_number;
 
 	// reg_date와 mod_date는 LocalDateTime으로 저장
 	@Override

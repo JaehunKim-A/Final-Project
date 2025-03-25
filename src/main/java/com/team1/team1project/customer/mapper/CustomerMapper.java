@@ -1,6 +1,6 @@
 package com.team1.team1project.customer.mapper;
 
-import com.team1.team1project.customer.domain.Customer;
+import com.team1.team1project.domain.Customer;
 import com.team1.team1project.customer.dto.CustomerDTO;
 
 public class CustomerMapper {

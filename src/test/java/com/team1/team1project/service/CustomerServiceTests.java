@@ -1,6 +1,6 @@
 package com.team1.team1project.service;
 
-import com.team1.team1project.customer.domain.Customer;
+import com.team1.team1project.domain.Customer;
 import com.team1.team1project.customer.service.CustomerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

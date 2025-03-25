@@ -1,6 +1,6 @@
 package com.team1.team1project.raw_material_suppliers.service;
 
-import com.team1.team1project.raw_material_suppliers.domain.RawMaterialSupplier;
+import com.team1.team1project.domain.RawMaterialSupplier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

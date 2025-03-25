@@ -1,6 +1,6 @@
 package com.team1.team1project.raw_material_suppliers.service;
 
-import com.team1.team1project.raw_material_suppliers.domain.RawMaterialSupplier;
+import com.team1.team1project.domain.RawMaterialSupplier;
 import com.team1.team1project.raw_material_suppliers.repository.RawMaterialSupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
