@@ -38,7 +38,7 @@ public class CustomerController extends PageController {
 
 		// 컬럼 이름 리스트
 		List<String> columnNames = List.of(
-				"customerId", "customerName", "address", "contactInfo", "reg_date", "mod_date"
+				"customerId", "customerName", "contactInfo", "address",  "reg_date", "mod_date"
 		);
 
 		// 페이지네이션 처리
