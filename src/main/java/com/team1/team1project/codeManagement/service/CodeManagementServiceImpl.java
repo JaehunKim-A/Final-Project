@@ -3,12 +3,20 @@ package com.team1.team1project.codeManagement.service;
 import com.team1.team1project.codeManagement.repository.CodeManagementRepository;
 import com.team1.team1project.domain.CodeManagement;
 import com.team1.team1project.dto.CodeManagementDTO;
+import com.team1.team1project.dto.PageRequestDTO;
+import com.team1.team1project.dto.PageResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -63,8 +71,22 @@ public class CodeManagementServiceImpl implements CodeManagementService {
                 codeManagementDTO.getCodeDescription(),
                 codeManagementDTO.getCategory(),
                 codeManagementDTO.getCodeType());
+
+        codeManagementRepository.save(codeManagement);
     }
 
     @Override
     public void removeOne(Long codeId){codeManagementRepository.deleteById(codeId);}
+
+    @Override
+    public PageResponseDTO list(PageRequestDTO pageRequestDTO) {
+        String[] types = pageRequestDTO.getTypes();
+        String keyword = pageRequestDTO.getKeyword();
+        Pageable pageable = pageRequestDTO.getPageable("codeId");
+        LocalDateTime from = pageRequestDTO.getFrom();
+        LocalDateTime tp = pageRequestDTO.getTo();
+
+        Page<CodeManagement> result = codeManagementRepository.searchAll(types, keyword, pageable, from, to);
+
+    }
 }

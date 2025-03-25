@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @Log4j2
-public class CodeManagementTests {
+public class CodeManagementTests{
 
     @Autowired
     private CodeManagementService codeManagementService;
@@ -42,5 +42,4 @@ public class CodeManagementTests {
                 .build();
         codeManagementService.modifyOne(codeManagementDTO);
     }
-
 }
