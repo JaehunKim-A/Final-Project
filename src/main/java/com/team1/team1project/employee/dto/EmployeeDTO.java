@@ -20,5 +20,5 @@ public class EmployeeDTO {
     private String position;
     private BigDecimal salary;
     private String address;
-    private String status;as
+    private String status;
 }
