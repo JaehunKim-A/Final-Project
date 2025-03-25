@@ -11,8 +11,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -78,15 +76,24 @@ public class CodeManagementServiceImpl implements CodeManagementService {
     @Override
     public void removeOne(Long codeId){codeManagementRepository.deleteById(codeId);}
 
-    @Override
-    public PageResponseDTO list(PageRequestDTO pageRequestDTO) {
-        String[] types = pageRequestDTO.getTypes();
-        String keyword = pageRequestDTO.getKeyword();
-        Pageable pageable = pageRequestDTO.getPageable("codeId");
-        LocalDateTime from = pageRequestDTO.getFrom();
-        LocalDateTime tp = pageRequestDTO.getTo();
-
-        Page<CodeManagement> result = codeManagementRepository.searchAll(types, keyword, pageable, from, to);
-
-    }
+//    @Override
+//    public PageResponseDTO list(PageRequestDTO pageRequestDTO) {
+//        String[] types = pageRequestDTO.getTypes();
+//        String keyword = pageRequestDTO.getKeyword();
+//        Pageable pageable = pageRequestDTO.getPageable("codeId");
+//        LocalDateTime from = pageRequestDTO.getFrom();
+//        LocalDateTime to = pageRequestDTO.getTo();
+//
+//       Page<CodeManagement> result = codeManagementRepository.searchAll(types, keyword, pageable, from, to);
+//        List<CodeManagementDTO> dtoList = result.getContent().stream().map(codeManagement -> {
+//            CodeManagementDTO codeManagementDTO = modelMapper.map(codeManagement, CodeManagementDTO.class);
+//            return codeManagementDTO;
+//        }).collect(Collectors.toList());
+//
+//        return PageResponseDTO.<CodeManagementDTO>builder()
+//                .pageRequestDTO(pageRequestDTO)
+//                .dtoList(dtoList)
+//                .total((int)result.getTotalElements())
+//                .build();
+//    }
 }

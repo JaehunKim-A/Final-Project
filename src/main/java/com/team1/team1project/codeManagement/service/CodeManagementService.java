@@ -11,6 +11,5 @@ public interface CodeManagementService{
     CodeManagementDTO readOne(Long codeId);
     void modifyOne(CodeManagementDTO codeManagementDTO);
     void removeOne(Long codeId);
-    PageResponseDTO<CodeManagementDTO> list(PageRequestDTO pageRequestDTO);
-    List<CodeManagementDTO> getAllCodeManagement();
+//    PageResponseDTO<CodeManagementDTO> list(PageRequestDTO pageRequestDTO);
 }

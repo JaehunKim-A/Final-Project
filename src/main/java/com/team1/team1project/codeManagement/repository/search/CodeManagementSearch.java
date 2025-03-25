@@ -6,6 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 
-public interface CodeManagementSearch {
-    Page<CodeManagement> searchAll(String[] types, String keyword, Pageable pageable, LocalDateTime from, LocalDateTime to);
-}
+//public interface CodeManagementSearch {
+//    Page<CodeManagement> searchAll(String[] types, String keyword, Pageable pageable, LocalDateTime from, LocalDateTime to);
+//}
