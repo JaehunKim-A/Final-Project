@@ -1,17 +1,17 @@
 package com.team1.team1project.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RawMaterial {
+@Builder
+@ToString(exclude = "combos")
+public class RawMaterial extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,23 +31,7 @@ public class RawMaterial {
     @Column(name = "stock", nullable = false)
     private int stock;  // 원자재 재고
 
-    @Column(name = "reg_date", updatable = false)
-    private LocalDateTime regDate;  // 생성 일시
-
-    @Column(name = "mod_date")
-    private LocalDateTime modDate;  // 수정 일시
-
-    // 생성 및 수정 시간 자동 처리
-    @PrePersist
-    public void prePersist() {
-        LocalDateTime now = LocalDateTime.now();
-        this.regDate = now;
-        this.modDate = now;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        this.modDate = LocalDateTime.now();
-    }
+    // FinishedProductCombos와의 관계 설정
+    @OneToMany(mappedBy = "rawMaterial")
+    private List<FinishedProductCombos> combos; // 해당 원자재를 사용하는 완제품 정보
 }
-
