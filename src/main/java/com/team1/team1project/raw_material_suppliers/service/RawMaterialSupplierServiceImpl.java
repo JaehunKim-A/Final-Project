@@ -53,11 +53,6 @@ public class RawMaterialSupplierServiceImpl implements RawMaterialSupplierServic
 
 		return false;
 	}
-
-	@Override
-	public Page<RawMaterialSupplier> getRawMaterialSupplierPage(Pageable pageable) {
-		return rawMaterialSupplierRepository.findAll(pageable);
-	}
 }
 
 

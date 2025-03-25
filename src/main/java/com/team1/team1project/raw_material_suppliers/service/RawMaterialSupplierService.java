@@ -14,6 +14,4 @@ public interface RawMaterialSupplierService {
 	RawMaterialSupplier updateRawMaterialSupplier(int supplierId, RawMaterialSupplier rawMaterialSupplier);
 	boolean deleteRawMaterialSupplier(int supplierId);
 
-	// ✅ 페이지네이션용 메서드
-	Page<RawMaterialSupplier> getRawMaterialSupplierPage(Pageable pageable);
 }

@@ -1,48 +1,41 @@
 package com.team1.team1project.customer.controller;
 
-import com.team1.team1project.controller.PageController;
-import com.team1.team1project.domain.Customer;
 import com.team1.team1project.customer.service.CustomerService;
+import com.team1.team1project.domain.Customer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
 @Controller
 @Log4j2
 @RequiredArgsConstructor
-public class CustomerController extends PageController {
+public class CustomerController {
 
 	@Autowired
 	private CustomerService customerService;
 
 	@GetMapping("/table/customer")
-	public String showCustomerList(Model model,
-	                               @RequestParam(defaultValue = "1") int page,
-	                               @RequestParam(defaultValue = "10") int size
-	) {
-
-		// Pageable 객체 생성, getPageable 메서드를 호출하여 페이지 번호 및 크기 설정
-		Pageable pageable = getPageable(page, size, Pageable.unpaged());
-
-		// 고객 페이지 데이터 가져오기
-		Page<Customer> customerPage = customerService.getCustomerPage(pageable);
+	public String showCustomerList(Model model) {
+		List<Customer> customers = customerService.getAllCustomers();
 
 		// 컬럼 이름 리스트
 		List<String> columnNames = List.of(
-				"customerId", "customerName", "contactInfo", "address",  "reg_date", "mod_date"
+				"customerId", "customerName", "contactInfo", "address", "reg_date", "mod_date"
 		);
 
-		// 페이지네이션 처리
-		addPagination(model, customerPage, page, columnNames);
+		// 데이터를 템플릿에 전달
+		model.addAttribute("customers", customers);
+		model.addAttribute("columns", columnNames);  // 컬럼 이름도 전달
 
-		return "dist/customer/table";
+		return "dist/customer/table"; // 데이터 테이블 템플릿으로 이동
 	}
 
 	// 고객 등록 폼을 표시하는 메서드

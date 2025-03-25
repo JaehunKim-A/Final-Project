@@ -52,10 +52,4 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 		return false;
 	}
-
-	// ✅ 페이지네이션 메서드 구현
-	@Override
-	public Page<Customer> getCustomerPage(Pageable pageable) {
-		return customerRepository.findAll(pageable);
-	}
 }

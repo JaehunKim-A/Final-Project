@@ -14,6 +14,5 @@ public interface CustomerService {
 	Customer updateCustomer(int customerId, Customer customer);
 	boolean deleteCustomer(int customerId);
 
-	// ✅ 페이지네이션용 메서드
-	Page<Customer> getCustomerPage(Pageable pageable);
+
 }
