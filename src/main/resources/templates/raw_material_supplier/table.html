@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supplier - Mazer Admin Dashboard</title>
+    <title>DataTable - Mazer Admin Dashboard</title>
 
-    <link rel="shortcut icon" href="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2033%2034'%20fill-rule='evenodd'%20stroke-linejoin='round'%20stroke-miterlimit='2'%20xmlns:v='https://vecta.io/nano'%3e%3cpath%20d='M3%2027.472c0%204.409%206.18%205.552%2013.5%205.552%207.281%200%2013.5-1.103%2013.5-5.513s-6.179-5.552-13.5-5.552c-7.281%200-13.5%201.103-13.5%205.513z'%20fill='%23435ebe'%20fill-rule='nonzero'/%3e%3ccircle%20cx='16.5'%20cy='8.8'%20r='8.8'%20fill='%2341bbdd'/%3e%3c/svg%3e" type="image/x-icon">
+    <link rel="shortcut icon" href="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/1999/svg'%20viewBox='0%200%2033%2034'%20fill-rule='evenodd'%20stroke-linejoin='round'%20stroke-miterlimit='2'%20xmlns:v='https://vecta.io/nano'%3e%3cpath%20d='M3%2027.472c0%204.409%206.18%205.552%2013.5%205.552%207.281%200%2013.5-1.103%2013.5-5.513s-6.179-5.552-13.5-5.552c-7.281%200-13.5%201.103-13.5%205.513z'%20fill='%23435ebe'%20fill-rule='nonzero'/%3e%3ccircle%20cx='16.5'%20cy='8.8'%20r='8.8'%20fill='%2341bbdd'/%3e%3c/svg%3e" type="image/x-icon">
     <link rel="stylesheet" href="/assets/extensions/simple-datatables/style.css">
     <link rel="stylesheet" href="/assets/compiled/css/table-datatable.css">
     <link rel="stylesheet" href="/assets/compiled/css/app.css">
@@ -16,8 +16,7 @@
 <body>
 <script src="/assets/static/js/initTheme.js"></script>
 <div id="app">
-    <div th:replace="~{dist/index :: sidebar}"></div>
-</div>
+    <div th:replace="~{dist/index :: sidebar}"></div></div>
 <div id="main">
     <header class="mb-3">
         <a href="#" class="burger-btn d-block d-xl-none">
@@ -29,8 +28,8 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>DataTable</h3>
-                    <p class="text-subtitle text-muted">Supplier data management using simple-datatables.</p>
+                    <h3>Supplier Table</h3>
+                    <p class="text-subtitle text-muted">A sortable, searchable, paginated table without dependencies thanks to simple-datatables.</p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -46,7 +45,7 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Supplier Table</h4>
+                    <h4 class="card-title">Simple Datatable</h4>
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Add New Supplier</button>
                 </div>
                 <div class="card-body">
@@ -60,8 +59,8 @@
                         <tr th:each="supplier : ${suppliers}">
                             <td th:text="${supplier.supplierId}"></td>
                             <td th:text="${supplier.supplierName}"></td>
-                            <td th:text="${supplier.address}"></td>
                             <td th:text="${supplier.contactInfo}"></td>
+                            <td th:text="${supplier.address}"></td>
                             <td th:text="${supplier.email}"></td>
                             <td th:text="${supplier.phone_number}"></td>
                             <td th:text="${supplier.formattedRegDate}"></td>
@@ -70,8 +69,8 @@
                                 <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal"
                                         th:data-id="${supplier.supplierId}"
                                         th:data-name="${supplier.supplierName}"
-                                        th:data-address="${supplier.address}"
                                         th:data-contact="${supplier.contactInfo}"
+                                        th:data-address="${supplier.address}"
                                         th:data-email="${supplier.email}"
                                         th:data-phone="${supplier.phone_number}"
                                         th:data-reg="${supplier.regDate}"
@@ -85,73 +84,171 @@
             </div>
         </section>
 
-        <!-- Modal 및 Script는 customer 구조와 동일하게 처리 (생략 가능 시 알려주세요) -->
-
-    </div>
-
-    <footer>
-        <div class="footer clearfix mb-0 text-muted">
-            <div class="float-start">
-                <p>2023 &copy; Mazer</p>
-            </div>
-            <div class="float-end">
-                <p>Crafted with <span class="text-danger"><i class="bi bi-heart-fill icon-mid"></i></span> by <a href="https://saugi.me">Saugi</a></p>
+        <!-- 고객 등록 모달 -->
+        <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form id="registerSupplierForm" method="post" th:action="@{/table/raw_material_supplier/register}">
+                        <div class="modal-header">
+                            <h5 class="modal-title">공급처 등록</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="text" class="form-control mb-2" name="supplierName" placeholder="공급처명">
+                            <input type="text" class="form-control mb-2" name="contactInfo" placeholder="연락처">
+                            <input type="text" class="form-control mb-2" name="address" placeholder="주소">
+                            <input type="email" class="form-control mb-2" name="email" placeholder="이메일">
+                            <input type="text" class="form-control mb-2" name="phone_number" placeholder="전화번호">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">저장</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </footer>
-</div>
 
-<script src="/assets/static/js/initTheme.js"></script>
-<script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-<script src="/assets/compiled/js/app.js"></script>
-<script src="/assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
-<script src="/assets/static/js/pages/simple-datatables.js"></script>
+        <!-- Edit Modal -->
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form id="editSupplierForm" method="post" th:action="@{/table/raw_material_supplier/edit/__id__}">
+                        <div class="modal-header">
+                            <h5 class="modal-title">공급처 수정</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="editSupplierId" name="supplierId">
+                            <input type="text" class="form-control mb-2" id="editSupplierName" name="supplierName" placeholder="공급처명">
+                            <input type="text" class="form-control mb-2" id="editContactInfo" name="contactInfo" placeholder="연락처">
+                            <input type="text" class="form-control mb-2" id="editAddress" name="address" placeholder="주소">
+                            <input type="email" class="form-control mb-2" id="editEmail" name="email" placeholder="이메일">
+                            <input type="text" class="form-control mb-2" id="editPhoneNumber" name="phone_number" placeholder="전화번호">
+                            <input type="text" class="form-control mb-2" id="editRegDate" name="regDate" readonly>
+                            <input type="text" class="form-control mb-2" id="editModDate" name="modDate" readonly>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">수정</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const tableBody = document.querySelector("#table1");
-        const myDataTable = new simpleDatatables.DataTable(tableBody, {
-            perPage: 10,
-            searchable: true,
-            sortable: true,
-            labels: {
-                placeholder: "공급업체 검색...",
-                perPage: "{select} 행 보기",
-                noRows: "등록된 공급업체가 없습니다.",
-                info: "전체 {rows}개 중 {start}에서 {end}까지 표시",
-            },
-        });
+        <!-- Delete Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="deleteSupplierForm">
+                        <div class="modal-header">
+                            <h5 class="modal-title">삭제 확인</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>정말로 삭제하시겠습니까?</p>
+                            <input type="hidden" id="deleteSupplierId" name="supplierId">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger">삭제</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-        document.querySelector("#table1").addEventListener("click", (e) => {
-            const btn = e.target.closest(".btn-warning");
-            if (btn) {
-                document.getElementById("editSupplierId").value = btn.dataset.id;
-                document.getElementById("editSupplierName").value = btn.dataset.name;
-                document.getElementById("editAddress").value = btn.dataset.address;
-                document.getElementById("editContactInfo").value = btn.dataset.contact;
-                document.getElementById("editEmail").value = btn.dataset.email;
-                document.getElementById("editPhoneNumber").value = btn.dataset.phone;
-                document.getElementById("editRegDate").value = btn.dataset.reg;
-                document.getElementById("editModDate").value = btn.dataset.mod;
-            }
-        });
+        <!-- JavaScript dependencies -->
+        <script src="/assets/static/js/components/dark.js"></script>
+        <script src="/assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
+        <script src="/assets/compiled/js/table-datatable.js"></script>
 
-        document.querySelector("#table1").addEventListener("click", (e) => {
-            const btn = e.target.closest(".btn-danger");
-            if (btn) {
-                document.getElementById("deleteSupplierId").value = btn.dataset.id;
-            }
-        });
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
 
-        document.getElementById("deleteSupplierForm").addEventListener("submit", (event) => {
-            event.preventDefault();
-            const supplierId = document.getElementById("deleteSupplierId").value;
-            if (supplierId) {
-                location.href = `/table/raw_material_supplier/delete/${supplierId}`;
-            }
-        });
-    });
-</script>
+                const tableBody = document.querySelector("#table1");
+                const myDataTable = new simpleDatatables.DataTable(tableBody, {
+                    perPage: 10,
+                    searchable: true,
+                    sortable: true,
+                    labels: {
+                        placeholder: "공급처를 검색하세요...",
+                        perPage: "{select} 행을 한 페이지에 표시",
+                        noRows: "공급처를 찾을 수 없습니다.",
+                        info: "전체 {rows}개의 공급처 중 {start}에서 {end}까지 표시",
+                    },
+                });
+
+                // 수정 버튼 클릭 (이벤트 위임)
+                document.querySelector("#table1").addEventListener("click", (e) => {
+                    const btn = e.target.closest(".btn-warning");
+                    if (btn) {
+                        const supplierId = btn.getAttribute("data-id");
+                        const supplierName = btn.getAttribute("data-name");
+                        const contactInfo = btn.getAttribute("data-contact");
+                        const address = btn.getAttribute("data-address");
+                        const email = btn.getAttribute("data-email");
+                        const phone_number = btn.getAttribute("data-phone");
+                        const regDate = btn.getAttribute("data-reg");
+                        const modDate = btn.getAttribute("data-mod");
+
+                        document.getElementById("editSupplierId").value = supplierId;
+                        document.getElementById("editSupplierName").value = supplierName;
+                        document.getElementById("editContactInfo").value = contactInfo;
+                        document.getElementById("editAddress").value = address;
+                        document.getElementById("editEmail").value = email;
+                        document.getElementById("editPhoneNumber").value = phone_number;
+                        document.getElementById("editRegDate").value = regDate;
+                        document.getElementById("editModDate").value = modDate;
+                    }
+                });
+
+                const editSupplierForm = document.getElementById("editSupplierForm");
+                editSupplierForm.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    const formData = new FormData(editSupplierForm);
+                    const supplierId = document.getElementById("editSupplierId").value;
+                    fetch(`/table/raw_material_supplier/edit/${supplierId}`, {
+                        method: "POST",
+                        body: formData,
+                    })
+                        .then((response) => {
+                            if (response.ok) {
+                                alert("공급처 정보가 수정되었습니다.");
+                                location.reload();
+                            } else {
+                                alert("공급처 수정에 실패했습니다.");
+                            }
+                        })
+                        .catch((error) => {
+                            alert("에러 발생: 공급처 수정 실패");
+                            console.error("에러:", error);
+                        });
+                });
+
+                // 삭제 버튼 클릭 → supplierId 세팅
+                document.querySelector("#table1").addEventListener("click", (e) => {
+                    const btn = e.target.closest(".btn-danger");
+                    if (btn) {
+                        const supplierId = btn.getAttribute("data-id");
+                        console.log("선택된 공급처 ID:", supplierId); // 디버깅용
+                        document.getElementById("deleteSupplierId").value = supplierId;
+                    }
+                });
+
+                // 삭제 폼 제출 → GET 요청으로 리다이렉트
+                const deleteSupplierForm = document.getElementById("deleteSupplierForm");
+                deleteSupplierForm.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    const supplierId = document.getElementById("deleteSupplierId").value;
+
+                    if (!supplierId) {
+                        alert("공급처 ID가 없습니다.");
+                        return;
+                    }
+
+                    location.href = `/table/raw_material_supplier/delete/${supplierId}`;
+                });
+            });
+        </script>
+
 </body>
-
 </html>

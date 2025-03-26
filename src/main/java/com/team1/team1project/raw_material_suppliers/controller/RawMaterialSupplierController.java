@@ -30,7 +30,7 @@ public class RawMaterialSupplierController {
 				"supplierId", "supplierName", "contactInfo", "address", "email", "phone_number", "reg_date", "mod_date"
 		);
 
-		model.addAttribute("rawMaterialSuppliers", rawMaterialSuppliers);
+		model.addAttribute("suppliers", rawMaterialSuppliers);
 		model.addAttribute("columns", columnNames);
 
 		return "raw_material_supplier/table";
