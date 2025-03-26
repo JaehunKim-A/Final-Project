@@ -2,6 +2,7 @@ package com.team1.team1project.raw_material_suppliers.service;
 
 import com.team1.team1project.domain.RawMaterialSupplier;
 import com.team1.team1project.raw_material_suppliers.repository.RawMaterialSupplierRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,14 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class RawMaterialSupplierServiceImpl implements RawMaterialSupplierService {
 
 	private final RawMaterialSupplierRepository rawMaterialSupplierRepository;
-
-	@Autowired
-	public RawMaterialSupplierServiceImpl(RawMaterialSupplierRepository rawMaterialSupplierRepository) {
-		this.rawMaterialSupplierRepository = rawMaterialSupplierRepository;
-	}
 
 	@Override
 	public List<RawMaterialSupplier> getAllRawMaterialSuppliers() {

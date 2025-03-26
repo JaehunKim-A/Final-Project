@@ -12,7 +12,7 @@ public class RawMaterialSuppliersDTO {
 	private String contactInfo;   // DB 컬럼명과 맞게 수정
 	private String address;
 	private String email;
-	private String phone_number;
+	private String phoneNumber;
 
 	public RawMaterialSuppliersDTO() {}
 
@@ -22,6 +22,6 @@ public class RawMaterialSuppliersDTO {
 		this.contactInfo = contactInfo;
 		this.address = address;
 		this.email = email;
-		this.phone_number = phone_number;
+		this.phoneNumber = phoneNumber;
 	}
 }

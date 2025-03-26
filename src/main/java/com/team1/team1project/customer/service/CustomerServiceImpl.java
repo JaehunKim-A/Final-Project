@@ -2,6 +2,7 @@ package com.team1.team1project.customer.service;
 
 import com.team1.team1project.domain.Customer;
 import com.team1.team1project.customer.repository.CustomerRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,14 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
 	private final CustomerRepository customerRepository;
-
-	@Autowired
-	public CustomerServiceImpl(CustomerRepository customerRepository) {
-		this.customerRepository = customerRepository;
-	}
 
 	@Override
 	public List<Customer> getAllCustomers() {

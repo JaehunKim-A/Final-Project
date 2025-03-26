@@ -13,7 +13,7 @@ public class RawMaterialSupplierMapper {
 		rawMaterialSuppliersDTO.setContactInfo(rawMaterialSuppliers.getContactInfo());
 		rawMaterialSuppliersDTO.setAddress(rawMaterialSuppliers.getAddress());
 		rawMaterialSuppliersDTO.setEmail(rawMaterialSuppliers.getEmail());
-		rawMaterialSuppliersDTO.setPhone_number(rawMaterialSuppliers.getPhone_number());
+		rawMaterialSuppliersDTO.setPhoneNumber(rawMaterialSuppliers.getPhoneNumber());
 		return rawMaterialSuppliersDTO;
 	}
 
@@ -25,7 +25,7 @@ public class RawMaterialSupplierMapper {
 		rawMaterialSuppliers.setContactInfo(rawMaterialSuppliersDTO.getContactInfo());
 		rawMaterialSuppliers.setAddress(rawMaterialSuppliers.getAddress());
 		rawMaterialSuppliers.setEmail(rawMaterialSuppliers.getEmail());
-		rawMaterialSuppliers.setPhone_number(rawMaterialSuppliers.getPhone_number());
+		rawMaterialSuppliers.setPhoneNumber(rawMaterialSuppliers.getPhoneNumber());
 
 		return rawMaterialSuppliers;
 	}

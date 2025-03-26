@@ -32,7 +32,7 @@ public class RawMaterialSupplier extends BaseEntity {
 	private String email;
 
 	@Column(name = "phone_number")
-	private String phone_number;
+	private String phoneNumber;
 
 	// reg_date와 mod_date는 LocalDateTime으로 저장
 	@Override
