@@ -46,7 +46,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Simple Datatable</h4>
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Add New Supplier</button>
+                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Add New Supplier</button>
                     </div>
                     <div class="card-body">
                         <table class="table table-striped" id="table1">
@@ -66,7 +66,7 @@
                                 <td th:text="${supplier.regDate}"></td>
                                 <td th:text="${supplier.modDate}"></td>
                                 <td>
-                                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal"
+                                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal"
                                             th:data-id="${supplier.supplierId}"
                                             th:data-name="${supplier.supplierName}"
                                             th:data-contact="${supplier.contactInfo}"
@@ -75,7 +75,7 @@
                                             th:data-phoneNumber="${supplier.phoneNumber}"
                                             th:data-reg="${supplier.regDate}"
                                             th:data-mod="${supplier.modDate}">Edit</button>
-                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" th:data-id="${supplier.supplierId}">Delete</button>
+                                    <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#deleteModal" th:data-id="${supplier.supplierId}">Delete</button>
                                 </td>
                             </tr>
                             </tbody>
