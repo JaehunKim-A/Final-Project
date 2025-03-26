@@ -1,49 +1,39 @@
 package com.team1.team1project.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
-@Entity
-@Data
+@Entity // jpa 에서 관리하는 entity 지정
 @NoArgsConstructor
+@ToString
 @AllArgsConstructor
+@Getter
+@Builder
 public class CodeManagement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "code_id")
-    private Long codeId;  // 코드 ID
+    private Long codeId; // 코드 id
+    private String codeValue;  // 예 RM1001
+    private String codeName; // 코드 이름
+    private String codeDescription; // 코드 기타사항
+    private String category; // 코드 구분
+    private String codeType; // 코드 타입 예) 원자재, 완제품
+    private String registeredBy; //등록자
+    private String updatedBy;   // 수정자
 
-    @Column(name = "code_type", nullable = false)
-    private String codeType;  // 코드 타입 (예: 원자재, 완제품 등)
-
-    @Column(name = "code_value", nullable = false)
-    private String codeValue;  // 코드 값 (예: RM001, FP001 등)
-
-    @Column(name = "code_description")
-    private String codeDescription;  // 코드 설명
-
-    @Column(name = "reg_date", updatable = false)
-    private LocalDateTime regDate;  // 생성 일시
-
-    @Column(name = "mod_date")
-    private LocalDateTime modDate;  // 수정 일시
-
-    // 생성 및 수정 시간 자동 처리
-    @PrePersist
-    public void prePersist() {
-        LocalDateTime now = LocalDateTime.now();
-        this.regDate = now;
-        this.modDate = now;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        this.modDate = LocalDateTime.now();
+    public void codeChange(String codeValue,
+                           String codeName,
+                           String codeDescription,
+                           String category,
+                           String codeType)
+    {
+        this.codeValue = codeValue;
+        this.codeName = codeName;
+        this.codeDescription = codeDescription;
+        this.category = category;
+        this.codeType = codeType;
     }
 }
-

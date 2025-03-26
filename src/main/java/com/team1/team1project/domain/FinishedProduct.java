@@ -17,8 +17,7 @@ public class FinishedProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer productId; // 제품 ID
-
+    private Integer product_id; // 제품 ID
     private String productName; // 제품 이름
     private String productDescription; // 제품 설명
     private String unit; // 단위 (예: pcs, kg 등)

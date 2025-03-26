@@ -1,3 +1,5 @@
+package com.team1.team1project.finishedProductCombos.service;
+
 import com.team1.team1project.domain.FinishedProductCombos;
 import com.team1.team1project.repository.FinishedProductCombosRepository;
 import com.team1.team1project.finishedProductCombos.service.FinishedProductCombosService;
