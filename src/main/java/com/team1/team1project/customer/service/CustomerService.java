@@ -1,18 +1,14 @@
 package com.team1.team1project.customer.service;
 
-import com.team1.team1project.domain.Customer;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.team1.team1project.dto.CustomerDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CustomerService {
-	List<Customer> getAllCustomers();
-	Optional<Customer> getCustomerById(int customerId);
-	Customer createCustomer(Customer customer);
-	Customer updateCustomer(int customerId, Customer customer);
+	List<CustomerDTO> getAllCustomers();
+	Optional<CustomerDTO> getCustomerById(int customerId);
+	CustomerDTO createCustomer(CustomerDTO customerDTO);
+	CustomerDTO updateCustomer(int customerId, CustomerDTO customerDTO);
 	boolean deleteCustomer(int customerId);
-
-
 }

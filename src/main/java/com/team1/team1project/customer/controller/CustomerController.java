@@ -1,16 +1,12 @@
 package com.team1.team1project.customer.controller;
 
 import com.team1.team1project.customer.service.CustomerService;
-import com.team1.team1project.domain.Customer;
+import com.team1.team1project.dto.CustomerDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,60 +15,57 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerController {
 
-	@Autowired
-	private CustomerService customerService;
+	private final CustomerService customerService;
 
 	@GetMapping("/table/customer")
 	public String showCustomerList(Model model) {
-		List<Customer> customers = customerService.getAllCustomers();
+		List<CustomerDTO> customers = customerService.getAllCustomers();
 
-		// 컬럼 이름 리스트
 		List<String> columnNames = List.of(
-				"customerId", "customerName", "contactInfo", "address", "reg_date", "mod_date"
+				"customerId", "customerName", "contactInfo", "address", "regDate", "modDate"
 		);
 
-		// 데이터를 템플릿에 전달
 		model.addAttribute("customers", customers);
-		model.addAttribute("columns", columnNames);  // 컬럼 이름도 전달
+		model.addAttribute("columns", columnNames);
 
-		return "customer/table"; // 데이터 테이블 템플릿으로 이동
+		return "customer/table";
 	}
 
-	// 고객 등록 폼을 표시하는 메서드
+	// 등록 폼
 	@GetMapping("/table/customer/register")
 	public String showRegistrationForm(Model model) {
-		model.addAttribute("customer", new Customer()); // 새 고객 객체를 모델에 추가
-		return "customer/register"; // 고객 등록 페이지로 이동
+		model.addAttribute("customer", new CustomerDTO());
+		return "customer/register";
 	}
 
-	// 고객 등록 처리 메서드
+	// 등록 처리
 	@PostMapping("/table/customer/register")
-	public String registerCustomer(@ModelAttribute Customer customer) {
-		customerService.createCustomer(customer); // 고객 등록
-		return "redirect:/table/customer"; // 고객 목록 페이지로 리다이렉트
+	public String registerCustomer(@ModelAttribute("customer") CustomerDTO customerDTO) {
+		customerService.createCustomer(customerDTO);
+		return "redirect:/table/customer";
 	}
 
-	// 고객 수정 폼을 표시하는 메서드
+	// 수정 폼
 	@GetMapping("/table/customer/edit/{customerId}")
 	public String showEditForm(@PathVariable("customerId") int customerId, Model model) {
-		Customer customer = customerService.getCustomerById(customerId)
-				.orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" + customerId));
-		model.addAttribute("customer", customer); // 수정할 고객 정보 모델에 추가
-		return "customer/edit"; // 고객 수정 페이지로 이동
+		CustomerDTO customerDTO = customerService.getCustomerById(customerId)
+				.orElseThrow(() -> new IllegalArgumentException("Invalid customer Id: " + customerId));
+		model.addAttribute("customer", customerDTO);
+		return "customer/edit";
 	}
 
-	// 고객 수정 처리 메서드
+	// 수정 처리
 	@PostMapping("/table/customer/edit/{customerId}")
-	public String updateCustomer(@PathVariable("customerId") int customerId, @ModelAttribute Customer customer) {
-		customerService.updateCustomer(customerId, customer); // 고객 정보 수정
-		return "redirect:/table/customer"; // 고객 목록 페이지로 리다이렉트
+	public String updateCustomer(@PathVariable("customerId") int customerId,
+	                             @ModelAttribute("customer") CustomerDTO customerDTO) {
+		customerService.updateCustomer(customerId, customerDTO);
+		return "redirect:/table/customer";
 	}
 
-	// 고객 삭제 처리 메서드
+	// 삭제
 	@GetMapping("/table/customer/delete/{customerId}")
 	public String deleteCustomer(@PathVariable("customerId") int customerId) {
-		customerService.deleteCustomer(customerId); // 고객 삭제
-		return "redirect:/table/customer"; // 고객 목록 페이지로 리다이렉트
+		customerService.deleteCustomer(customerId);
+		return "redirect:/table/customer";
 	}
-
 }

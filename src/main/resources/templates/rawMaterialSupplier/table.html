@@ -63,8 +63,8 @@
                                 <td th:text="${supplier.address}"></td>
                                 <td th:text="${supplier.email}"></td>
                                 <td th:text="${supplier.phoneNumber}"></td>
-                                <td th:text="${supplier.formattedRegDate}"></td>
-                                <td th:text="${supplier.formattedModDate}"></td>
+                                <td th:text="${supplier.regDate}"></td>
+                                <td th:text="${supplier.modDate}"></td>
                                 <td>
                                     <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal"
                                             th:data-id="${supplier.supplierId}"
@@ -92,7 +92,7 @@
                             <h5 class="modal-title" id="registerModalLabel">Register New Supplier</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="/table/raw_material_supplier/register" method="POST">
+                        <form action="/table/rawMaterialSupplier/register" method="POST">
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label for="supplierName" class="form-label">Supplier Name</label>
@@ -132,7 +132,7 @@
                             <h5 class="modal-title" id="editModalLabel">Edit Supplier</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="/table/raw_material_supplier/edit/{supplierId}" method="POST" id="editSupplierForm">
+                        <form action="/table/rawMaterialSupplier/edit/{supplierId}" method="POST" id="editSupplierForm">
                             <div class="modal-body">
                                 <input type="hidden" id="editSupplierId" name="supplierId">
                                 <div class="mb-3">
@@ -157,11 +157,11 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="editRegDate" class="form-label">Registration Date</label>
-                                    <input type="text" class="form-control" id="editRegDate" name="regDate" readonly>
+                                    <input type="text" class="form-control" id="editRegDate" name="regDate" readonly disabled>
                                 </div>
                                 <div class="mb-3">
                                     <label for="editModDate" class="form-label">Modification Date</label>
-                                    <input type="text" class="form-control" id="editModDate" name="modDate" readonly>
+                                    <input type="text" class="form-control" id="editModDate" name="modDate" readonly disabled>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -254,7 +254,7 @@
             event.preventDefault();
             const formData = new FormData(editSupplierForm);
             const supplierId = document.getElementById("editSupplierId").value;
-            fetch(`/table/raw_material_supplier/edit/${supplierId}`, {
+            fetch(`/table/rawMaterialSupplier/edit/${supplierId}`, {
                 method: "POST",
                 body: formData,
             })
@@ -293,7 +293,7 @@
                 return;
             }
 
-            location.href = `/table/raw_material_supplier/delete/${supplierId}`;
+            location.href = `/table/rawMaterialSupplier/delete/${supplierId}`;
             });
         });
     </script>

@@ -1,4 +1,4 @@
-package com.team1.team1project.raw_material_suppliers.repository;
+package com.team1.team1project.rawMaterialSuppliers.repository;
 
 import com.team1.team1project.domain.RawMaterialSupplier;
 import org.springframework.data.jpa.repository.JpaRepository;

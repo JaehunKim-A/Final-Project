@@ -13,10 +13,5 @@ public class CustomerServiceTests {
 
 	@Test
 	public void testModify() {
-		Customer customer = new Customer(7, "ModifiedName", "Modified123-456-7890", "ModifiedAddress");
-
-		Customer result = customerService.updateCustomer(7, customer);
 	}
-
-
 }

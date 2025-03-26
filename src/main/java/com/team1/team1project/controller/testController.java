@@ -304,9 +304,9 @@ public class testController {
         return "dist/layout-vertical-navbar"; // layout-vertical-navbar.html
     }
 
-    @GetMapping("/raw_material_supplier")
+    @GetMapping("/rawMaterialSupplier")
     public String rawMaterialSupplier() {
-        return "dist/raw_material_supplier"; // raw_material_supplier.html
+        return "dist/rawMaterialSupplier"; // raw_material_supplier.html
     }
 
     @GetMapping("/table-datatable-jquery")

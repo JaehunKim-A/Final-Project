@@ -61,8 +61,8 @@
                                 <td th:text="${customer.customerName}"></td>
                                 <td th:text="${customer.contactInfo}"></td>
                                 <td th:text="${customer.address}"></td>
-                                <td th:text="${customer.formattedRegDate}"></td>
-                                <td th:text="${customer.formattedModDate}"></td>
+                                <td th:text="${customer.regDate}"></td>
+                                <td th:text="${customer.modDate}"></td>
                                 <td>
                                     <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal"
                                             th:data-id="${customer.customerId}"
@@ -137,11 +137,11 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="editRegDate" class="form-label">Registration Date</label>
-                                    <input type="text" class="form-control" id="editRegDate" name="regDate" readonly>
+                                    <input type="text" class="form-control" id="editRegDate" name="regDate" readonly disabled>
                                 </div>
                                 <div class="mb-3">
                                     <label for="editModDate" class="form-label">Modification Date</label>
-                                    <input type="text" class="form-control" id="editModDate" name="modDate" readonly>
+                                    <input type="text" class="form-control" id="editModDate" name="modDate" readonly disabled>
                                 </div>
                             </div>
                             <div class="modal-footer">
