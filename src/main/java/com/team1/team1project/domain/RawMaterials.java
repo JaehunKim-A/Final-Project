@@ -14,7 +14,7 @@ public class RawMaterials extends BaseEntity {
 
     @Id
     private Long materialId;  // 원자재 쌓이는 번호
-    private String materialCode; // 원자재 코드
+    private String codeValue; // 원자재 코드
     private String material; // 원자재 이름
 
     @Column(name = "unit")

@@ -1,4 +1,4 @@
-package com.team1.team1project.rawMaterial.service;
+package com.team1.team1project.rawMaterials.service;
 
 import com.team1.team1project.dto.CodeManagementDTO;
 

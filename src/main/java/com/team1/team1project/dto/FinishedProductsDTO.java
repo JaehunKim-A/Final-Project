@@ -18,12 +18,18 @@ import java.time.LocalDateTime;
 public class FinishedProductsDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer productId; // 제품 id
-
+    private Long productId; // 제품 id
     private String productCode;  // 코드 id
-    private String productDescription;  // 제품 기타사항
+
+    private String description;  // 제품 기타사항
     private LocalDate[] productionDate;    // 제품만들어진 날짜
+
+    private String unit;
     private String status;
+    private String category;
+    private String registeredBy;
+    private String updatedBy;
+
     private LocalDateTime regDate;
     private LocalDateTime modDate;
 }
