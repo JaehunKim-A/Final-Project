@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -73,4 +74,8 @@ public class FinishedProductsServiceImpl implements FinishedProductsService {
     @Override
     public void removeOne(Long productId){finishedProductsRepository.deleteById(productId);}
 
+    @Override
+    public List<FinishedProducts> getAllProducts(){
+        return finishedProductsRepository.findAll();
+    }
 }

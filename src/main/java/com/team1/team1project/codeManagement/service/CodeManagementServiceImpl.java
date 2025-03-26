@@ -3,8 +3,6 @@ package com.team1.team1project.codeManagement.service;
 import com.team1.team1project.codeManagement.repository.CodeManagementRepository;
 import com.team1.team1project.domain.CodeManagement;
 import com.team1.team1project.dto.CodeManagementDTO;
-import com.team1.team1project.dto.PageRequestDTO;
-import com.team1.team1project.dto.PageResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -76,24 +74,8 @@ public class CodeManagementServiceImpl implements CodeManagementService {
     @Override
     public void removeOne(Long codeId){codeManagementRepository.deleteById(codeId);}
 
-//    @Override
-//    public PageResponseDTO list(PageRequestDTO pageRequestDTO) {
-//        String[] types = pageRequestDTO.getTypes();
-//        String keyword = pageRequestDTO.getKeyword();
-//        Pageable pageable = pageRequestDTO.getPageable("codeId");
-//        LocalDateTime from = pageRequestDTO.getFrom();
-//        LocalDateTime to = pageRequestDTO.getTo();
-//
-//       Page<CodeManagement> result = codeManagementRepository.searchAll(types, keyword, pageable, from, to);
-//        List<CodeManagementDTO> dtoList = result.getContent().stream().map(codeManagement -> {
-//            CodeManagementDTO codeManagementDTO = modelMapper.map(codeManagement, CodeManagementDTO.class);
-//            return codeManagementDTO;
-//        }).collect(Collectors.toList());
-//
-//        return PageResponseDTO.<CodeManagementDTO>builder()
-//                .pageRequestDTO(pageRequestDTO)
-//                .dtoList(dtoList)
-//                .total((int)result.getTotalElements())
-//                .build();
-//    }
+    @Override
+    public List<CodeManagement> getAllCode(){
+        return codeManagementRepository.findAll();
+    }
 }

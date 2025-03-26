@@ -1,6 +1,10 @@
 package com.team1.team1project.finishedProducts.service;
 
+import com.team1.team1project.domain.CodeManagement;
+import com.team1.team1project.domain.FinishedProducts;
 import com.team1.team1project.dto.FinishedProductsDTO;
+
+import java.util.List;
 
 public interface FinishedProductsService {
     // 등록 여러개 가능하도록
@@ -11,4 +15,7 @@ public interface FinishedProductsService {
     void modifyOne(FinishedProductsDTO finishedProductsDTO);
     // 1개 행 삭제
     void removeOne(Long productId);
+
+    List<FinishedProducts> getAllProducts();
+
 }

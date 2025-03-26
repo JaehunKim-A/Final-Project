@@ -3,8 +3,6 @@ package com.team1.team1project.codeManagement.controller;
 import com.team1.team1project.codeManagement.service.CodeManagementService;
 import com.team1.team1project.domain.CodeManagement;
 import com.team1.team1project.dto.CodeManagementDTO;
-import com.team1.team1project.dto.PageRequestDTO;
-import com.team1.team1project.dto.PageResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/final")
@@ -23,11 +22,11 @@ public class CodeManagementController {
     private final CodeManagementService codeManagementService;
 
     @GetMapping("/codeManagement")
-    public void list(PageRequestDTO pageRequestDTO,
-                     Model model){
-//        PageResponseDTO<CodeManagementDTO> responseDTO = codeManagementService.list(pageRequestDTO);
-//        model.addAttribute("responseDTO", responseDTO);
-        model.addAttribute("pageRequestDTO", pageRequestDTO);
+    public void list(Model model){
+        List<CodeManagement> codeManagement = codeManagementService.getAllCode();
+        List<String> columns = List.of("codeId", "codeValue", "codeName", "codeDescription", "category", "codeType");
+        model.addAttribute("columns", columns);
+        model.addAttribute("codeManagement", codeManagement);
     }
 
     @GetMapping("/codeManagement/register")
@@ -48,8 +47,7 @@ public class CodeManagementController {
     }
 
     @GetMapping({"/codeManagement/read", "/codeManagement/modify"})
-    public String read(PageRequestDTO pageRequestDTO,
-                       Model model,
+    public String read(Model model,
                        Long codeId){
         CodeManagementDTO codeManagementDTO = codeManagementService.readOne(codeId);
         model.addAttribute("codeManagementDto", codeManagementDTO);
@@ -58,26 +56,21 @@ public class CodeManagementController {
     }
 
     @PostMapping("/codeManagement/modify")
-    public String Mmdify(@Valid CodeManagementDTO  codeManagementDTO,
+    public String modify(@Valid CodeManagementDTO  codeManagementDTO,
                          BindingResult bindingResult,
-                         RedirectAttributes redirectAttributes,
-                         PageRequestDTO pageRequestDTO){
+                         RedirectAttributes redirectAttributes){
         if(bindingResult.hasErrors()){
-            String link = pageRequestDTO.getLink();
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             redirectAttributes.addAttribute("codeId", codeManagementDTO.getCodeId());
-            return "redirect:/final/codeManagement/list?" + link;
+            return "redirect:/final/codeManagement/list" ;
         }
         return "/final/codeManagement/modify";
     }
     @PostMapping("/codeManagement/remove")
     public String remove(RedirectAttributes redirectAttributes,
-                         PageRequestDTO pageRequestDTO,
                          Long codeId){
-        String link = pageRequestDTO.getLink();
         codeManagementService.removeOne(codeId);
         redirectAttributes.addFlashAttribute("result", "removed");
-        redirectAttributes.addFlashAttribute("link", link);
-        return "redirect:/fianl/codeManagement/list";
+        return "redirect:/final/codeManagement/list";
     }
 }
