@@ -12,8 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FinishedProductStockDTO {
-    private Integer productId; // 완제품 id
-    private Long stock; // 완제품 재고
-    private LocalDateTime regDate;  // 등록일
-    private LocalDateTime modDate;  // 수정일
+    private Long finishedStockId;
+    private Long productCode; // 완제품 코드
+    private Long stock; // 완제품 재고 inbound 완료 된 것만
 }

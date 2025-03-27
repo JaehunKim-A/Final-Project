@@ -15,7 +15,7 @@ import java.util.List;
 public class FinishedProductsController {
     private final FinishedProductsService finishedProductsService;
 
-    @GetMapping("/finishedProduct/list")
+    @GetMapping("/finishedProduct")
     public void list(Model model){
         List<FinishedProducts> finishedProducts = finishedProductsService.getAllProducts();
         List<String> columns = List.of("productId", "productCode", "unit", "category", "status", "description");
@@ -31,7 +31,7 @@ public class FinishedProductsController {
     @PostMapping("/finishedProduct/register")
     public String registerPost(@ModelAttribute("finishedProducts") FinishedProductsDTO finishedProductsDTO){
         finishedProductsService.registers(finishedProductsDTO);
-        return "redirect:/finished/finishedProduct/list";
+        return "redirect:/finishedProduct/finishedProduct";
     }
     @GetMapping("/finishedProduct/edit/{productId}")
     public String modifyEdit(@PathVariable("productId") Long productId,
@@ -46,9 +46,9 @@ public class FinishedProductsController {
         finishedProductsService.modifyOne(finishedProductsDTO);
         return "redirect:/finishedProduct/finishedProduct";
     }
-    @PostMapping("/finishedProduct/remove")
+    @GetMapping("/finishedProduct/delete/{productId}")
     public String remove(@PathVariable("productId") Long productId ){
-        finishedProductsService.readOne(productId);
+        finishedProductsService.removeOne(productId);
         return "redirect:/finishedProduct/finishedProduct";
     }
 }

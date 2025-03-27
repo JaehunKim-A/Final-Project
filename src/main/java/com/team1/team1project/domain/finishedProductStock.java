@@ -13,10 +13,10 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Builder
 @ToString
-public class RawMaterialStock extends BaseEntity{
+public class finishedProductStock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rawMaterialStockId;
-    private Long materialCode;
-    private Long rawMaterialStock;
+    private Long finishedProductStockId;
+    private Long productCode;
+    private Long finishedProductStock;
 }
