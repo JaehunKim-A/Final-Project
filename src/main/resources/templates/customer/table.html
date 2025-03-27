@@ -48,32 +48,41 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Simple Datatable</h4>
-                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Add New Customer</button>
+                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                            <!-- Left Side: Add + Upload -->
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#registerModal">
+                                    Add New Customer
+                                </button>
 
-                        <form method="post" action="/upload/csv/customer" enctype="multipart/form-data" class="d-flex align-items-center gap-2 mb-3">
-                            <input type="file" name="file" accept=".csv" required class="form-control w-auto">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-upload"></i> 고객 CSV 업로드
-                            </button>
-                        </form>
+                                <form id="csvUploadForm" method="post" action="/upload/csv/customer" enctype="multipart/form-data" class="d-flex align-items-center gap-2">
+                                    <input type="file" name="file" accept=".csv" required class="form-control w-auto">
+                                    <button type="submit" class="btn btn-outline-primary">
+                                        <i class="bi bi-upload"></i> 고객 CSV 업로드
+                                    </button>
+                                </form>
+                                <a href="/download/sample/customer" class="btn btn-outline-secondary">
+                                    <i class="bi bi-download"></i> 고객 CSV 샘플 다운로드
+                                </a>
 
-                        <div class="text-end mb-3">
-                            <a href="/download/excel/customer" class="btn btn-success">
-                                <i class="bi bi-download"></i> Customer Excel
-                            </a>
-                            <a href="/download/csv/customer" class="btn btn-secondary">
-                                <i class="bi bi-file-earmark-text"></i> Customer CSV
-                            </a>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <a href="/download/excel/customer" class="btn btn-outline-success">
+                                    <i class="bi bi-download"></i> Customer Excel
+                                </a>
+                                <a href="/download/csv/customer" class="btn btn-outline-secondary">
+                                    <i class="bi bi-file-earmark-text"></i> Customer CSV
+                                </a>
+                            </div>
                         </div>
-
                     </div>
                     <div class="card-body">
                         <table class="table table-striped" id="table1">
                             <thead>
                             <tr>
                                 <th>이름</th>
-                                <th>이메일</th>
-                                <th>전화번호</th>
+                                <th>연락처</th>
+                                <th>주소</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -88,6 +97,8 @@
                             </tr>
                             </tbody>
                         </table>
+
+
                     </div>
                 </div>
             </section>
@@ -285,43 +296,50 @@
             });
         });
 
-        document.querySelector("#table1").addEventListener("click", function (e) {
-        const detailCell = e.target.closest(".customer-detail-toggle");
-        if (!detailCell) return;
+    document.querySelector("#table1").addEventListener("click", function (e) {
+    const detailCell = e.target.closest(".customer-detail-toggle");
+    if (!detailCell) return;
 
-        const row = detailCell.closest("tr");
+    const row = detailCell.closest("tr");
+    const nextRow = row.nextElementSibling;
 
-        // 이미 열려있으면 닫기
-        const nextRow = row.nextElementSibling;
-        if (nextRow && nextRow.classList.contains("accordion-row")) {
-            nextRow.remove();
-            return;
+    // 이미 열려 있는 경우 → 닫고 return
+    if (nextRow && nextRow.classList.contains("accordion-row")) {
+        const collapseEl = nextRow.querySelector(".accordion-collapse");
+        if (collapseEl) {
+            const collapseInstance = bootstrap.Collapse.getOrCreateInstance(collapseEl);
+            collapseInstance.hide();
         }
+        nextRow.remove(); // DOM에서 제거
+        return;
+    }
 
+    // 새로 열기
+    const customerId = row.querySelector(".customer-id")?.innerText || "";
+    const customerName = row.querySelectorAll("td")[0]?.innerText || "";
+    const contactInfo = row.querySelectorAll("td")[1]?.innerText || "";
+    const address = row.querySelectorAll("td")[2]?.innerText || "";
+    const regDate = row.querySelector(".customer-reg")?.innerText || "";
+    const modDate = row.querySelector(".customer-mod")?.innerText || "";
 
-        // 필요한 데이터 수집
-        const customerId = row.querySelector(".customer-id")?.innerText || "";
-        const customerName = row.querySelectorAll("td")[0]?.innerText || "";
-        const contactInfo = row.querySelectorAll("td")[1]?.innerText || "";
-        const address = row.querySelectorAll("td")[2]?.innerText || "";
-        const regDate = row.querySelector(".customer-reg")?.innerText || "";
-        const modDate = row.querySelector(".customer-mod")?.innerText || "";
+    const accordionId = `accordionDetail-${row.rowIndex}`;
+    const collapseId = `collapse-${row.rowIndex}`;
 
-        const accordionHTML = `
-        <div class="accordion" id="accordionDetail-${row.rowIndex}">
+    const accordionHTML = `
+        <div class="accordion" id="${accordionId}">
             <div class="accordion-item">
-                <div id="collapse-${row.rowIndex}" class="accordion-collapse collapse show" aria-labelledby="heading-${row.rowIndex}">
+                <div id="${collapseId}" class="accordion-collapse collapse" aria-labelledby="heading-${row.rowIndex}">
                     <div class="accordion-body p-0">
                         <table class="table table-bordered mb-0 align-middle">
                             <thead>
                                 <tr>
                                     <th>고객ID</th>
                                     <th>이름</th>
-                                    <th>이메일</th>
+                                    <th>연락처</th>
                                     <th>주소</th>
                                     <th>등록일</th>
                                     <th>수정일</th>
-                                    <th class="text-center">작업</th> <!-- 버튼 위치 -->
+                                    <th>수정/삭제</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -332,7 +350,7 @@
                                     <td>${address}</td>
                                     <td>${regDate}</td>
                                     <td>${modDate}</td>
-                                    <td class="text-center">
+                                    <td>
                                         <button class="btn btn-sm btn-outline-primary btn-edit"
                                             data-bs-toggle="modal" data-bs-target="#editModal"
                                             data-id="${customerId}"
@@ -351,14 +369,46 @@
                     </div>
                 </div>
             </div>
-        </div>
-    `;
+        </div>`;
 
-        const accordionRow = document.createElement("tr");
-        accordionRow.classList.add("accordion-row");
-        accordionRow.innerHTML = `<td colspan="7">${accordionHTML}</td>`;
-        row.parentNode.insertBefore(accordionRow, row.nextSibling);
+    const accordionRow = document.createElement("tr");
+    accordionRow.classList.add("accordion-row");
+    accordionRow.innerHTML = `<td colspan="7">${accordionHTML}</td>`;
+    row.parentNode.insertBefore(accordionRow, row.nextSibling);
+
+    // Bootstrap 애니메이션으로 show
+    const collapseEl = document.getElementById(collapseId);
+    if (collapseEl) {
+        const collapseInstance = new bootstrap.Collapse(collapseEl, {
+            toggle: true
+        });
+    }
+});
+
+    const csvUploadForm = document.getElementById("csvUploadForm");
+
+    csvUploadForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(csvUploadForm);
+
+    fetch("/upload/csv/customer", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("업로드 실패");
+        return response.text();
+    })
+    .then(() => {
+        alert("고객 CSV 업로드가 완료되었습니다.");
+        window.location.href = "/table/customer";
+    })
+    .catch(error => {
+        alert("CSV 업로드 중 오류가 발생했습니다.");
+        console.error("에러:", error);
     });
+});
 
     </script>
 

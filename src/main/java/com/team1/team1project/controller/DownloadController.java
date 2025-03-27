@@ -43,4 +43,16 @@ public class DownloadController {
 		out.flush();
 		out.close();
 	}
+
+	@GetMapping("/sample/customer")
+	public void downloadCustomerSample(HttpServletResponse response) throws IOException {
+		String sample = "customerName,contactInfo,address\n기존이름,바꿀연락처,바꿀주소\n";
+
+		response.setContentType("text/csv");
+		response.setCharacterEncoding("UTF-8");
+		response.setHeader("Content-Disposition", "attachment; filename=customer_sample.csv");
+
+		response.getWriter().write(sample);
+		response.getWriter().flush();
+	}
 }

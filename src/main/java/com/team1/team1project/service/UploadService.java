@@ -23,21 +23,27 @@ public class UploadService {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
 			String line;
 			boolean isFirst = true;
+
 			while ((line = reader.readLine()) != null) {
-				if (isFirst) { isFirst = false; continue; } // skip header
+				if (isFirst) { isFirst = false; continue; }
+
 				String[] fields = line.split(",");
-				CustomerDTO dto = CustomerDTO.builder()
-						.customerId(Integer.parseInt(fields[0]))
-						.customerName(fields[1])
-						.contactInfo(fields[2])
-						.address(fields[3])
-						.build();
-				customerService.saveOrUpdate(dto); // 존재 여부 따라 insert or update
+				String customerName = fields[0].trim();
+				String contactInfo = fields[1].trim();
+				String address = fields[2].trim();
+
+				CustomerDTO existing = customerService.getCustomerByName(customerName);
+				if (existing != null) {
+					existing.setContactInfo(contactInfo);
+					existing.setAddress(address);
+					customerService.updateCustomer(existing.getCustomerId(), existing);
+				}
 			}
 		} catch (Exception e) {
 			throw new RuntimeException("CSV 처리 중 오류 발생", e);
 		}
 	}
+
 
 	public void processSupplierCsv(MultipartFile file) {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {

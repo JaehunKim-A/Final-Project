@@ -73,4 +73,19 @@ public class CustomerServiceImpl implements CustomerService {
 			createCustomer(dto);
 		}
 	}
+
+	@Override
+	public CustomerDTO getCustomerByName(String customerName) {
+		Customer customer = customerRepository.findByCustomerName(customerName);
+		return modelMapper.map(customer, CustomerDTO.class);
+	}
+
+	@Override
+	public void updateCustomer(Integer customerId, CustomerDTO dto) {
+		Customer customer = customerRepository.findById(customerId)
+				.orElseThrow(() -> new IllegalArgumentException("고객 없음"));
+		customer.setContactInfo(dto.getContactInfo());
+		customer.setAddress(dto.getAddress());
+		customerRepository.save(customer);
+	}
 }
