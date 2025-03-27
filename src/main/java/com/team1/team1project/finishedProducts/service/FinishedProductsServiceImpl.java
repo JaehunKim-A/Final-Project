@@ -67,6 +67,7 @@ public class FinishedProductsServiceImpl implements FinishedProductsService {
                 finishedProductsDTO.getDescription(),
                 finishedProductsDTO.getCategory(),
                 finishedProductsDTO.getProductName(),
+                finishedProductsDTO.getStatus(),
                 finishedProductsDTO.getUnit());
 
         finishedProductsRepository.save(finishedProducts);

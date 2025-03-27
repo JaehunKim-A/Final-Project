@@ -97,7 +97,7 @@
                             <h5 class="modal-title" id="registerModalLabel">Register New RawMaterials</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="/rawMaterial/rawMaterial/register" method="POST">
+                        <form action="/rawMaterial/rawMaterial/rawMaterial/register" method="POST">
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label for="materialCode" class="form-label">Raw Material Code</label>
@@ -137,7 +137,7 @@
                             <h5 class="modal-title" id="editModalLabel">Edit RawMaterial</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="/rawMaterial/modify/{rawMaterialId}" method="POST" id="editRawMaterialForm">
+                        <form action="/rawMaterial/rawMaterial/modify/{rawMaterialId}" method="POST" id="editRawMaterialForm">
                             <div class="modal-body">
                                 <input type="hidden" id="editMaterialId" name="materialId">
                                 <div class="mb-3">
@@ -281,7 +281,7 @@
             const materialId = document.getElementById("deleteMaterialId").value;
 
             if (!materialId) {
-                alert("고객 ID가 없습니다.");
+                alert("원자재 ID가 없습니다.");
                 return;
             }
 
