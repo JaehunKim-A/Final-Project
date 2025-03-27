@@ -13,22 +13,29 @@ import javax.persistence.*;
 public class RawMaterials extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long materialId;  // 원자재 쌓이는 번호
-    private String codeValue; // 원자재 코드
-    private String material; // 원자재 이름
+    private String materialCode; // 원자재 코드
+    private String materialName; // 원자재 이름
 
-    @Column(name = "unit")
     private String unit;  // 코드로 변경하여 코드 관리 EA06 등 포장 단위
 
-    @Column(name = "material_description")
-    private String materialDescription;  // 원자재 설명
-
+    private String category;
+    private String description;  // 원자재 설명
+    private String registeredBy; // 등록자
+    private String updatedBy;   // 수정자
 
 
     //수정할 사항 * 원자재 ID 랑 코드 ID 는 변경 불가하게 하고 설명, 단위만 변경 가능하게
-    public void rawMaterialsChange(String materialDescription, String unit, String codeValue) {
-        this.codeValue = codeValue;
-        this.materialDescription = materialDescription;
+    public void rawMaterialsChange(String description,
+                                   String unit,
+                                   String materialCode,
+                                   String materialName,
+                                   String category) {
+        this.category = category;
+        this.materialName = materialName;
+        this.materialCode = materialCode;
+        this.description = description;
         this.unit = unit;
     }
 }

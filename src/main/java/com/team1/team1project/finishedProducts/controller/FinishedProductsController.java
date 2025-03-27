@@ -18,10 +18,10 @@ import java.util.List;
 public class FinishedProductsController {
     private final FinishedProductsService finishedProductsService;
 
-    @GetMapping("/finishedProduct")
+    @GetMapping("/finishedProduct/list")
     public void list(Model model){
         List<FinishedProducts> finishedProducts = finishedProductsService.getAllProducts();
-        List<String> columns = List.of("productId", "productCode", "description", "productionDate", "unit", "category");
+        List<String> columns = List.of("productId", "productCode", "description", "unit", "category");
         model.addAttribute("columns", columns);
         model.addAttribute("finishedProducts", finishedProducts);
     }

@@ -16,7 +16,10 @@ import javax.persistence.Id;
 public class RawMaterialsDTO extends BaseEntity {
     private Long materialId; // 원자재 아이디
     private String materialCode; // 원자재 코드
-    private String codeValue; // 원자재 코드
-    private String materialDescription; // 원자재 정보사항
+    private String materialName; // 원자재 이름
     private String unit; // 원자재 규격
+    private String description; // 원자재 정보사항
+    private String category;
+    private String registeredBy;
+    private String updatedBy;
 }

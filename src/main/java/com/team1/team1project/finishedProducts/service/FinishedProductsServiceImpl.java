@@ -23,22 +23,22 @@ public class FinishedProductsServiceImpl implements FinishedProductsService {
     public Long registers(FinishedProductsDTO finishedProductsDTO){
         String[] productCodes = finishedProductsDTO.getProductCode().split(",");
         String[] descriptions = finishedProductsDTO.getDescription().split(",");
-        LocalDate[] productionDates = finishedProductsDTO.getProductionDate();
+        String[] productNames = finishedProductsDTO.getProductName().split(",");
         String[] units = finishedProductsDTO.getUnit().split(",");
         String[] statuses = finishedProductsDTO.getStatus().split(",");
         String[] categories = finishedProductsDTO.getCategory().split(",");
         for(int i = 0; i < productCodes.length; i++ ){
             String productCode = productCodes[i].trim();
             String description = descriptions[i].trim();
-            LocalDate productionDate = productionDates[i];
+            String productName = productNames[i].trim();
             String unit = units[i].trim();
             String status = statuses[i].trim();
             String category = categories[i].trim();
 
             FinishedProducts finishedProducts = FinishedProducts.builder()
                     .productCode(productCode)
+                    .productName(productName)
                     .description(description)
-                    .productionDate(productionDate)
                     .unit(unit)
                     .status(status)
                     .category(category)
@@ -65,8 +65,8 @@ public class FinishedProductsServiceImpl implements FinishedProductsService {
         finishedProducts.finishedProductsChange(
                 finishedProductsDTO.getProductCode(),
                 finishedProductsDTO.getDescription(),
-                finishedProductsDTO.getProductionDate()[0],
                 finishedProductsDTO.getCategory(),
+                finishedProductsDTO.getProductName(),
                 finishedProductsDTO.getUnit());
 
         finishedProductsRepository.save(finishedProducts);
