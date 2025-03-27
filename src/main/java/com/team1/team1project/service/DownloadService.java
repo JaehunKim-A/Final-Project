@@ -78,6 +78,51 @@ public class DownloadService {
 		return workbook;
 	}
 
+	public String createCsvByType(String type) {
+		switch (type.toLowerCase()) {
+			case "customer":
+				return createCustomerCsv();
+			case "supplier":
+				return createSupplierCsv();
+			default:
+				throw new IllegalArgumentException("Unknown type: " + type);
+		}
+	}
+
+	private String createCustomerCsv() {
+		List<CustomerDTO> customers = customerService.getAllCustomers();
+		StringBuilder sb = new StringBuilder();
+		sb.append("ID|고객명|전화번호|주소|등록일|수정일\n");
+		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		for (CustomerDTO c : customers) {
+			sb.append(c.getCustomerId()).append("|")
+					.append(c.getCustomerName()).append("|")
+					.append(c.getContactInfo()).append("|")
+					.append(c.getAddress()).append("|")
+					.append(c.getRegDate().format(fmt)).append("|")
+					.append(c.getModDate().format(fmt)).append("\n");
+		}
+		return sb.toString();
+	}
+
+	private String createSupplierCsv() {
+		List<RawMaterialSupplierDTO> suppliers = rawMaterialSupplierService.getAllRawMaterialSuppliers();
+		StringBuilder sb = new StringBuilder();
+		sb.append("ID|공급처명|연락처|주소|등록일|수정일\n");
+		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		for (RawMaterialSupplierDTO s : suppliers) {
+			sb.append(s.getSupplierId()).append("|")
+					.append(s.getSupplierName()).append("|")
+					.append(s.getContactInfo()).append("|")
+					.append(s.getAddress()).append("|")
+					.append(s.getEmail()).append("|")
+					.append(s.getPhoneNumber()).append("|")
+					.append(s.getRegDate().format(fmt)).append("|")
+					.append(s.getModDate().format(fmt)).append("\n");
+		}
+		return sb.toString();
+	}
+
 	private void createHeaderRow(Sheet sheet, String[] headers) {
 		Row headerRow = sheet.createRow(0);
 		for (int i = 0; i < headers.length; i++) {

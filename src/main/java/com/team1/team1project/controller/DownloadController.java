@@ -28,4 +28,19 @@ public class DownloadController {
 		workbook.write(response.getOutputStream());
 		workbook.close();
 	}
+
+	@GetMapping("/csv/{type}")
+	public void downloadCsv(@PathVariable String type, HttpServletResponse response) throws IOException {
+		String csvContent = downloadService.createCsvByType(type);
+
+		response.setContentType("text/csv");
+		response.setCharacterEncoding("UTF-8");
+		response.setHeader("Content-Disposition", "attachment; filename=" + type + ".csv");
+
+		var out = response.getOutputStream();
+		out.write(new byte[]{(byte)0xEF, (byte)0xBB, (byte)0xBF}); // BOM
+		out.write(csvContent.getBytes("UTF-8")); // 문자열 → 바이트
+		out.flush();
+		out.close();
+	}
 }
