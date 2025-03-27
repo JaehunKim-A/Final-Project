@@ -2,10 +2,7 @@ package com.team1.team1project.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -16,7 +13,9 @@ import javax.persistence.Id;
 public class RawMaterialStock extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "stockId")
     private Long rawMaterialStockId;
-    private Long materialCode;
+    private String materialCode;
+    @Column(name = "stock")
     private Long rawMaterialStock;
 }

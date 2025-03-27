@@ -34,7 +34,9 @@ public class RawMaterialsController {
     }
 
     @PostMapping("/rawMaterial/register")
-    public String registerPost(@ModelAttribute("rawMaterials") RawMaterialsDTO rawMaterialsDTO){
+    public String registerPost(@ModelAttribute("rawMaterials") RawMaterialsDTO rawMaterialsDTO,
+                               BindingResult bindingResult,
+                               RedirectAttributes redirectAttributes){
         rawMaterialsService.registers(rawMaterialsDTO);
         return "redirect:/rawMaterial/rawMaterial";
 
