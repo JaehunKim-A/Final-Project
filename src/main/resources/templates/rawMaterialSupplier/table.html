@@ -66,7 +66,7 @@
                                 <td th:text="${supplier.regDate}"></td>
                                 <td th:text="${supplier.modDate}"></td>
                                 <td>
-                                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal"
+                                    <button class="btn btn-outline-primary btn-edit" data-bs-toggle="modal" data-bs-target="#editModal"
                                             th:data-id="${supplier.supplierId}"
                                             th:data-name="${supplier.supplierName}"
                                             th:data-contact="${supplier.contactInfo}"
@@ -75,7 +75,7 @@
                                             th:data-phoneNumber="${supplier.phoneNumber}"
                                             th:data-reg="${supplier.regDate}"
                                             th:data-mod="${supplier.modDate}">Edit</button>
-                                    <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#deleteModal" th:data-id="${supplier.supplierId}">Delete</button>
+                                    <button class="btn btn-outline-info btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal" th:data-id="${supplier.supplierId}">Delete</button>
                                 </td>
                             </tr>
                             </tbody>
@@ -227,7 +227,7 @@
 
         // 수정 버튼 클릭 (이벤트 위임)
         document.querySelector("#table1").addEventListener("click", (e) => {
-            const btn = e.target.closest(".btn-warning");
+            const btn = e.target.closest(".btn-edit");
             if (btn) {
                 const supplierId = btn.getAttribute("data-id");
                 const supplierName = btn.getAttribute("data-name");
@@ -274,7 +274,7 @@
 
         // 삭제 버튼 클릭 → supplierId 세팅
         document.querySelector("#table1").addEventListener("click", (e) => {
-            const btn = e.target.closest(".btn-danger");
+            const btn = e.target.closest(".btn-delete");
             if (btn) {
                 const supplierId = btn.getAttribute("data-id");
                 console.log("선택된 고객 ID:", supplierId); // 디버깅용

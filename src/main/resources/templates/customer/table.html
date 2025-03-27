@@ -7,6 +7,7 @@
     <title>DataTable - Mazer Admin Dashboard</title>
 
     <link rel="shortcut icon" href="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/1999/svg'%20viewBox='0%200%2033%2034'%20fill-rule='evenodd'%20stroke-linejoin='round'%20stroke-miterlimit='2'%20xmlns:v='https://vecta.io/nano'%3e%3cpath%20d='M3%2027.472c0%204.409%206.18%205.552%2013.5%205.552%207.281%200%2013.5-1.103%2013.5-5.513s-6.179-5.552-13.5-5.552c-7.281%200-13.5%201.103-13.5%205.513z'%20fill='%23435ebe'%20fill-rule='nonzero'/%3e%3ccircle%20cx='16.5'%20cy='8.8'%20r='8.8'%20fill='%2341bbdd'/%3e%3c/svg%3e" type="image/x-icon">
+
     <link rel="stylesheet" href="/assets/extensions/simple-datatables/style.css">
     <link rel="stylesheet" href="/assets/compiled/css/table-datatable.css">
     <link rel="stylesheet" href="/assets/compiled/css/app.css">
@@ -64,14 +65,14 @@
                                 <td th:text="${customer.regDate}"></td>
                                 <td th:text="${customer.modDate}"></td>
                                 <td>
-                                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal"
+                                    <button class="btn btn-outline-primary btn-edit" data-bs-toggle="modal" data-bs-target="#editModal"
                                             th:data-id="${customer.customerId}"
                                             th:data-name="${customer.customerName}"
                                             th:data-contact="${customer.contactInfo}"
                                             th:data-address="${customer.address}"
                                             th:data-reg="${customer.regDate}"
                                             th:data-mod="${customer.modDate}">Edit</button>
-                                    <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#deleteModal" th:data-id="${customer.customerId}">Delete</button>
+                                    <button class="btn btn-outline-info btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal" th:data-id="${customer.customerId}">Delete</button>
                                 </td>
                             </tr>
                             </tbody>
@@ -207,7 +208,7 @@
 
     // 수정 버튼 클릭 (이벤트 위임)
     document.querySelector("#table1").addEventListener("click", (e) => {
-        const btn = e.target.closest(".btn-warning");
+        const btn = e.target.closest(".btn-edit");
         if (btn) {
             const customerId = btn.getAttribute("data-id");
             const customerName = btn.getAttribute("data-name");
@@ -250,7 +251,7 @@
 
     // 삭제 버튼 클릭 → customerId 세팅
     document.querySelector("#table1").addEventListener("click", (e) => {
-        const btn = e.target.closest(".btn-danger");
+        const btn = e.target.closest(".btn-delete");
         if (btn) {
             const customerId = btn.getAttribute("data-id");
             console.log("선택된 고객 ID:", customerId); // 디버깅용
