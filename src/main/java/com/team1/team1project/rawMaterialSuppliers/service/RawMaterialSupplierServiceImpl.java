@@ -6,6 +6,7 @@ import com.team1.team1project.rawMaterialSuppliers.repository.RawMaterialSupplie
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,17 +42,22 @@ public class RawMaterialSupplierServiceImpl implements RawMaterialSupplierServic
 
 	@Override
 	public RawMaterialSupplierDTO updateRawMaterialSupplier(int supplierId, RawMaterialSupplierDTO rawMaterialSupplierDTO) {
-		if (rawMaterialSupplierRepository.existsById(supplierId)) {
-			RawMaterialSupplier existing = rawMaterialSupplierRepository.findById(supplierId).get();
+		Optional<RawMaterialSupplier> optional = rawMaterialSupplierRepository.findById(supplierId);
 
-			RawMaterialSupplier rawMaterialSupplier = modelMapper.map(rawMaterialSupplierDTO, RawMaterialSupplier.class);
-			rawMaterialSupplier.setSupplierId(supplierId);
-			rawMaterialSupplier.setRegDate(existing.getRegDate()); // 등록일은 유지
-			rawMaterialSupplier.setModDate(LocalDateTime.now());   // 수정일은 현재 시간
+		if (optional.isPresent()) {
+			RawMaterialSupplier existing = optional.get();
 
-			RawMaterialSupplier updated = rawMaterialSupplierRepository.save(rawMaterialSupplier);
+			existing.setSupplierName(rawMaterialSupplierDTO.getSupplierName());
+			existing.setContactInfo(rawMaterialSupplierDTO.getContactInfo());
+			existing.setAddress(rawMaterialSupplierDTO.getAddress());
+			existing.setEmail(rawMaterialSupplierDTO.getEmail());
+			existing.setPhoneNumber(rawMaterialSupplierDTO.getPhoneNumber());
+			existing.setModDate(LocalDateTime.now()); // 수정일 갱신
+
+			RawMaterialSupplier updated = rawMaterialSupplierRepository.save(existing);
 			return modelMapper.map(updated, RawMaterialSupplierDTO.class);
 		}
+
 		return null;
 	}
 
@@ -62,5 +68,23 @@ public class RawMaterialSupplierServiceImpl implements RawMaterialSupplierServic
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public Optional<RawMaterialSupplierDTO> getRawMaterialSupplierByName(String supplierName) {
+		return rawMaterialSupplierRepository.findBySupplierName(supplierName)
+				.map(supplier -> modelMapper.map(supplier, RawMaterialSupplierDTO.class));
+	}
+
+	@Transactional
+	@Override
+	public void saveOrUpdateByName(RawMaterialSupplierDTO dto) {
+		Optional<RawMaterialSupplierDTO> existing = getRawMaterialSupplierByName(dto.getSupplierName());
+
+		if (existing.isPresent()) {
+			updateRawMaterialSupplier(existing.get().getSupplierId(), dto);
+		} else {
+			createRawMaterialSupplier(dto);
+		}
 	}
 }

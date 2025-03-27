@@ -63,4 +63,14 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 		return false;
 	}
+
+	@Override
+	public void saveOrUpdate(CustomerDTO dto) {
+		Optional<CustomerDTO> existing = getCustomerById(dto.getCustomerId());
+		if (existing.isPresent()) {
+			updateCustomer(dto.getCustomerId(), dto);
+		} else {
+			createCustomer(dto);
+		}
+	}
 }

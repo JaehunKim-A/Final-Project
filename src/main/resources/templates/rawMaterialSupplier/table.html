@@ -48,6 +48,13 @@
                         <h4 class="card-title">Simple Datatable</h4>
                         <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Add New Supplier</button>
 
+                        <form id="supplierUploadForm" enctype="multipart/form-data" class="mb-3">
+                            <input type="file" name="file" accept=".csv" required class="form-control w-auto d-inline-block" />
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-upload"></i> 공급처 CSV 업로드
+                            </button>
+                        </form>
+
                         <div class="text-end mb-3">
                             <a href="/download/excel/supplier" class="btn btn-success">
                                 <i class="bi bi-download"></i> Supplier Excel
@@ -306,6 +313,25 @@
             location.href = `/table/rawMaterialSupplier/delete/${supplierId}`;
             });
         });
+
+        document.getElementById('supplierUploadForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            fetch('/upload/csv/supplier', {
+              method: 'POST',
+              body: formData,
+            })
+            .then(res => {
+              if (!res.ok) throw new Error('업로드 실패');
+              return res.text();
+            })
+            .then(() => {
+              alert('공급처 CSV 업로드 완료');
+              window.location.href = '/table/rawMaterialSupplier';
+            })
+            .catch(err => alert('업로드 중 오류 발생: ' + err.message));
+      });
     </script>
 
 </body>
