@@ -25,9 +25,19 @@ public class UploadService {
 			boolean isFirst = true;
 
 			while ((line = reader.readLine()) != null) {
-				if (isFirst) { isFirst = false; continue; }
+				if (isFirst) {
+					isFirst = false;
+					continue;
+				}
+
+				if (line.trim().isEmpty()) continue;
 
 				String[] fields = line.split("\\|");
+				if (fields.length < 3) {
+					System.err.println("잘못된 고객 CSV 라인 (필드 부족): " + line);
+					continue;
+				}
+
 				String customerName = fields[0].trim();
 				String contactInfo = fields[1].trim();
 				String address = fields[2].trim();
@@ -37,13 +47,14 @@ public class UploadService {
 					existing.setContactInfo(contactInfo);
 					existing.setAddress(address);
 					customerService.updateCustomer(existing.getCustomerId(), existing);
+				} else {
+					System.out.println("등록되지 않은 고객 이름: " + customerName);
 				}
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("CSV 처리 중 오류 발생", e);
+			throw new RuntimeException("고객 CSV 처리 중 오류 발생", e);
 		}
 	}
-
 
 	public void processSupplierCsv(MultipartFile file) {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
@@ -51,9 +62,19 @@ public class UploadService {
 			boolean isFirst = true;
 
 			while ((line = reader.readLine()) != null) {
-				if (isFirst) { isFirst = false; continue; }
+				if (isFirst) {
+					isFirst = false;
+					continue;
+				}
+
+				if (line.trim().isEmpty()) continue;
 
 				String[] fields = line.split("\\|");
+				if (fields.length < 5) {
+					System.err.println("잘못된 공급사 CSV 라인 (필드 부족): " + line);
+					continue;
+				}
+
 				String supplierName = fields[0].trim();
 				String contactInfo = fields[1].trim();
 				String address = fields[2].trim();
@@ -67,11 +88,12 @@ public class UploadService {
 					existing.setEmail(email);
 					existing.setPhoneNumber(phoneNumber);
 					rawMaterialSupplierService.updateRawMaterialSupplier(existing.getSupplierId(), existing);
+				} else {
+					System.out.println("등록되지 않은 공급사 이름: " + supplierName);
 				}
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("CSV 처리 중 오류 발생", e);
+			throw new RuntimeException("공급사 CSV 처리 중 오류 발생", e);
 		}
 	}
-
 }
