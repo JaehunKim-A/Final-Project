@@ -13,7 +13,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Builder
 @ToString
-public class finishedProductStock {
+public class FinishedProductStock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long finishedProductStockId;
