@@ -56,7 +56,7 @@ public class DownloadService {
 
 	private Workbook createSupplierWorkbook() {
 		List<RawMaterialSupplierDTO> suppliers = rawMaterialSupplierService.getAllRawMaterialSuppliers();
-		String[] headers = {"ID", "공급처명", "연락처", "주소", "등록일", "수정일"};
+		String[] headers = {"ID", "공급처명", "연락처", "주소", "이메일", "전화번호", "등록일", "수정일"};
 
 		Workbook workbook = new XSSFWorkbook();
 		Sheet sheet = workbook.createSheet("Suppliers");
@@ -70,8 +70,10 @@ public class DownloadService {
 			row.createCell(1).setCellValue(s.getSupplierName());
 			row.createCell(2).setCellValue(s.getContactInfo());
 			row.createCell(3).setCellValue(s.getAddress());
-			row.createCell(4).setCellValue(s.getRegDate().format(fmt));
-			row.createCell(5).setCellValue(s.getModDate().format(fmt));
+			row.createCell(4).setCellValue(s.getEmail());
+			row.createCell(5).setCellValue(s.getPhoneNumber());
+			row.createCell(6).setCellValue(s.getRegDate().format(fmt));
+			row.createCell(7).setCellValue(s.getModDate().format(fmt));
 		}
 
 		autoSizeColumns(sheet, headers.length);

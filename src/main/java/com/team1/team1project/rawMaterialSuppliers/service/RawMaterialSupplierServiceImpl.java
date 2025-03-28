@@ -6,7 +6,6 @@ import com.team1.team1project.rawMaterialSuppliers.repository.RawMaterialSupplie
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -71,20 +70,29 @@ public class RawMaterialSupplierServiceImpl implements RawMaterialSupplierServic
 	}
 
 	@Override
-	public Optional<RawMaterialSupplierDTO> getRawMaterialSupplierByName(String supplierName) {
-		return rawMaterialSupplierRepository.findBySupplierName(supplierName)
-				.map(supplier -> modelMapper.map(supplier, RawMaterialSupplierDTO.class));
+	public void saveOrUpdate(RawMaterialSupplierDTO rawMaterialSupplierDTO) {
+		Optional<RawMaterialSupplierDTO> existing = getRawMaterialSupplierById(rawMaterialSupplierDTO.getSupplierId());
+		if(existing.isPresent()) {
+			updateRawMaterialSupplier(rawMaterialSupplierDTO.getSupplierId(), rawMaterialSupplierDTO);
+		} else {
+			createRawMaterialSupplier(rawMaterialSupplierDTO);
+		}
 	}
 
-	@Transactional
 	@Override
-	public void saveOrUpdateByName(RawMaterialSupplierDTO dto) {
-		Optional<RawMaterialSupplierDTO> existing = getRawMaterialSupplierByName(dto.getSupplierName());
+	public RawMaterialSupplierDTO getRawMaterialSupplierByName(String supplierName) {
+		RawMaterialSupplier rawMaterialSupplier = rawMaterialSupplierRepository.findBySupplierName(supplierName);
+		return modelMapper.map(rawMaterialSupplier, RawMaterialSupplierDTO.class);
+	}
 
-		if (existing.isPresent()) {
-			updateRawMaterialSupplier(existing.get().getSupplierId(), dto);
-		} else {
-			createRawMaterialSupplier(dto);
-		}
+	@Override
+	public void updateRawMaterialSupplier(Integer supplierId, RawMaterialSupplierDTO rawMaterialSupplierDTO) {
+		RawMaterialSupplier rawMaterialSupplier = rawMaterialSupplierRepository.findById(supplierId)
+				.orElseThrow(() -> new IllegalArgumentException("공급자 없음"));
+		rawMaterialSupplier.setContactInfo(rawMaterialSupplierDTO.getContactInfo());
+		rawMaterialSupplier.setAddress(rawMaterialSupplierDTO.getAddress());
+		rawMaterialSupplier.setEmail(rawMaterialSupplierDTO.getEmail());
+		rawMaterialSupplier.setPhoneNumber(rawMaterialSupplier.getPhoneNumber());
+		rawMaterialSupplierRepository.save(rawMaterialSupplier);
 	}
 }

@@ -27,7 +27,7 @@ public class UploadService {
 			while ((line = reader.readLine()) != null) {
 				if (isFirst) { isFirst = false; continue; }
 
-				String[] fields = line.split(",");
+				String[] fields = line.split("\\|");
 				String customerName = fields[0].trim();
 				String contactInfo = fields[1].trim();
 				String address = fields[2].trim();
@@ -49,24 +49,25 @@ public class UploadService {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
 			String line;
 			boolean isFirst = true;
+
 			while ((line = reader.readLine()) != null) {
 				if (isFirst) { isFirst = false; continue; }
 
-				String[] fields = line.split(",");
+				String[] fields = line.split("\\|");
+				String supplierName = fields[0].trim();
+				String contactInfo = fields[1].trim();
+				String address = fields[2].trim();
+				String email = fields[3].trim();
+				String phoneNumber = fields[4].trim();
 
-				if (fields.length < 5) {
-					continue;
+				RawMaterialSupplierDTO existing = rawMaterialSupplierService.getRawMaterialSupplierByName(supplierName);
+				if (existing != null) {
+					existing.setContactInfo(contactInfo);
+					existing.setAddress(address);
+					existing.setEmail(email);
+					existing.setPhoneNumber(phoneNumber);
+					rawMaterialSupplierService.updateRawMaterialSupplier(existing.getSupplierId(), existing);
 				}
-
-				RawMaterialSupplierDTO dto = RawMaterialSupplierDTO.builder()
-						.supplierName(fields[0].trim())
-						.contactInfo(fields[1].trim())
-						.address(fields[2].trim())
-						.email(fields[3].trim())
-						.phoneNumber(fields[4].trim())
-						.build();
-
-				rawMaterialSupplierService.saveOrUpdateByName(dto);
 			}
 		} catch (Exception e) {
 			throw new RuntimeException("CSV 처리 중 오류 발생", e);

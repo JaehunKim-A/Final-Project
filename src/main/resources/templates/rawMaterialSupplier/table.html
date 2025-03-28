@@ -7,6 +7,7 @@
     <title>DataTable - Mazer Admin Dashboard</title>
 
     <link rel="shortcut icon" href="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/1999/svg'%20viewBox='0%200%2033%2034'%20fill-rule='evenodd'%20stroke-linejoin='round'%20stroke-miterlimit='2'%20xmlns:v='https://vecta.io/nano'%3e%3cpath%20d='M3%2027.472c0%204.409%206.18%205.552%2013.5%205.552%207.281%200%2013.5-1.103%2013.5-5.513s-6.179-5.552-13.5-5.552c-7.281%200-13.5%201.103-13.5%205.513z'%20fill='%23435ebe'%20fill-rule='nonzero'/%3e%3ccircle%20cx='16.5'%20cy='8.8'%20r='8.8'%20fill='%2341bbdd'/%3e%3c/svg%3e" type="image/x-icon">
+
     <link rel="stylesheet" href="/assets/extensions/simple-datatables/style.css">
     <link rel="stylesheet" href="/assets/compiled/css/table-datatable.css">
     <link rel="stylesheet" href="/assets/compiled/css/app.css">
@@ -46,54 +47,54 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Simple Datatable</h4>
-                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Add New Supplier</button>
+                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
 
-                        <form id="supplierUploadForm" enctype="multipart/form-data" class="mb-3">
-                            <input type="file" name="file" accept=".csv" required class="form-control w-auto d-inline-block" />
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-upload"></i> 공급처 CSV 업로드
-                            </button>
-                        </form>
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#registerModal">
+                                    Add New Supplier
+                                </button>
 
-                        <div class="text-end mb-3">
-                            <a href="/download/excel/supplier" class="btn btn-success">
-                                <i class="bi bi-download"></i> Supplier Excel
-                            </a>
-                            <a href="/download/csv/supplier" class="btn btn-secondary">
-                                <i class="bi bi-file-earmark-text"></i> Supplier CSV
-                            </a>
+                                <form id="csvUploadForm" method="post" action="/upload/csv/supplier" enctype="multipart/form-data" class="d-flex align-items-center gap-2">
+                                    <input type="file" name="file" accept=".csv" required class="form-control w-auto">
+                                    <button type="submit" class="btn btn-outline-primary">
+                                        <i class="bi bi-upload"></i> 공급처 CSV 업로드
+                                    </button>
+                                </form>
+                                <a href="/download/sample/supplier" class="btn btn-outline-secondary">
+                                    <i class="bi bi-download"></i> 고객 CSV 샘플 다운로드
+                                </a>
+
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <a href="/download/excel/supplier" class="btn btn-outline-success">
+                                    <i class="bi bi-download"></i> Supplier Excel
+                                </a>
+                                <a href="/download/csv/supplier" class="btn btn-outline-secondary">
+                                    <i class="bi bi-file-earmark-text"></i> Supplier CSV
+                                </a>
+                            </div>
                         </div>
-
                     </div>
                     <div class="card-body">
                         <table class="table table-striped" id="table1">
                             <thead>
                             <tr>
-                                <th th:each="col : ${columns}" th:text="${col}"></th>
+                                <th>이름</th>
+                                <th>연락처</th>
+                                <th>주소</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:each="supplier : ${suppliers}">
-                                <td th:text="${supplier.supplierId}"></td>
-                                <td th:text="${supplier.supplierName}"></td>
-                                <td th:text="${supplier.contactInfo}"></td>
-                                <td th:text="${supplier.address}"></td>
-                                <td th:text="${supplier.email}"></td>
-                                <td th:text="${supplier.phoneNumber}"></td>
-                                <td th:text="${supplier.regDate}"></td>
-                                <td th:text="${supplier.modDate}"></td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-edit" data-bs-toggle="modal" data-bs-target="#editModal"
-                                            th:data-id="${supplier.supplierId}"
-                                            th:data-name="${supplier.supplierName}"
-                                            th:data-contact="${supplier.contactInfo}"
-                                            th:data-address="${supplier.address}"
-                                            th:data-email="${supplier.email}"
-                                            th:data-phoneNumber="${supplier.phoneNumber}"
-                                            th:data-reg="${supplier.regDate}"
-                                            th:data-mod="${supplier.modDate}">Edit</button>
-                                    <button class="btn btn-outline-info btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal" th:data-id="${supplier.supplierId}">Delete</button>
-                                </td>
+                                <td th:text="${supplier.supplierName}" class="supplier-detail-toggle" style="cursor: pointer;"></td>
+                                <td th:text="${supplier.contactInfo}" class="supplier-detail-toggle" style="cursor: pointer;"></td>
+                                <td th:text="${supplier.address}" class="supplier-detail-toggle" style="cursor: pointer;"></td>
+
+                                <td class="d-none supplier-id" th:text="${supplier.supplierId}"></td>
+                                <td class="d-none supplier-email" th:text="${supplier.email}"></td>
+                                <td class="d-none supplier-phoneNumber" th:text="${supplier.phoneNumber}"></td>
+                                <td class="d-none supplier-reg" th:text="${supplier.regDate}"></td>
+                                <td class="d-none supplier-mod" th:text="${supplier.modDate}"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -314,25 +315,129 @@
             });
         });
 
-        document.getElementById('supplierUploadForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const formData = new FormData(this);
+        document.querySelector("#table1").addEventListener("click", function (e) {
+        const detailCell = e.target.closest(".supplier-detail-toggle");
+        if (!detailCell) return;
 
-            fetch('/upload/csv/supplier', {
-              method: 'POST',
-              body: formData,
-            })
-            .then(res => {
-              if (!res.ok) throw new Error('업로드 실패');
-              return res.text();
-            })
-            .then(() => {
-              alert('공급처 CSV 업로드 완료');
-              window.location.href = '/table/rawMaterialSupplier';
-            })
-            .catch(err => alert('업로드 중 오류 발생: ' + err.message));
-      });
+        const row = detailCell.closest("tr");
+        const nextRow = row.nextElementSibling;
+
+        // 이미 열려 있는 경우 → 닫고 return
+        if (nextRow && nextRow.classList.contains("accordion-row")) {
+            const collapseEl = nextRow.querySelector(".accordion-collapse");
+            if (collapseEl) {
+                const collapseInstance = bootstrap.Collapse.getOrCreateInstance(collapseEl);
+                collapseInstance.hide();
+            }
+            nextRow.remove(); // DOM에서 제거
+            return;
+        }
+
+        // 새로 열기
+    const supplierId = row.querySelector(".supplier-id")?.innerText || "";
+    const supplierName = row.querySelectorAll("td")[0]?.innerText || "";
+    const contactInfo = row.querySelectorAll("td")[1]?.innerText || "";
+    const address = row.querySelectorAll("td")[2]?.innerText || "";
+    const email = row.querySelector(".supplier-email")?.innerText || "";
+    const phoneNumber = row.querySelector(".supplier-phoneNumber")?.innerText || "";
+    const regDate = row.querySelector(".supplier-reg")?.innerText || "";
+    const modDate = row.querySelector(".supplier-mod")?.innerText || "";
+
+    const accordionId = `accordionDetail-${row.rowIndex}`;
+    const collapseId = `collapse-${row.rowIndex}`;
+
+     const accordionHTML = `
+        <div class="accordion" id="${accordionId}">
+            <div class="accordion-item">
+                <div id="${collapseId}" class="accordion-collapse collapse" aria-labelledby="heading-${row.rowIndex}">
+                    <div class="accordion-body p-0">
+                        <table class="table table-bordered mb-0 align-middle">
+                            <thead>
+                                <tr>
+                                    <th>고객ID</th>
+                                    <th>이름</th>
+                                    <th>연락처</th>
+                                    <th>주소</th>
+                                    <th>이메일</th>
+                                    <th>전화번호</th>
+                                    <th>등록일</th>
+                                    <th>수정일</th>
+                                    <th>수정/삭제</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>${supplierId}</td>
+                                    <td>${supplierName}</td>
+                                    <td>${contactInfo}</td>
+                                    <td>${address}</td>
+                                    <td>${email}</td>
+                                    <td>${phoneNumber}</td>
+                                    <td>${regDate}</td>
+                                    <td>${modDate}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary btn-edit"
+                                            data-bs-toggle="modal" data-bs-target="#editModal"
+                                            data-id="${supplierId}"
+                                            data-name="${supplierName}"
+                                            data-contact="${contactInfo}"
+                                            data-address="${address}"
+                                            data-email="${email}"
+                                            data-phoneNumber="${phoneNumber}"
+                                            data-reg="${regDate}"
+                                            data-mod="${modDate}">Edit</button>
+                                        <button class="btn btn-sm btn-outline-info btn-delete"
+                                            data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                            data-id="${supplierId}">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+
+        const accordionRow = document.createElement("tr");
+        accordionRow.classList.add("accordion-row");
+        accordionRow.innerHTML = `<td colspan="7">${accordionHTML}</td>`;
+        row.parentNode.insertBefore(accordionRow, row.nextSibling);
+
+        // Bootstrap 애니메이션으로 show
+        const collapseEl = document.getElementById(collapseId);
+        if (collapseEl) {
+            const collapseInstance = new bootstrap.Collapse(collapseEl, {
+                toggle: true
+            });
+        }
+    });
+
+
+
+    const csvUploadForm = document.getElementById("csvUploadForm");
+
+    csvUploadForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(csvUploadForm);
+
+    fetch("/upload/csv/supplier", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("업로드 실패");
+        return response.text();
+    })
+    .then(() => {
+        alert("고객 CSV 업로드가 완료되었습니다.");
+        window.location.replace("/table/rawMaterialSupplier");
+    })
+    .catch(error => {
+        alert("CSV 업로드 중 오류가 발생했습니다.");
+        console.error("에러:", error);
+    });
+});
     </script>
-
 </body>
 </html>
