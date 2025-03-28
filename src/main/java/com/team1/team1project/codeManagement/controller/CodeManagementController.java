@@ -4,19 +4,17 @@ import com.team1.team1project.codeManagement.service.CodeManagementService;
 import com.team1.team1project.domain.CodeManagement;
 import com.team1.team1project.dto.CodeManagementDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController
-@RequestMapping("/final")
+@Controller
+@RequestMapping("/codeManagement")
 @RequiredArgsConstructor
 public class CodeManagementController {
     private final CodeManagementService codeManagementService;
@@ -30,47 +28,36 @@ public class CodeManagementController {
     }
 
     @GetMapping("/codeManagement/register")
-    public void codeManagementRegisterGet(){}
+    public String codeManagementRegisterGet(Model model){
+        model.addAttribute("codeManagement", new CodeManagementDTO());
+        return "/codeManagement/codeManagement/register";
+    }
 
     @PostMapping("/codeManagement/register")
-    public String registerPost(@Valid CodeManagementDTO codeManagementDTO,
-                           BindingResult bindingResult,
-                           RedirectAttributes redirectAttributes){
-        if(bindingResult.hasErrors()){
-            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "redirect:/final/codeManagement/register";
-        }
-        Long codeId = codeManagementService.registers(codeManagementDTO);
-        redirectAttributes.addFlashAttribute("result", codeId);
-        return "redirect:/final/codeManagement/list";
+    public String registerPost(@ModelAttribute("codeManagement") CodeManagementDTO codeManagementDTO){
+        codeManagementService.registers(codeManagementDTO);
+        return "redirect:/codeManagement/codeManagement";
 
     }
 
-    @GetMapping({"/codeManagement/read", "/codeManagement/modify"})
-    public String read(Model model,
-                       Long codeId){
+    @GetMapping("/codeManagement/edit/{codeId}")
+    public String modifyEdit(Model model,
+                       @PathVariable("codeId") Long codeId){
         CodeManagementDTO codeManagementDTO = codeManagementService.readOne(codeId);
-        model.addAttribute("codeManagementDto", codeManagementDTO);
+        model.addAttribute("codeManagementDTO", codeManagementDTO);
 
-        return "redirect:/final/codeManagement/list";
+        return "redirect:/codeManagement/codeManagement/edit";
     }
 
-    @PostMapping("/codeManagement/modify")
-    public String modify(@Valid CodeManagementDTO  codeManagementDTO,
-                         BindingResult bindingResult,
-                         RedirectAttributes redirectAttributes){
-        if(bindingResult.hasErrors()){
-            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            redirectAttributes.addAttribute("codeId", codeManagementDTO.getCodeId());
-            return "redirect:/final/codeManagement/list" ;
-        }
-        return "/final/codeManagement/modify";
+    @PostMapping("/codeManagement/edit/{codeId}")
+    public String modify(@PathVariable("codeId") Long codeId,
+                         @ModelAttribute("codeManagement") CodeManagementDTO codeManagementDTO){
+        codeManagementService.modifyOne(codeManagementDTO);
+        return "/codeManagement/codeManagement";
     }
-    @PostMapping("/codeManagement/remove")
-    public String remove(RedirectAttributes redirectAttributes,
-                         Long codeId){
+    @PostMapping("/codeManagement/delete/{codeId}")
+    public String remove(@PathVariable("codeId") Long codeId){
         codeManagementService.removeOne(codeId);
-        redirectAttributes.addFlashAttribute("result", "removed");
-        return "redirect:/final/codeManagement/list";
+        return "redirect:/codeManagement/codeManagement";
     }
 }
