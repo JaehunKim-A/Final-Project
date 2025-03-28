@@ -12,10 +12,14 @@
     <link rel="stylesheet" href="/assets/compiled/css/table-datatable.css">
     <link rel="stylesheet" href="/assets/compiled/css/app.css">
     <link rel="stylesheet" href="/assets/compiled/css/app-dark.css">
-
 </head>
 
-<body>
+<body
+        data-entity="customer"
+        data-label="고객"
+        data-fields='["name", "contact", "address"]'
+        data-accordion-fields='["id", "name", "contact", "address", "reg", "mod"]'
+>
 
 <div id="app">
     <div id="sidebar" th:replace="~{layout/layout :: sidebar}"></div>
@@ -92,9 +96,9 @@
                             </thead>
                             <tbody>
                             <tr th:each="customer : ${customers}">
-                                <td th:text="${customer.customerName}" class="customer-detail-toggle" style="cursor: pointer;"></td>
-                                <td th:text="${customer.contactInfo}" class="customer-detail-toggle" style="cursor: pointer;"></td>
-                                <td th:text="${customer.address}" class="customer-detail-toggle" style="cursor: pointer;"></td>
+                                <td th:text="${customer.customerName}" class="customer-name customer-detail-toggle" style="cursor: pointer;"></td>
+                                <td th:text="${customer.contactInfo}" class="customer-contact customer-detail-toggle" style="cursor: pointer;"></td>
+                                <td th:text="${customer.address}" class="customer-address customer-detail-toggle" style="cursor: pointer;"></td>
 
                                 <td class="d-none customer-id" th:text="${customer.customerId}"></td>
                                 <td class="d-none customer-reg" th:text="${customer.regDate}"></td>
@@ -150,12 +154,12 @@
                             <div class="modal-body">
                                 <input type="hidden" id="editCustomerId" name="customerId">
                                 <div class="mb-3">
-                                    <label for="editCustomerName" class="form-label">Customer Name</label>
-                                    <input type="text" class="form-control" id="editCustomerName" name="customerName" required>
+                                    <label for="editName" class="form-label">Customer Name</label>
+                                    <input type="text" class="form-control" id="editName" name="customerName" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="editContactInfo" class="form-label">Contact Information</label>
-                                    <input type="text" class="form-control" id="editContactInfo" name="contactInfo" required>
+                                    <label for="editContact" class="form-label">Contact Information</label>
+                                    <input type="text" class="form-control" id="editContact" name="contactInfo" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="editAddress" class="form-label">Address</label>
@@ -178,6 +182,7 @@
                     </div>
                 </div>
             </div>
+
 
             <!-- 고객 삭제 모달 -->
             <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -207,215 +212,13 @@
     </div>
 </div>
 
-
-
-    <script src="/assets/static/js/initTheme.js"></script>
-    <script src="/assets/static/js/components/dark.js"></script>
-    <script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    <script src="/assets/compiled/js/app.js"></script>
-    <script src="/assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
-    <script src="/assets/static/js/pages/simple-datatables.js"></script>
-
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-
-        const tableBody = document.querySelector("#table1");
-        const myDataTable = new simpleDatatables.DataTable(tableBody, {
-            perPage: 10,
-            searchable: true,
-            sortable: true,
-            labels: {
-                placeholder: "고객을 검색하세요...",
-                perPage: "{select} 행을 한 페이지에 표시",
-                noRows: "고객을 찾을 수 없습니다.",
-                info: "전체 {rows}개의 고객 중 {start}에서 {end}까지 표시",
-            },
-        });
-
-        // 수정 버튼 클릭 (이벤트 위임)
-        document.querySelector("#table1").addEventListener("click", (e) => {
-            const btn = e.target.closest(".btn-edit");
-            if (btn) {
-                const customerId = btn.getAttribute("data-id");
-                const customerName = btn.getAttribute("data-name");
-                const contactInfo = btn.getAttribute("data-contact");
-                const address = btn.getAttribute("data-address");
-                const regDate = btn.getAttribute("data-reg");
-                const modDate = btn.getAttribute("data-mod");
-
-                document.getElementById("editCustomerId").value = customerId;
-                document.getElementById("editCustomerName").value = customerName;
-                document.getElementById("editContactInfo").value = contactInfo;
-                document.getElementById("editAddress").value = address;
-                document.getElementById("editRegDate").value = regDate;
-                document.getElementById("editModDate").value = modDate;
-            }
-        });
-
-        const editCustomerForm = document.getElementById("editCustomerForm");
-        editCustomerForm.addEventListener("submit", (event) => {
-            event.preventDefault();
-            const formData = new FormData(editCustomerForm);
-            const customerId = document.getElementById("editCustomerId").value;
-            fetch(`/table/customer/edit/${customerId}`, {
-                method: "POST",
-                body: formData,
-            })
-            .then((response) => {
-                if (response.ok) {
-                    alert("고객 정보가 수정되었습니다.");
-                    location.reload();
-                } else {
-                    alert("고객 수정에 실패했습니다.");
-                }
-            })
-            .catch((error) => {
-                alert("에러 발생: 고객 수정 실패");
-                console.error("에러:", error);
-            });
-        });
-
-        // 삭제 버튼 클릭 → customerId 세팅
-        document.querySelector("#table1").addEventListener("click", (e) => {
-            const btn = e.target.closest(".btn-delete");
-            if (btn) {
-                const customerId = btn.getAttribute("data-id");
-                console.log("선택된 고객 ID:", customerId); // 디버깅용
-                document.getElementById("deleteCustomerId").value = customerId;
-            }
-        });
-
-        // 삭제 폼 제출 → GET 요청으로 리다이렉트
-        const deleteCustomerForm = document.getElementById("deleteCustomerForm");
-        deleteCustomerForm.addEventListener("submit", (event) => {
-            event.preventDefault();
-            const customerId = document.getElementById("deleteCustomerId").value;
-
-            if (!customerId) {
-                alert("고객 ID가 없습니다.");
-                return;
-            }
-
-            location.href = `/table/customer/delete/${customerId}`;
-            });
-        });
-
-    document.querySelector("#table1").addEventListener("click", function (e) {
-    const detailCell = e.target.closest(".customer-detail-toggle");
-    if (!detailCell) return;
-
-    const row = detailCell.closest("tr");
-    const nextRow = row.nextElementSibling;
-
-    // 이미 열려 있는 경우 → 닫고 return
-    if (nextRow && nextRow.classList.contains("accordion-row")) {
-        const collapseEl = nextRow.querySelector(".accordion-collapse");
-        if (collapseEl) {
-            const collapseInstance = bootstrap.Collapse.getOrCreateInstance(collapseEl);
-            collapseInstance.hide();
-        }
-        nextRow.remove(); // DOM에서 제거
-        return;
-    }
-
-    // 새로 열기
-    const customerId = row.querySelector(".customer-id")?.innerText || "";
-    const customerName = row.querySelectorAll("td")[0]?.innerText || "";
-    const contactInfo = row.querySelectorAll("td")[1]?.innerText || "";
-    const address = row.querySelectorAll("td")[2]?.innerText || "";
-    const regDate = row.querySelector(".customer-reg")?.innerText || "";
-    const modDate = row.querySelector(".customer-mod")?.innerText || "";
-
-    const accordionId = `accordionDetail-${row.rowIndex}`;
-    const collapseId = `collapse-${row.rowIndex}`;
-
-    const accordionHTML = `
-        <div class="accordion" id="${accordionId}">
-            <div class="accordion-item">
-                <div id="${collapseId}" class="accordion-collapse collapse" aria-labelledby="heading-${row.rowIndex}">
-                    <div class="accordion-body p-0">
-                        <table class="table table-bordered mb-0 align-middle">
-                            <thead>
-                                <tr>
-                                    <th>고객ID</th>
-                                    <th>이름</th>
-                                    <th>연락처</th>
-                                    <th>주소</th>
-                                    <th>등록일</th>
-                                    <th>수정일</th>
-                                    <th>수정/삭제</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>${customerId}</td>
-                                    <td>${customerName}</td>
-                                    <td>${contactInfo}</td>
-                                    <td>${address}</td>
-                                    <td>${regDate}</td>
-                                    <td>${modDate}</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-primary btn-edit"
-                                            data-bs-toggle="modal" data-bs-target="#editModal"
-                                            data-id="${customerId}"
-                                            data-name="${customerName}"
-                                            data-contact="${contactInfo}"
-                                            data-address="${address}"
-                                            data-reg="${regDate}"
-                                            data-mod="${modDate}">Edit</button>
-                                        <button class="btn btn-sm btn-outline-info btn-delete"
-                                            data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                            data-id="${customerId}">Delete</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>`;
-
-    const accordionRow = document.createElement("tr");
-    accordionRow.classList.add("accordion-row");
-    accordionRow.innerHTML = `<td colspan="7">${accordionHTML}</td>`;
-    row.parentNode.insertBefore(accordionRow, row.nextSibling);
-
-    // Bootstrap 애니메이션으로 show
-    const collapseEl = document.getElementById(collapseId);
-    if (collapseEl) {
-        const collapseInstance = new bootstrap.Collapse(collapseEl, {
-            toggle: true
-        });
-    }
-});
-
-    const csvUploadForm = document.getElementById("csvUploadForm");
-
-    csvUploadForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const formData = new FormData(csvUploadForm);
-
-    fetch("/upload/csv/customer", {
-        method: "POST",
-        body: formData
-    })
-    .then(response => {
-        if (!response.ok) throw new Error("업로드 실패");
-        return response.text();
-    })
-    .then(() => {
-        alert("고객 CSV 업로드가 완료되었습니다.");
-        window.location.href = "/table/customer";
-    })
-    .catch(error => {
-        alert("CSV 업로드 중 오류가 발생했습니다.");
-        console.error("에러:", error);
-    });
-});
-
-    </script>
+<script src="/assets/static/js/initTheme.js"></script>
+<script src="/assets/static/js/components/dark.js"></script>
+<script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="/assets/compiled/js/app.js"></script>
+<script src="/assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
+<script src="/assets/static/js/pages/simple-datatables.js"></script>
+<script src="/jiyeon/js/entityTable.js"></script>
 
 </body>
 </html>
