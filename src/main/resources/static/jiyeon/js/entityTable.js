@@ -34,10 +34,8 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("editRegDate").value = btn.dataset.reg || "";
         document.getElementById("editModDate").value = btn.dataset.mod || "";
 
-        // 디버깅용 로그 (필요 없으면 제거 가능)
-        console.log("TEST: phoneNumber =", btn.dataset.phoneNumber);
         const phoneInput = document.getElementById("editPhoneNumber");
-        console.log("TEST: input =", phoneInput);
+
         if (phoneInput) phoneInput.value = btn.dataset.phoneNumber;
     });
 
@@ -94,16 +92,16 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const data = {};
-        accordionFields.forEach(f => {
-            const selector = `.${entity}-${f}`;
-            let el = row.querySelector(selector) || row.querySelector(`.${f}`);
-            if (!el && row.nextElementSibling) {
-                el = row.nextElementSibling.querySelector(selector) || row.nextElementSibling.querySelector(`.${f}`);
-            }
-            if (!el) console.warn(`❗ '${selector}' not found in row or nextRow`, row);
-            data[f] = el?.innerHTML?.trim() || "";
-        });
+       const data = {};
+       accordionFields.forEach(f => {
+           const selector = `.${entity}-${f}`;
+           let el = row.querySelector(selector) || row.querySelector(`.${f}`);
+           if (!el && row.nextElementSibling) {
+               el = row.nextElementSibling.querySelector(selector) || row.nextElementSibling.querySelector(`.${f}`);
+           }
+           data[f] = el?.innerHTML?.trim() || "";
+       });
+
 
 
         const accordionId = `accordionDetail-${row.rowIndex}`;
