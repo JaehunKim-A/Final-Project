@@ -16,8 +16,8 @@
 <body
         data-entity="rawMaterialSupplier"
         data-label="공급처"
-        data-fields='["name", "contact", "address", "email", "phoneNumber"]'
-        data-accordion-fields='["id", "name", "contact", "address", "email", "phoneNumber", "reg", "mod"]'
+        data-fields='["name", "contact", "address", "email", "phone"]'
+        data-accordion-fields='["id", "name", "contact", "address", "email", "phone", "reg", "mod"]'
 >
 
 <div id="app">
@@ -101,7 +101,7 @@
 
                                 <td class="d-none rawMaterialSupplier-id" th:text="${supplier.supplierId}"></td>
                                 <td class="d-none rawMaterialSupplier-email" th:text="${supplier.email}"></td>
-                                <td class="d-none rawMaterialSupplier-phoneNumber" th:text="${supplier.phoneNumber}"></td>
+                                <td class="d-none rawMaterialSupplier-phone" th:text="${supplier.phoneNumber}"></td>
                                 <td class="d-none rawMaterialSupplier-reg" th:text="${supplier.regDate}"></td>
                                 <td class="d-none rawMaterialSupplier-mod" th:text="${supplier.modDate}"></td>
                             </tr>
@@ -180,8 +180,8 @@
                                     <input type="text" class="form-control" id="editEmail" name="email" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="editPhoneNumber" class="form-label">PhoneNumber</label>
-                                    <input type="text" class="form-control" id="editPhoneNumber" name="phoneNumber" required>
+                                    <label for="editPhone" class="form-label">PhoneNumber</label>
+                                    <input type="text" class="form-control" id="editPhone" name="phoneNumber" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="editRegDate" class="form-label">Registration Date</label>
