@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!el) console.warn(`❗ '${selector}' not found in row or nextRow`, row);
             data[f] = el?.innerHTML?.trim() || "";
         });
-        console.log("🔍 FINAL data:", data);
+
 
         const accordionId = `accordionDetail-${row.rowIndex}`;
         const collapseId = `collapse-${row.rowIndex}`;
