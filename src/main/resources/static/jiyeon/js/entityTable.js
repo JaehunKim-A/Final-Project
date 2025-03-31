@@ -96,7 +96,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const deleteBtn = e.target.closest(".btn-delete");
         if (deleteBtn) {
-            utils.setInputValue(`delete${utils.capitalize(entity)}Id`, deleteBtn.dataset.id);
+            const id = deleteBtn.dataset.id;
+            const name = deleteBtn.dataset.name || "선택된 고객"; // data-name 속성 활용
+            utils.setInputValue(`delete${utils.capitalize(entity)}Id`, id);
+
+            const msg = document.getElementById("deleteConfirmMessage");
+            if (msg) msg.textContent = `정말로 ${name} 님을 삭제하시겠습니까?`;
             return;
         }
 
@@ -161,11 +166,13 @@ document.addEventListener("DOMContentLoaded", function () {
                                                     data-id="${data.id}" ${buttonAttrs}
                                                     data-reg="${data.reg || ''}"
                                                     data-mod="${data.mod || ''}">
-                                                    Edit
+                                                    수정
                                                 </button>
                                                 <button class="btn btn-sm btn-outline-info btn-delete"
                                                     data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                                    data-id="${data.id}">Delete</button>
+                                                    data-id="${data.id}" data-name="${data.name}">
+                                                    삭제
+                                                </button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -262,6 +269,7 @@ document.addEventListener("DOMContentLoaded", function () {
         visibleRows.forEach(row => {
             if (row.offsetParent === null) return;
             const rowData = config.classes.map(cls => row.querySelector(`.${cls}`)?.innerText.trim() || "");
+            if (rowData.every(cell => !cell)) return;
             data.push(rowData);
         });
 
@@ -296,7 +304,9 @@ document.addEventListener("DOMContentLoaded", function () {
        const data = [config.headers];
        visibleRows.forEach(row => {
            if (row.offsetParent === null) return;
-           data.push(config.classes.map(cls => row.querySelector(`.${cls}`)?.innerText.trim() || ""));
+           const rowData = config.classes.map(cls => row.querySelector(`.${cls}`)?.innerText.trim() || "");
+           if (rowData.every(cell => !cell)) return;
+           data.push(rowData);
        });
 
        const worksheet = XLSX.utils.aoa_to_sheet(data);
