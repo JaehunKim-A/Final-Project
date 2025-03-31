@@ -287,13 +287,13 @@ document.addEventListener("DOMContentLoaded", function () {
            customer: {
                headers: ["코드", "이름", "연락처", "주소", "등록일", "수정일"],
                classes: ["customer-id", "customer-name", "customer-contact", "customer-address", "customer-reg", "customer-mod"],
-               fileName: "고객_현재보기.csv",
+               fileName: "고객_검색결과.csv",
                sheetName: "고객 목록"
            },
            rawMaterialSupplier: {
                headers: ["코드", "이름", "연락처", "주소", "이메일", "전화번호", "등록일", "수정일"],
                classes: ["rawMaterialSupplier-id", "rawMaterialSupplier-name", "rawMaterialSupplier-contact", "rawMaterialSupplier-address", "rawMaterialSupplier-email", "rawMaterialSupplier-phone", "rawMaterialSupplier-reg", "rawMaterialSupplier-mod"],
-               fileName: "공급업체_현재보기.csv",
+               fileName: "공급업체_검색결과.csv",
                sheetName: "공급업체 목록"
            }
        };
