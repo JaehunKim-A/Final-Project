@@ -1,127 +1,122 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const entity = document.body.dataset.entity;
-    const label = document.body.dataset.label;
-    const fields = JSON.parse(document.body.dataset.fields);
-    const accordionFields = JSON.parse(document.body.dataset.accordionFields);
+
+    const entity = document.body.dataset.entity || "unknown";
+    const label = document.body.dataset.label || "항목";
+    const fields = JSON.parse(document.body.dataset.fields || "[]");
+    const accordionFields = JSON.parse(document.body.dataset.accordionFields || "[]");
     const table = document.querySelector("#table1");
 
-    new simpleDatatables.DataTable(table, {
+    const utils = {
+        capitalize: str => str.charAt(0).toUpperCase() + str.slice(1),
+        getIdElement: (prefix) => document.getElementById(`${prefix}${utils.capitalize(entity)}Id`),
+        getFormElement: (prefix) => document.getElementById(`${prefix}${utils.capitalize(entity)}Form`),
+        setInputValue: (id, value) => {
+            const el = document.getElementById(id);
+            if (el) el.value = value;
+        },
+        renderDataAttrs: (data, fields) => fields.map(f => `data-${f}="${data[f] || ''}"`).join(" ")
+    };
+
+    const dataTable = new simpleDatatables.DataTable(table, {
         perPage: 10,
         searchable: true,
         sortable: true,
         labels: {
-            placeholder: `${label}을 검색하세요...`,
-            perPage: "{select} 행을 한 페이지에 표시",
-            noRows: `${label}을 찾을 수 없습니다.`,
-            info: `전체 {rows}개의 ${label} 중 {start}에서 {end}까지 표시`,
-        },
+                placeholder: `${label} 를(을) 검색`,
+                perPage: `{select}개씩 보기`,
+                noRows: `${label}을 찾을 수 없습니다.`,
+                info: `현재 페이지 ${label} {start}~{end} / 전체:{rows}`,
+                },
     });
 
-    // 수정 버튼
+    const adaptPageDropdown = () => {
+        const selector = dataTable.wrapper.querySelector(".dataTable-selector");
+        if (selector) {
+            selector.parentNode.parentNode.insertBefore(selector, selector.parentNode);
+            selector.classList.add("form-select");
+        }
+    };
+
+    const adaptPagination = () => {
+        const paginations = dataTable.wrapper.querySelectorAll("ul.dataTable-pagination-list");
+        paginations.forEach(pagination => {
+            pagination.classList.add("pagination", "pagination-primary");
+        });
+
+        const items = dataTable.wrapper.querySelectorAll("ul.dataTable-pagination-list li");
+        items.forEach(li => li.classList.add("page-item"));
+
+        const links = dataTable.wrapper.querySelectorAll("ul.dataTable-pagination-list li a");
+        links.forEach(link => link.classList.add("page-link"));
+    };
+
+    const refreshPagination = () => adaptPagination();
+
+    dataTable.on("datatable.init", () => {
+        adaptPageDropdown();
+        refreshPagination();
+    });
+    dataTable.on("datatable.update", refreshPagination);
+    dataTable.on("datatable.sort", refreshPagination);
+    dataTable.on("datatable.page", adaptPagination);
+
     table.addEventListener("click", (e) => {
-        const btn = e.target.closest(".btn-edit");
-        if (!btn) return;
+        const editBtn = e.target.closest(".btn-edit");
+        if (editBtn) {
+            const id = editBtn.dataset.id;
+            utils.setInputValue(`edit${utils.capitalize(entity)}Id`, id);
 
-        const id = btn.dataset.id;
-        document.getElementById(`edit${capitalize(entity)}Id`).value = id;
+            fields.forEach(field => {
+                utils.setInputValue(`edit${utils.capitalize(field)}`, editBtn.dataset[field.toLowerCase()] || "");
+            });
 
-        fields.forEach(field => {
-            const value = btn.dataset[field.toLowerCase()] || "";
-            const input = document.getElementById(`edit${capitalize(field)}`);
-            if (input) input.value = value;
-        });
+            utils.setInputValue("editRegDate", editBtn.dataset.reg || "");
+            utils.setInputValue("editModDate", editBtn.dataset.mod || "");
+            utils.setInputValue("editPhoneNumber", editBtn.dataset.phoneNumber || "");
+            return;
+        }
 
-        document.getElementById("editRegDate").value = btn.dataset.reg || "";
-        document.getElementById("editModDate").value = btn.dataset.mod || "";
+        const deleteBtn = e.target.closest(".btn-delete");
+        if (deleteBtn) {
+            utils.setInputValue(`delete${utils.capitalize(entity)}Id`, deleteBtn.dataset.id);
+            return;
+        }
 
-        const phoneInput = document.getElementById("editPhoneNumber");
-
-        if (phoneInput) phoneInput.value = btn.dataset.phoneNumber;
-    });
-
-
-    // 수정 form 전송
-    const editForm = document.getElementById(`edit${capitalize(entity)}Form`);
-    editForm?.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const id = document.getElementById(`edit${capitalize(entity)}Id`).value;
-        const formData = new FormData(editForm);
-        fetch(`/table/${entity}/edit/${id}`, {
-            method: "POST",
-            body: formData
-        }).then(res => {
-            if (!res.ok) throw new Error("수정 실패");
-            alert(`${label} 정보가 수정되었습니다.`);
-            location.reload();
-        }).catch(err => {
-            alert(`${label} 수정 실패`);
-            console.error(err);
-        });
-    });
-
-    // 삭제 버튼
-        table.addEventListener("click", (e) => {
-            const btn = e.target.closest(".btn-delete");
-            if (!btn) return;
-            const id = btn.dataset.id;
-            document.getElementById(`delete${capitalize(entity)}Id`).value = id;
-        });
-
-
-    // 삭제 form 전송
-    const deleteForm = document.getElementById(`delete${capitalize(entity)}Form`);
-    deleteForm?.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const id = document.getElementById(`delete${capitalize(entity)}Id`).value;
-        location.href = `/table/${entity}/delete/${id}`;
-    });
-
-    // accordion 상세 보기
-    table.addEventListener("click", function (e) {
         const detailCell = e.target.closest(`.${entity}-detail-toggle`);
-        if (!detailCell) return;
+        if (detailCell) toggleAccordionRow(detailCell.closest("tr"));
+    });
 
-        const row = detailCell.closest("tr");
+    function toggleAccordionRow(row) {
         const nextRow = row.nextElementSibling;
-
-        if (nextRow && nextRow.classList.contains("accordion-row")) {
-            const collapseEl = nextRow.querySelector(".accordion-collapse");
-            if (collapseEl) {
-                const instance = bootstrap.Collapse.getOrCreateInstance(collapseEl);
-                instance.hide();
-            }
+        if (nextRow?.classList.contains("accordion-row")) {
+            bootstrap.Collapse.getOrCreateInstance(nextRow.querySelector(".accordion-collapse")).hide();
             nextRow.remove();
             return;
         }
 
-       const data = {};
-       accordionFields.forEach(f => {
-           const selector = `.${entity}-${f}`;
-           let el = row.querySelector(selector) || row.querySelector(`.${f}`);
-           if (!el && row.nextElementSibling) {
-               el = row.nextElementSibling.querySelector(selector) || row.nextElementSibling.querySelector(`.${f}`);
-           }
-           data[f] = el?.innerHTML?.trim() || "";
-       });
+        const data = {};
+        accordionFields.forEach(f => {
+            const el = row.querySelector(`.${entity}-${f}`) || row.querySelector(`.${f}`);
+            data[f] = el?.innerHTML?.trim() || "";
+        });
 
+        const rowIndex = row.rowIndex;
+        const accordionRow = document.createElement("tr");
+        accordionRow.classList.add("accordion-row");
+        accordionRow.innerHTML = renderAccordionRow(data, rowIndex);
+        row.parentNode.insertBefore(accordionRow, row.nextSibling);
 
+        new bootstrap.Collapse(document.getElementById(`collapse-${rowIndex}`), { toggle: true });
+    }
 
-        const accordionId = `accordionDetail-${row.rowIndex}`;
-        const collapseId = `collapse-${row.rowIndex}`;
-
-        let detailHTML = accordionFields.map(f =>
-            `<td>${data[f]}</td>`
-        ).join("");
-
-        const buttonFields = fields
-            .filter(f => data[f] !== undefined && data[f] !== null)
-            .map(f => `data-${f}="${data[f]}"`)
-            .join(" ");
-
-        const accordionHTML = `
-            <div class="accordion" id="${accordionId}">
+    function renderAccordionRow(data, index) {
+        const detailHTML = accordionFields.map(f => `<td>${data[f]}</td>`).join("");
+        const buttonAttrs = utils.renderDataAttrs(data, fields);
+        return `
+        <td colspan="99">
+            <div class="accordion" id="accordionDetail-${index}">
                 <div class="accordion-item">
-                    <div id="${collapseId}" class="accordion-collapse collapse" aria-labelledby="heading-${row.rowIndex}">
+                    <div id="collapse-${index}" class="accordion-collapse collapse">
                         <div class="accordion-body p-0">
                             <table class="table table-bordered mb-0 align-middle">
                                 <thead>
@@ -136,8 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                         <td>
                                             <button class="btn btn-sm btn-outline-primary btn-edit"
                                                 data-bs-toggle="modal" data-bs-target="#editModal"
-                                                data-id="${data.id}"
-                                                ${buttonFields}
+                                                data-id="${data.id}" ${buttonAttrs}
                                                 data-reg="${data.reg || ''}"
                                                 data-mod="${data.mod || ''}">
                                                 Edit
@@ -152,20 +146,15 @@ document.addEventListener("DOMContentLoaded", function () {
                         </div>
                     </div>
                 </div>
-            </div>`;
+            </div>
+        </td>`;
+    }
 
-        const accordionRow = document.createElement("tr");
-        accordionRow.classList.add("accordion-row");
-        accordionRow.innerHTML = `<td colspan="99">${accordionHTML}</td>`;
-        row.parentNode.insertBefore(accordionRow, row.nextSibling);
+    // 수정 및 삭제 form 처리
+    setupFormSubmit("edit", "POST", `수정 완료`, `수정 실패`);
+    setupDeleteForm();
 
-        const collapseEl = document.getElementById(collapseId);
-        if (collapseEl) {
-            new bootstrap.Collapse(collapseEl, { toggle: true });
-        }
-    });
-
-    // CSV 업로드
+    // CSV 업로드 처리
     const csvUploadForm = document.getElementById("csvUploadForm");
     csvUploadForm?.addEventListener("submit", function (e) {
         e.preventDefault();
@@ -178,14 +167,39 @@ document.addEventListener("DOMContentLoaded", function () {
             return res.text();
         }).then(() => {
             alert(`${label} CSV 업로드 완료`);
-            window.location.href = `/table/${entity}`;
+            location.href = `/table/${entity}`;
         }).catch(err => {
-            alert("CSV 업로드 중 오류");
+            alert("CSV 업로드 중 오류 발생");
             console.error(err);
         });
     });
 
-    function capitalize(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1);
+    function setupFormSubmit(prefix, method, successMsg, errorMsg) {
+        const form = utils.getFormElement(prefix);
+        form?.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const id = utils.getIdElement(prefix)?.value;
+            const formData = new FormData(form);
+            fetch(`/table/${entity}/edit/${id}`, {
+                method,
+                body: formData
+            }).then(res => {
+                if (!res.ok) throw new Error("요청 실패");
+                alert(`${label} ${successMsg}`);
+                location.reload();
+            }).catch(err => {
+                alert(`${label} ${errorMsg}`);
+                console.error(err);
+            });
+        });
+    }
+
+    function setupDeleteForm() {
+        const deleteForm = utils.getFormElement("delete");
+        deleteForm?.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const id = utils.getIdElement("delete")?.value;
+            location.href = `/table/${entity}/delete/${id}`;
+        });
     }
 });
