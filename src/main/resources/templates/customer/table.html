@@ -150,7 +150,7 @@
                             <h5 class="modal-title" id="editModalLabel">Edit Customer</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="/table/customer/edit/{customerId}" method="POST" id="editCustomerForm">
+                        <form method="POST" id="editCustomerForm">
                             <div class="modal-body">
                                 <input type="hidden" id="editCustomerId" name="customerId">
                                 <div class="mb-3">
@@ -196,7 +196,7 @@
                             <p>Are you sure you want to delete this customer?</p>
                         </div>
                         <div class="modal-footer">
-                            <form action="#" method="GET" id="deleteCustomerForm">
+                            <form method="GET" id="deleteCustomerForm">
                                 <input type="hidden" id="deleteCustomerId" name="customerId">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-danger">Delete</button>

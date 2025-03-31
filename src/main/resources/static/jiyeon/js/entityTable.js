@@ -39,13 +39,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (phoneInput) phoneInput.value = btn.dataset.phoneNumber;
     });
 
-    // 삭제 버튼
-    table.addEventListener("click", (e) => {
-        const btn = e.target.closest(".btn-delete");
-        if (!btn) return;
-        const id = btn.dataset.id;
-        document.getElementById(`delete${capitalize(entity)}Id`).value = id;
-    });
 
     // 수정 form 전송
     const editForm = document.getElementById(`edit${capitalize(entity)}Form`);
@@ -65,6 +58,15 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error(err);
         });
     });
+
+    // 삭제 버튼
+        table.addEventListener("click", (e) => {
+            const btn = e.target.closest(".btn-delete");
+            if (!btn) return;
+            const id = btn.dataset.id;
+            document.getElementById(`delete${capitalize(entity)}Id`).value = id;
+        });
+
 
     // 삭제 form 전송
     const deleteForm = document.getElementById(`delete${capitalize(entity)}Form`);
