@@ -20,10 +20,10 @@ public class DownloadService {
 	private final RawMaterialSupplierService rawMaterialSupplierService;
 
 	public Workbook createExcelByType(String type) {
-		switch (type.toLowerCase()) {
+		switch (type) {
 			case "customer":
 				return createCustomerWorkbook();
-			case "supplier":
+			case "rawMaterialSupplier":
 				return createSupplierWorkbook();
 			default:
 				throw new IllegalArgumentException("Unknown type: " + type);
@@ -81,10 +81,10 @@ public class DownloadService {
 	}
 
 	public String createCsvByType(String type) {
-		switch (type.toLowerCase()) {
+		switch (type) {
 			case "customer":
 				return createCustomerCsv();
-			case "supplier":
+			case "rawMaterialSupplier":
 				return createSupplierCsv();
 			default:
 				throw new IllegalArgumentException("Unknown type: " + type);
