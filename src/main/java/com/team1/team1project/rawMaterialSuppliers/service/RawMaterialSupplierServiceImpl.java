@@ -41,22 +41,17 @@ public class RawMaterialSupplierServiceImpl implements RawMaterialSupplierServic
 
 	@Override
 	public RawMaterialSupplierDTO updateRawMaterialSupplier(int supplierId, RawMaterialSupplierDTO rawMaterialSupplierDTO) {
-		Optional<RawMaterialSupplier> optional = rawMaterialSupplierRepository.findById(supplierId);
+		if (rawMaterialSupplierRepository.existsById(supplierId)) {
+			RawMaterialSupplier existing = rawMaterialSupplierRepository.findById(supplierId).get();
 
-		if (optional.isPresent()) {
-			RawMaterialSupplier existing = optional.get();
+			RawMaterialSupplier supplier = modelMapper.map(rawMaterialSupplierDTO, RawMaterialSupplier.class);
+			supplier.setSupplierId(supplierId);
+			supplier.setRegDate(existing.getRegDate());
+			supplier.setModDate(LocalDateTime.now());
 
-			existing.setSupplierName(rawMaterialSupplierDTO.getSupplierName());
-			existing.setContactInfo(rawMaterialSupplierDTO.getContactInfo());
-			existing.setAddress(rawMaterialSupplierDTO.getAddress());
-			existing.setEmail(rawMaterialSupplierDTO.getEmail());
-			existing.setPhoneNumber(rawMaterialSupplierDTO.getPhoneNumber());
-			existing.setModDate(LocalDateTime.now()); // 수정일 갱신
-
-			RawMaterialSupplier updated = rawMaterialSupplierRepository.save(existing);
+			RawMaterialSupplier updated = rawMaterialSupplierRepository.save(supplier);
 			return modelMapper.map(updated, RawMaterialSupplierDTO.class);
 		}
-
 		return null;
 	}
 
@@ -67,16 +62,6 @@ public class RawMaterialSupplierServiceImpl implements RawMaterialSupplierServic
 			return true;
 		}
 		return false;
-	}
-
-	@Override
-	public void saveOrUpdate(RawMaterialSupplierDTO rawMaterialSupplierDTO) {
-		Optional<RawMaterialSupplierDTO> existing = getRawMaterialSupplierById(rawMaterialSupplierDTO.getSupplierId());
-		if(existing.isPresent()) {
-			updateRawMaterialSupplier(rawMaterialSupplierDTO.getSupplierId(), rawMaterialSupplierDTO);
-		} else {
-			createRawMaterialSupplier(rawMaterialSupplierDTO);
-		}
 	}
 
 	@Override

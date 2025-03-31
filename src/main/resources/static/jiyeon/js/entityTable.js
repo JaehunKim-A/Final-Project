@@ -110,45 +110,55 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function renderAccordionRow(data, index) {
-        const detailHTML = accordionFields.map(f => `<td>${data[f]}</td>`).join("");
+        const accordionLabels = JSON.parse(document.body.dataset.accordionLabels || "[]");
         const buttonAttrs = utils.renderDataAttrs(data, fields);
+
         return `
-        <td colspan="99">
-            <div class="accordion" id="accordionDetail-${index}">
-                <div class="accordion-item">
-                    <div id="collapse-${index}" class="accordion-collapse collapse">
-                        <div class="accordion-body p-0">
-                            <table class="table table-bordered mb-0 align-middle">
-                                <thead>
-                                    <tr>
-                                        ${accordionFields.map(f => `<th>${f}</th>`).join("")}
-                                        <th>수정/삭제</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        ${detailHTML}
-                                        <td>
-                                            <button class="btn btn-sm btn-outline-primary btn-edit"
-                                                data-bs-toggle="modal" data-bs-target="#editModal"
-                                                data-id="${data.id}" ${buttonAttrs}
-                                                data-reg="${data.reg || ''}"
-                                                data-mod="${data.mod || ''}">
-                                                Edit
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-info btn-delete"
-                                                data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                                data-id="${data.id}">Delete</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+            <td colspan="99">
+                <div class="accordion" id="accordionDetail-${index}">
+                    <div class="accordion-item">
+                        <div id="collapse-${index}" class="accordion-collapse collapse">
+                            <div class="accordion-body p-0">
+                                <table class="table table-bordered mb-0 align-middle">
+                                    <thead>
+                                        <tr>
+                                            ${
+                                                accordionFields.map((f, i) =>
+                                                    `<th>${accordionLabels[i] || f}</th>`
+                                                ).join("")
+                                            }
+                                            <th>수정/삭제</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            ${
+                                                accordionFields.map(f =>
+                                                    `<td>${data[f]}</td>`
+                                                ).join("")
+                                            }
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary btn-edit"
+                                                    data-bs-toggle="modal" data-bs-target="#editModal"
+                                                    data-id="${data.id}" ${buttonAttrs}
+                                                    data-reg="${data.reg || ''}"
+                                                    data-mod="${data.mod || ''}">
+                                                    Edit
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-info btn-delete"
+                                                    data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                                    data-id="${data.id}">Delete</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </td>`;
+            </td>`;
     }
+
 
     // 수정 및 삭제 form 처리
     setupFormSubmit("edit", "POST", `수정 완료`, `수정 실패`);

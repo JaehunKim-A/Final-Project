@@ -46,8 +46,8 @@ public class CustomerServiceImpl implements CustomerService {
 
 			Customer customer = modelMapper.map(customerDTO, Customer.class);
 			customer.setCustomerId(customerId);
-			customer.setRegDate(existing.getRegDate()); // 기존 등록일 유지
-			customer.setModDate(LocalDateTime.now());   // 수정일 현재로 설정
+			customer.setRegDate(existing.getRegDate());
+			customer.setModDate(LocalDateTime.now());
 
 			Customer updated = customerRepository.save(customer);
 			return modelMapper.map(updated, CustomerDTO.class);
@@ -79,3 +79,7 @@ public class CustomerServiceImpl implements CustomerService {
 		customerRepository.save(customer);
 	}
 }
+
+
+
+
