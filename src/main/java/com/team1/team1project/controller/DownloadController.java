@@ -56,7 +56,7 @@ public class DownloadController {
 		response.getWriter().flush();
 	}
 
-	@GetMapping("/sample/supplier")
+	@GetMapping("/sample/rawMaterialSupplier")
 	public void downloadSupplierSample(HttpServletResponse response) throws IOException {
 		String sample = "supplierName|contactInfo|address|email|phoneNumber\n기존이름|변경연락처|변경주소|변경이메일|변경전화번호\n";
 
