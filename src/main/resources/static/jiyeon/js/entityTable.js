@@ -55,7 +55,25 @@ document.addEventListener("DOMContentLoaded", function () {
     dataTable.on("datatable.init", () => {
         adaptPageDropdown();
         refreshPagination();
+
+        const selector = dataTable.wrapper.querySelector(".dataTable-selector");
+        if (selector) {
+            const optionAll = document.createElement("option");
+            optionAll.value = "all";
+            optionAll.textContent = "전체";
+            selector.appendChild(optionAll);
+
+            selector.addEventListener("change", () => {
+                if (selector.value === "all") {
+                    const totalRows = dataTable.data.length || 1000;
+                    dataTable.options.perPage = totalRows;
+                    dataTable.update();
+                }
+            });
+        }
+        table.classList.remove("invisible");
     });
+
     dataTable.on("datatable.update", refreshPagination);
     dataTable.on("datatable.sort", refreshPagination);
     dataTable.on("datatable.page", adaptPagination);
@@ -212,4 +230,93 @@ document.addEventListener("DOMContentLoaded", function () {
             location.href = `/table/${entity}/delete/${id}`;
         });
     }
+
+    document.getElementById("downloadVisibleExcel")?.addEventListener("click", () => {
+        const visibleRows = table.querySelectorAll("tbody tr:not(.accordion-row)");
+
+        // entity별 필드 클래스 및 헤더 정의
+        const exportConfig = {
+            customer: {
+                headers: ["코드", "이름", "연락처", "주소", "등록일", "수정일"],
+                classes: ["customer-id", "customer-name", "customer-contact", "customer-address", "customer-reg", "customer-mod"],
+                sheetName: "고객 목록",
+                fileName: "고객_현재보기.xlsx"
+            },
+            rawMaterialSupplier: {
+                headers: ["코드", "이름", "연락처", "주소", "이메일", "전화번호", "등록일", "수정일"],
+                classes: ["rawMaterialSupplier-id", "rawMaterialSupplier-name", "rawMaterialSupplier-contact", "rawMaterialSupplier-address", "rawMaterialSupplier-email", "rawMaterialSupplier-phone", "rawMaterialSupplier-reg", "rawMaterialSupplier-mod"],
+                sheetName: "공급업체 목록",
+                fileName: "공급업체_현재보기.xlsx"
+            }
+            // 필요한 다른 entity 추가 가능
+        };
+
+        const config = exportConfig[entity];
+        if (!config) {
+            alert(`${label} 엑셀 다운로드 구성이 없습니다.`);
+            return;
+        }
+
+        const data = [config.headers];
+
+        visibleRows.forEach(row => {
+            if (row.offsetParent === null) return;
+            const rowData = config.classes.map(cls => row.querySelector(`.${cls}`)?.innerText.trim() || "");
+            data.push(rowData);
+        });
+
+        const worksheet = XLSX.utils.aoa_to_sheet(data);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, config.sheetName);
+
+        XLSX.writeFile(workbook, config.fileName);
+    });
+
+   document.getElementById("downloadVisibleCsv")?.addEventListener("click", () => {
+       const visibleRows = table.querySelectorAll("tbody tr:not(.accordion-row)");
+
+       const exportConfig = {
+           customer: {
+               headers: ["코드", "이름", "연락처", "주소", "등록일", "수정일"],
+               classes: ["customer-id", "customer-name", "customer-contact", "customer-address", "customer-reg", "customer-mod"],
+               fileName: "고객_현재보기.csv",
+               sheetName: "고객 목록"
+           },
+           rawMaterialSupplier: {
+               headers: ["코드", "이름", "연락처", "주소", "이메일", "전화번호", "등록일", "수정일"],
+               classes: ["rawMaterialSupplier-id", "rawMaterialSupplier-name", "rawMaterialSupplier-contact", "rawMaterialSupplier-address", "rawMaterialSupplier-email", "rawMaterialSupplier-phone", "rawMaterialSupplier-reg", "rawMaterialSupplier-mod"],
+               fileName: "공급업체_현재보기.csv",
+               sheetName: "공급업체 목록"
+           }
+       };
+
+       const config = exportConfig[entity];
+       if (!config) return alert(`${label} CSV 다운로드 구성이 없습니다.`);
+
+       const data = [config.headers];
+       visibleRows.forEach(row => {
+           if (row.offsetParent === null) return;
+           data.push(config.classes.map(cls => row.querySelector(`.${cls}`)?.innerText.trim() || ""));
+       });
+
+       const worksheet = XLSX.utils.aoa_to_sheet(data);
+       const workbook = XLSX.utils.book_new();
+       XLSX.utils.book_append_sheet(workbook, worksheet, config.sheetName);
+       const csvContent = "\uFEFF" + XLSX.write(workbook, {
+           bookType: "csv",
+           type: "string",
+           FS: "|"
+       });
+
+       const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+       const link = Object.assign(document.createElement("a"), {
+           href: URL.createObjectURL(blob),
+           download: config.fileName
+       });
+       document.body.appendChild(link);
+       link.click();
+       document.body.removeChild(link);
+   });
+
+
 });
