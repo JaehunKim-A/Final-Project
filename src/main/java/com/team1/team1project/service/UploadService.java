@@ -33,17 +33,26 @@ public class UploadService {
 				if (line.trim().isEmpty()) continue;
 
 				String[] fields = line.split("\\|");
-				if (fields.length < 3) {
+				if (fields.length < 4) {
 					System.err.println("잘못된 고객 CSV 라인 (필드 부족): " + line);
 					continue;
 				}
 
-				String customerName = fields[0].trim();
-				String contactInfo = fields[1].trim();
-				String address = fields[2].trim();
+				int customerId;
+				try {
+					customerId = Integer.parseInt(fields[0].trim());
+				} catch (NumberFormatException e) {
+					System.err.println("유효하지 않은 고객 ID: " + fields[0]);
+					continue;
+				}
 
-				CustomerDTO existing = customerService.getCustomerByName(customerName);
+				String customerName = fields[1].trim();
+				String contactInfo = fields[2].trim();
+				String address = fields[3].trim();
+
+				CustomerDTO existing = customerService.getCustomerById(customerId).orElse(null);
 				if (existing != null) {
+					existing.setCustomerName(customerName);
 					existing.setContactInfo(contactInfo);
 					existing.setAddress(address);
 					customerService.updateCustomer(existing.getCustomerId(), existing);
@@ -70,26 +79,36 @@ public class UploadService {
 				if (line.trim().isEmpty()) continue;
 
 				String[] fields = line.split("\\|");
-				if (fields.length < 5) {
+				if (fields.length < 6) {
 					System.err.println("잘못된 공급사 CSV 라인 (필드 부족): " + line);
 					continue;
 				}
 
-				String supplierName = fields[0].trim();
-				String contactInfo = fields[1].trim();
-				String address = fields[2].trim();
-				String email = fields[3].trim();
-				String phoneNumber = fields[4].trim();
+				int supplierId;
 
-				RawMaterialSupplierDTO existing = rawMaterialSupplierService.getRawMaterialSupplierByName(supplierName);
+				try {
+					supplierId = Integer.parseInt(fields[0].trim());
+				} catch (NumberFormatException e) {
+					System.err.println("유효하지 않은 공급사 ID: " + fields[0]);
+					continue;
+				}
+
+				String supplierName = fields[1].trim();
+				String contactInfo = fields[2].trim();
+				String address = fields[3].trim();
+				String email = fields[4].trim();
+				String phoneNumber = fields[5].trim();
+
+				RawMaterialSupplierDTO existing = rawMaterialSupplierService.getRawMaterialSupplierById(supplierId).orElse(null);
 				if (existing != null) {
+					existing.setSupplierName(supplierName);
 					existing.setContactInfo(contactInfo);
 					existing.setAddress(address);
 					existing.setEmail(email);
 					existing.setPhoneNumber(phoneNumber);
 					rawMaterialSupplierService.updateRawMaterialSupplier(existing.getSupplierId(), existing);
 				} else {
-					System.out.println("등록되지 않은 공급사 이름: " + supplierName);
+					System.out.println("등록되지 않은 공급사 ID: " + supplierId);
 				}
 			}
 		} catch (Exception e) {

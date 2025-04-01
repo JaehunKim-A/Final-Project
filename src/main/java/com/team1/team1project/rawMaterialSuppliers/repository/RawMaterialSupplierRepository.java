@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RawMaterialSupplierRepository extends JpaRepository<RawMaterialSupplier, Integer> {
-	RawMaterialSupplier findBySupplierName(String supplierName);
 
 }

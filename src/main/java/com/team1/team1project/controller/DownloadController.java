@@ -62,7 +62,7 @@ public class DownloadController {
 
 	@GetMapping("/sample/customer")
 	public void downloadCustomerSample(HttpServletResponse response) throws IOException {
-		String sample = "customerName|contactInfo|address\n기존이름|변경연락처|변경주소\n";
+		String sample = "customerId|customerName|contactInfo|address\n기존코드|변경이름|변경연락처|변경주소\n";
 
 		String fileName = "고객_업로드_샘플.csv";
 		setCsvDownloadHeader(response, fileName);
@@ -73,7 +73,7 @@ public class DownloadController {
 
 	@GetMapping("/sample/rawMaterialSupplier")
 	public void downloadSupplierSample(HttpServletResponse response) throws IOException {
-		String sample = "supplierName|contactInfo|address|email|phoneNumber\n기존이름|변경연락처|변경주소|변경이메일|변경전화번호\n";
+		String sample = "supplierId|supplierName|contactInfo|address|email|phoneNumber\n기존코드|변경이름|변경연락처|변경주소|변경이메일|변경전화번호\n";
 
 		String fileName = "공급자_업로드_샘플.csv";
 		setCsvDownloadHeader(response, fileName);

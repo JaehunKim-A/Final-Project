@@ -11,6 +11,4 @@ public interface CustomerService {
 	CustomerDTO createCustomer(CustomerDTO customerDTO);
 	CustomerDTO updateCustomer(int customerId, CustomerDTO customerDTO);
 	boolean deleteCustomer(int customerId);
-	CustomerDTO getCustomerByName(String customerName);
-	void updateCustomerByName(Integer customerId, CustomerDTO customerDTO);
 }

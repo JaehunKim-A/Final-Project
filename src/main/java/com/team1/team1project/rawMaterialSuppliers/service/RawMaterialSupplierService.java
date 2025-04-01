@@ -11,8 +11,5 @@ public interface RawMaterialSupplierService {
 	RawMaterialSupplierDTO createRawMaterialSupplier(RawMaterialSupplierDTO rawMaterialSupplierDTO);
 	RawMaterialSupplierDTO updateRawMaterialSupplier(int supplierId, RawMaterialSupplierDTO rawMaterialSupplierDTO);
 	boolean deleteRawMaterialSupplier(int supplierId);
-	RawMaterialSupplierDTO getRawMaterialSupplierByName(String supplierName);
-	void updateRawMaterialSupplier(Integer supplierId, RawMaterialSupplierDTO rawMaterialSupplierDTO);
-
 
 }

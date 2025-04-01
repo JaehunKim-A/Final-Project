@@ -64,20 +64,4 @@ public class RawMaterialSupplierServiceImpl implements RawMaterialSupplierServic
 		return false;
 	}
 
-	@Override
-	public RawMaterialSupplierDTO getRawMaterialSupplierByName(String supplierName) {
-		RawMaterialSupplier rawMaterialSupplier = rawMaterialSupplierRepository.findBySupplierName(supplierName);
-		return modelMapper.map(rawMaterialSupplier, RawMaterialSupplierDTO.class);
-	}
-
-	@Override
-	public void updateRawMaterialSupplier(Integer supplierId, RawMaterialSupplierDTO rawMaterialSupplierDTO) {
-		RawMaterialSupplier rawMaterialSupplier = rawMaterialSupplierRepository.findById(supplierId)
-				.orElseThrow(() -> new IllegalArgumentException("공급자 없음"));
-		rawMaterialSupplier.setContactInfo(rawMaterialSupplierDTO.getContactInfo());
-		rawMaterialSupplier.setAddress(rawMaterialSupplierDTO.getAddress());
-		rawMaterialSupplier.setEmail(rawMaterialSupplierDTO.getEmail());
-		rawMaterialSupplier.setPhoneNumber(rawMaterialSupplier.getPhoneNumber());
-		rawMaterialSupplierRepository.save(rawMaterialSupplier);
-	}
 }
