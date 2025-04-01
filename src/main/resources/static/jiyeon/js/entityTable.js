@@ -56,20 +56,20 @@ document.addEventListener("DOMContentLoaded", function () {
         adaptPageDropdown();
         refreshPagination();
 
-        const searchInput = dataTable.input;
-            searchInput.addEventListener("input", function () {
-                const searchTerms = this.value.toLowerCase().trim().split("&").map(s => s.trim()).filter(s => s);
-
-                dataTable.rows().each(row => {
-                    const rowText = row.node.textContent.toLowerCase();
-                    const matched = searchTerms.every(term => rowText.includes(term));
-                    if (matched) {
-                        row.node.classList.remove("hidden");
-                    } else {
-                        row.node.classList.add("hidden");
-                    }
-                });
-            });
+//        const searchInput = dataTable.input;
+//            searchInput.addEventListener("input", function () {
+//                const searchTerms = this.value.toLowerCase().trim().split("&").map(s => s.trim()).filter(s => s);
+//
+//                dataTable.rows().each(row => {
+//                    const rowText = row.node.textContent.toLowerCase();
+//                    const matched = searchTerms.every(term => rowText.includes(term));
+//                    if (matched) {
+//                        row.node.classList.remove("hidden");
+//                    } else {
+//                        row.node.classList.add("hidden");
+//                    }
+//                });
+//            });
 
         const selector = dataTable.wrapper.querySelector(".dataTable-selector");
         if (selector) {
