@@ -23,7 +23,7 @@ public class RawMaterialsController {
     @GetMapping("/rawMaterial")
     public void list(Model model){
         List<RawMaterials> rawMaterials = rawMaterialsService.getAllMaterials();
-        List<String> columns = List.of("materialId", "materialCode", "unit", "category", "description");
+        List<String> columns = List.of("materialCode", "materialName", "unit", "category", "description");
         model.addAttribute("columns", columns);
         model.addAttribute("rawMaterials", rawMaterials);
     }

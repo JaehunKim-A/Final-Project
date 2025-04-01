@@ -18,7 +18,7 @@ public class FinishedProductsController {
     @GetMapping("/finishedProduct")
     public void list(Model model){
         List<FinishedProducts> finishedProducts = finishedProductsService.getAllProducts();
-        List<String> columns = List.of("productId", "productCode", "unit", "category", "status", "description");
+        List<String> columns = List.of("productCode", "unit", "category", "status", "description");
         model.addAttribute("columns", columns);
         model.addAttribute("finishedProducts", finishedProducts);
     }

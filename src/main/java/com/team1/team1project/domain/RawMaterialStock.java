@@ -15,6 +15,7 @@ public class RawMaterialStock extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stockId")
     private Long rawMaterialStockId;
+
     private String materialCode;
     @Column(name = "stock")
     private Long rawMaterialStock;

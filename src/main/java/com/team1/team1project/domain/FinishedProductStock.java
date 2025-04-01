@@ -15,7 +15,9 @@ public class FinishedProductStock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stockId")
     private Long finishedProductStockId;
-    private Long productCode;
+
+    private String productCode;
+    private String productId;
     @Column(name = "stock")
     private Long finishedProductStock;
 }
