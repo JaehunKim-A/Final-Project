@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
         searchable: true,
         sortable: true,
         labels: {
-                placeholder: `검색(&로 조건 추가 가능)`,
+                placeholder: `검색(검색어1 검색어2 ..)`,
                 perPage: `{select}개씩 보기`,
                 noRows: `${label}을 찾을 수 없습니다.`,
                 info: `현재 페이지 ${label} {start}~{end} / 전체:{rows}`,
@@ -55,21 +55,6 @@ document.addEventListener("DOMContentLoaded", function () {
     dataTable.on("datatable.init", () => {
         adaptPageDropdown();
         refreshPagination();
-
-//        const searchInput = dataTable.input;
-//            searchInput.addEventListener("input", function () {
-//                const searchTerms = this.value.toLowerCase().trim().split("&").map(s => s.trim()).filter(s => s);
-//
-//                dataTable.rows().each(row => {
-//                    const rowText = row.node.textContent.toLowerCase();
-//                    const matched = searchTerms.every(term => rowText.includes(term));
-//                    if (matched) {
-//                        row.node.classList.remove("hidden");
-//                    } else {
-//                        row.node.classList.add("hidden");
-//                    }
-//                });
-//            });
 
         const selector = dataTable.wrapper.querySelector(".dataTable-selector");
         if (selector) {
