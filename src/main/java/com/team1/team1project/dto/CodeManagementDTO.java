@@ -20,4 +20,6 @@ public class CodeManagementDTO {
     private String codeType; // 코드 타입 예) 원자재, 완제품
     private String registeredBy; //등록자
     private String updatedBy;   // 수정자
+    private LocalDateTime regDate;
+    private LocalDateTime modDate;
 }

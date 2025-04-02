@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -14,4 +16,6 @@ public class FinishedProductRawMaterialsDTO {
     private Integer comboId;    // 콤보 id
     private Integer materialId; // 원자재 id
     private Integer materialQuantity;   // 콤보에 사용된 원자재 수량
+    private LocalDateTime regDate;  // 등록일
+    private LocalDateTime modDate;  // 수정일
 }

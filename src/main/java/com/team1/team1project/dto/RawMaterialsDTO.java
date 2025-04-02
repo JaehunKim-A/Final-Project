@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 
 @Data
@@ -22,4 +23,6 @@ public class RawMaterialsDTO extends BaseEntity {
     private String category;
     private String registeredBy;
     private String updatedBy;
+    private LocalDateTime regDate;  // 등록일
+    private LocalDateTime modDate;  // 수정일
 }

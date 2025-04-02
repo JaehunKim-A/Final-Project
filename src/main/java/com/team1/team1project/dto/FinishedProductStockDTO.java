@@ -15,4 +15,6 @@ public class FinishedProductStockDTO {
     private Long finishedStockId;
     private Long productCode; // 완제품 코드
     private Long stock; // 완제품 재고 inbound 완료 된 것만
+    private LocalDateTime regDate;  // 등록일
+    private LocalDateTime modDate;  // 수정일
 }
