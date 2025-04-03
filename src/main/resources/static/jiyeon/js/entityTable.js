@@ -277,10 +277,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 fileName: "공급업체_현재보기.xlsx"
             },
             customerOrders: {
-                headers: ["주문 ID", "고객 ID", "주문일", "수량", "상태", "등록일", "수정일"],
+                headers: ["주문 ID", "고객 ID", "고객명", "주문일", "수량", "상태", "등록일", "수정일"],
                 classes: [
                     "customerOrders-orderId",
                     "customerOrders-customerId",
+                    "customerOrders-customerName",
                     "customerOrders-orderDate",
                     "customerOrders-totalAmount",
                     "customerOrders-status",
@@ -290,6 +291,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 sheetName: "주문 목록",
                 fileName: "주문_현재보기.xlsx"
             }
+
         };
 
         const config = exportConfig[entity];
@@ -331,10 +333,11 @@ document.addEventListener("DOMContentLoaded", function () {
                fileName: "공급업체_검색결과.csv"
            },
            customerOrders: {
-               headers: ["주문 ID", "고객 ID", "주문일", "수량", "상태", "등록일", "수정일"],
+               headers: ["주문 ID", "고객 ID", "고객명", "주문일", "수량", "상태", "등록일", "수정일"],
                classes: [
                    "customerOrders-orderId",
                    "customerOrders-customerId",
+                   "customerOrders-customerName",
                    "customerOrders-orderDate",
                    "customerOrders-totalAmount",
                    "customerOrders-status",

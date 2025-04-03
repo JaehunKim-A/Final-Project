@@ -20,8 +20,8 @@
         data-entity="customerOrders"
         data-fields='["customerId", "orderDate", "totalAmount", "status"]'
         data-label="주문"
-        data-accordion-fields='["orderId", "customerId", "orderDate", "totalAmount", "status", "reg", "mod"]'
-        data-accordion-labels='["주문 ID", "고객 ID", "주문일", "수량", "상태", "등록일", "수정일"]'>
+        data-accordion-fields='["orderId", "customerId", "customerName", "orderDate", "totalAmount", "status", "reg", "mod"]'
+        data-accordion-labels='["주문 ID", "고객 ID", "고객명", "주문일", "수량", "상태", "등록일", "수정일"]'>
 
 <div id="app">
     <div id="sidebar" th:replace="~{layout/layout :: sidebar}"></div>
@@ -102,7 +102,7 @@
                             <tr>
                                 <th>고객 ID</th>
                                 <th>주문일</th>
-                                <th>총 금액</th>
+                                <th>수량</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -112,6 +112,11 @@
                                 <td th:text="${order.totalAmount}" class="customerOrders-totalAmount customerOrders-detail-toggle" style="cursor: pointer;"></td>
 
                                 <td class="d-none customerOrders-orderId id" th:text="${order.orderId}"></td>
+                                <td class="d-none customerOrders-customerName">
+                                    <span th:each="c : ${customers}"
+                                          th:if="${c.customerId == order.customerId}"
+                                          th:text="${c.customerName}"></span>
+                                </td>
                                 <td class="d-none customerOrders-status status" th:text="${order.status}"></td>
                                 <td class="d-none customerOrders-reg reg" th:text="${order.regDate}"></td>
                                 <td class="d-none customerOrders-mod mod" th:text="${order.modDate}"></td>
