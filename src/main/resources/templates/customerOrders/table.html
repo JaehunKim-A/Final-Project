@@ -21,7 +21,7 @@
         data-fields='["customerId", "orderDate", "totalAmount", "status"]'
         data-label="주문"
         data-accordion-fields='["orderId", "customerId", "customerName", "orderDate", "totalAmount", "status", "reg", "mod"]'
-        data-accordion-labels='["주문 ID", "고객 ID", "고객명", "주문일", "수량", "상태", "등록일", "수정일"]'>
+        data-accordion-labels='["주문코드", "고객코드", "고객명", "주문일", "수량", "상태", "등록일", "수정일"]'>
 
 <div id="app">
     <div id="sidebar" th:replace="~{layout/layout :: sidebar}"></div>
@@ -100,7 +100,7 @@
                             </colgroup>
                             <thead>
                             <tr>
-                                <th>고객 ID</th>
+                                <th>고객코드</th>
                                 <th>주문일</th>
                                 <th>수량</th>
                             </tr>
@@ -143,7 +143,7 @@
                                         <option disabled selected>고객을 선택하세요</option>
                                         <option th:each="customer : ${customers}"
                                                 th:value="${customer.customerId}"
-                                                th:text="${customer.customerName + ' (ID: ' + customer.customerId + ')'}">
+                                                th:text="${customer.customerName + ' (고객코드: ' + customer.customerId + ')'}">
                                         </option>
                                     </select>
                                 </div>
@@ -186,7 +186,7 @@
                                         <option disabled selected>고객을 선택하세요</option>
                                         <option th:each="customer : ${customers}"
                                                 th:value="${customer.customerId}"
-                                                th:text="${customer.customerName + ' (ID: ' + customer.customerId + ')'}">
+                                                th:text="${customer.customerName + ' (고객코드: ' + customer.customerId + ')'}">
                                         </option>
                                     </select>
                                 </div>
