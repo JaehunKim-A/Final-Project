@@ -29,6 +29,8 @@ public class DownloadController {
 		Map<String, String> fileNames = new HashMap<>();
 		fileNames.put("customer", "고객_전체.xlsx");
 		fileNames.put("rawMaterialSupplier", "공급자_전체.xlsx");
+		fileNames.put("customerOrders", "주문_전체.xlsx");
+
 
 		String fileName = fileNames.getOrDefault(type, type + "_전체.xlsx");
 
@@ -46,6 +48,7 @@ public class DownloadController {
 		Map<String, String> fileNames = new HashMap<>();
 		fileNames.put("customer", "고객_전체.csv");
 		fileNames.put("rawMaterialSupplier", "공급자_전체.csv");
+		fileNames.put("customerOrders", "주문_전체.csv");
 
 		String fileName = fileNames.getOrDefault(type, type + "_전체.csv");
 
@@ -76,6 +79,17 @@ public class DownloadController {
 		String sample = "supplierId|supplierName|contactInfo|address|email|phoneNumber\n기존코드|변경이름|변경연락처|변경주소|변경이메일|변경전화번호\n";
 
 		String fileName = "공급자_업로드_샘플.csv";
+		setCsvDownloadHeader(response, fileName);
+
+		response.getWriter().write(sample);
+		response.getWriter().flush();
+	}
+
+	@GetMapping("/sample/customerOrders")
+	public void downloadOrdersSample(HttpServletResponse response) throws IOException {
+		String sample = "orderId|customerId|orderDate|totalAmount|status\n기존주문코드|변경고객코드|주문일|수량|상태\n";
+
+		String fileName = "주문_업로드_샘플.csv";
 		setCsvDownloadHeader(response, fileName);
 
 		response.getWriter().write(sample);

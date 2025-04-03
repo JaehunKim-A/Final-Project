@@ -26,4 +26,9 @@ public class UploadController {
 		uploadService.processSupplierCsv(file);
 		return ResponseEntity.ok("공급처 CSV 업로드 완료");
 	}
+	@PostMapping("/csv/customerOrders")
+	public ResponseEntity<String> uploadOrdersCsv(@RequestParam("file") MultipartFile file) throws IOException {
+		uploadService.processOrdersCsv(file);
+		return ResponseEntity.ok("주문 CSV 업로드 완료");
+	}
 }

@@ -1,7 +1,9 @@
 package com.team1.team1project.service;
 
 import com.team1.team1project.customer.service.CustomerService;
+import com.team1.team1project.customerOrders.service.CustomerOrdersService;
 import com.team1.team1project.dto.CustomerDTO;
+import com.team1.team1project.dto.CustomerOrdersDTO;
 import com.team1.team1project.dto.RawMaterialSupplierDTO;
 import com.team1.team1project.rawMaterialSuppliers.service.RawMaterialSupplierService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +12,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +24,7 @@ public class UploadService {
 
 	private final CustomerService customerService;
 	private final RawMaterialSupplierService rawMaterialSupplierService;
+	private final CustomerOrdersService customerOrdersService;
 
 	public void processCustomerCsv(MultipartFile file) {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
@@ -115,4 +122,78 @@ public class UploadService {
 			throw new RuntimeException("공급사 CSV 처리 중 오류 발생", e);
 		}
 	}
+
+	public void processOrdersCsv(MultipartFile file) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+			String line;
+			boolean isFirst = true;
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+
+			while ((line = reader.readLine()) != null) {
+				if (isFirst) {
+					isFirst = false;
+					continue;
+				}
+
+				if (line.trim().isEmpty()) continue;
+
+				String[] fields = line.split("\\|");
+				if (fields.length < 5) {
+					System.err.println("잘못된 주문 CSV 라인 (필드 부족): " + line);
+					continue;
+				}
+
+				int orderId;
+				try {
+					orderId = Integer.parseInt(fields[0].trim());
+				} catch (NumberFormatException e) {
+					System.err.println("유효하지 않은 주문 ID: " + fields[0]);
+					continue;
+				}
+
+				int customerId;
+				try {
+					customerId = Integer.parseInt(fields[1].trim());
+				} catch (NumberFormatException e) {
+					System.err.println("유효하지 않은 고객 ID: " + fields[1]);
+					continue;
+				}
+
+				LocalDateTime orderDate;
+				try {
+					orderDate = LocalDateTime.parse(fields[2].trim(), formatter);
+				} catch (DateTimeParseException e) {
+					System.err.println("유효하지 않은 날짜 형식: " + fields[2]);
+					continue;
+				}
+
+				BigDecimal totalAmount;
+				try {
+					totalAmount = new BigDecimal(fields[3].trim());
+				} catch (NumberFormatException e) {
+					System.err.println("유효하지 않은 총 금액: " + fields[3]);
+					continue;
+				}
+
+				String status = fields[4].trim();
+
+				CustomerOrdersDTO existing = customerOrdersService.getCustomerOrderById(orderId).orElse(null);
+				if (existing != null) {
+					existing.setCustomerId(customerId);
+					existing.setOrderDate(orderDate);
+					existing.setTotalAmount(totalAmount);
+					existing.setStatus(status);
+
+					customerOrdersService.updateCustomerOrder(orderId, existing);
+				} else {
+					System.out.println("등록되지 않은 주문 ID: " + orderId);
+				}
+			}
+		} catch (Exception e) {
+			throw new RuntimeException("주문 CSV 처리 중 오류 발생", e);
+		}
+	}
+
+
+
 }

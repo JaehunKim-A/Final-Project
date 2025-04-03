@@ -1,7 +1,9 @@
 package com.team1.team1project.service;
 
+import com.team1.team1project.customerOrders.service.CustomerOrdersService;
 import com.team1.team1project.dto.CustomerDTO;
 import com.team1.team1project.customer.service.CustomerService;
+import com.team1.team1project.dto.CustomerOrdersDTO;
 import com.team1.team1project.dto.RawMaterialSupplierDTO;
 import com.team1.team1project.rawMaterialSuppliers.service.RawMaterialSupplierService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ public class DownloadService {
 
 	private final CustomerService customerService;
 	private final RawMaterialSupplierService rawMaterialSupplierService;
+	private final CustomerOrdersService customerOrdersService;
 
 	public Workbook createExcelByType(String type) {
 		switch (type) {
@@ -25,6 +28,8 @@ public class DownloadService {
 				return createCustomerWorkbook();
 			case "rawMaterialSupplier":
 				return createSupplierWorkbook();
+			case "customerOrders":
+				return createOrdersWorkbook();
 			default:
 				throw new IllegalArgumentException("Unknown type: " + type);
 		}
@@ -80,12 +85,43 @@ public class DownloadService {
 		return workbook;
 	}
 
+	private Workbook createOrdersWorkbook() {
+		List<CustomerOrdersDTO> orders = customerOrdersService.getAllCustomerOrders();
+		String[] headers = {"주문코드", "고객코드", "주문일", "수량", "상태", "등록일", "수정일"};
+
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("Orders");
+		createHeaderRow(sheet, headers);
+
+		int rowNum = 1;
+		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		for (CustomerOrdersDTO o : orders) {
+			Row row = sheet.createRow(rowNum++);
+			row.createCell(0).setCellValue(o.getOrderId());
+			row.createCell(1).setCellValue(o.getCustomerId());
+			row.createCell(2).setCellValue(o.getOrderDate());
+			if (o.getTotalAmount() != null) {
+				row.createCell(3).setCellValue(o.getTotalAmount().doubleValue());
+			} else {
+				row.createCell(3).setCellValue("");
+			}
+			row.createCell(4).setCellValue(o.getStatus());
+			row.createCell(5).setCellValue(o.getRegDate().format(fmt));
+			row.createCell(6).setCellValue(o.getModDate().format(fmt));
+		}
+
+		autoSizeColumns(sheet, headers.length);
+		return workbook;
+	}
+
 	public String createCsvByType(String type) {
 		switch (type) {
 			case "customer":
 				return createCustomerCsv();
 			case "rawMaterialSupplier":
 				return createSupplierCsv();
+			case "customerOrders":
+				return createOrdersCsv();
 			default:
 				throw new IllegalArgumentException("Unknown type: " + type);
 		}
@@ -121,6 +157,23 @@ public class DownloadService {
 					.append(s.getPhoneNumber()).append("|")
 					.append(s.getRegDate().format(fmt)).append("|")
 					.append(s.getModDate().format(fmt)).append("\n");
+		}
+		return sb.toString();
+	}
+
+	private String createOrdersCsv() {
+		List<CustomerOrdersDTO> orders = customerOrdersService.getAllCustomerOrders();
+		StringBuilder sb = new StringBuilder();
+		sb.append("주문코드|고객코드|주문일|수량|상태|등록일|수정일\n");
+		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		for (CustomerOrdersDTO o : orders) {
+			sb.append(o.getOrderId()).append("|")
+					.append(o.getCustomerId()).append("|")
+					.append(o.getOrderDate()).append("|")
+					.append(o.getTotalAmount()).append("|")
+					.append(o.getStatus()).append("|")
+					.append(o.getRegDate().format(fmt)).append("|")
+					.append(o.getModDate().format(fmt)).append("\n");
 		}
 		return sb.toString();
 	}

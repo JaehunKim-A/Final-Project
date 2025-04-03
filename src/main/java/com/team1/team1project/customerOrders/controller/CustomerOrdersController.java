@@ -1,0 +1,79 @@
+package com.team1.team1project.customerOrders.controller;
+
+import com.team1.team1project.customer.service.CustomerService;
+import com.team1.team1project.customerOrders.service.CustomerOrdersService;
+import com.team1.team1project.dto.CustomerDTO;
+import com.team1.team1project.dto.CustomerOrdersDTO;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
+
+@Controller
+@Log4j2
+@RequiredArgsConstructor
+public class CustomerOrdersController {
+	private final CustomerOrdersService customerOrdersService;
+	private final CustomerService customerService;
+
+	@GetMapping("/table/customerOrders")
+	public String showCustomerOrdersList(Model model) {
+		List<CustomerOrdersDTO> customerOrders = customerOrdersService.getAllCustomerOrders();
+		List<CustomerDTO> customers = customerService.getAllCustomers();
+
+		List<String> columnNames = List.of(
+				"orderId", "customerId", "orderDate", "status", "totalAmount", "regDate", "modDate"
+		);
+
+		model.addAttribute("customerOrders", customerOrders);
+		model.addAttribute("customers", customers);
+		model.addAttribute("columns", columnNames);
+
+		return "customerOrders/table";
+	}
+
+	// 등록 폼
+	@GetMapping("/table/customerOrders/register")
+	public String showRegistrationForm(Model model) {
+		model.addAttribute("customerOrders", new CustomerOrdersDTO());
+		return "customerOrders/register";
+	}
+
+	// 등록 처리
+	@PostMapping("/table/customerOrders/register")
+	public String registerCustomer(@ModelAttribute("customerOrders") CustomerOrdersDTO customerOrdersDTO) {
+		customerOrdersService.createCustomerOrder(customerOrdersDTO);
+		return "redirect:/table/customerOrders";
+	}
+
+	// 수정 폼
+	@GetMapping("/table/customerOrders/edit/{orderId}")
+	public String showEditForm(@PathVariable("orderId") int orderId, Model model) {
+		CustomerOrdersDTO customerOrdersDTO = customerOrdersService.getCustomerOrderById(orderId)
+				.orElseThrow(() -> new IllegalArgumentException("Invalid customerOrder Id: " + orderId));
+		model.addAttribute("customerOrders", customerOrdersDTO);
+		return "customerOrders/edit";
+	}
+
+	// 수정 처리
+	@PostMapping("/table/customerOrders/edit/{orderId}")
+	public String updateCustomer(@PathVariable("orderId") int orderId,
+	                             @ModelAttribute("customerOrders") CustomerOrdersDTO customerOrdersDTO) {
+		customerOrdersService.updateCustomerOrder(orderId, customerOrdersDTO);
+		return "redirect:/table/customerOrders";
+	}
+
+	// 삭제
+	@GetMapping("/table/customerOrders/delete/{orderId}")
+	public String deleteCustomer(@PathVariable("orderId") int orderId) {
+		customerOrdersService.deleteCustomerOrder(orderId);
+		return "redirect:/table/customerOrders";
+	}
+
+}

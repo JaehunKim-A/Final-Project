@@ -6,13 +6,25 @@ document.addEventListener("DOMContentLoaded", function () {
     const accordionFields = JSON.parse(document.body.dataset.accordionFields || "[]");
     const table = document.querySelector("#table1");
 
+    const primaryKey = {
+        customer: "id",
+        customerOrders: "orderId",
+        rawMaterialSupplier: "id"
+    }[entity] || "id";
+
     const utils = {
         capitalize: str => str.charAt(0).toUpperCase() + str.slice(1),
         getIdElement: (prefix) => document.getElementById(`${prefix}${utils.capitalize(entity)}Id`),
         getFormElement: (prefix) => document.getElementById(`${prefix}${utils.capitalize(entity)}Form`),
         setInputValue: (id, value) => {
             const el = document.getElementById(id);
-            if (el) el.value = value;
+            if (el) {
+                if (el.tagName === "SELECT") {
+                    el.value = value;
+                } else {
+                    el.value = value;
+                }
+            }
         },
         renderDataAttrs: (data, fields) => fields.map(f => `data-${f}="${data[f] || ''}"`).join(" ")
     };
@@ -22,11 +34,11 @@ document.addEventListener("DOMContentLoaded", function () {
         searchable: true,
         sortable: true,
         labels: {
-                placeholder: `검색(검색어1 검색어2 ..)`,
-                perPage: `{select}개씩 보기`,
-                noRows: `${label}을 찾을 수 없습니다.`,
-                info: `현재 페이지 ${label} {start}~{end} / 전체:{rows}`,
-                },
+            placeholder: `검색(검색어1 검색어2 ..)`,
+            perPage: `{select}개씩 보기`,
+            noRows: `${label}을 찾을 수 없습니다.`,
+            info: `현재 페이지 ${label} {start}~{end} / 전체:{rows}`,
+        },
     });
 
     const adaptPageDropdown = () => {
@@ -81,7 +93,14 @@ document.addEventListener("DOMContentLoaded", function () {
     table.addEventListener("click", (e) => {
         const editBtn = e.target.closest(".btn-edit");
         if (editBtn) {
-            const id = editBtn.dataset.id;
+            let id = editBtn.dataset.id;
+
+            if (!id || id === 'undefined') {
+                const row = editBtn.closest("tr");
+                const pkCell = row.querySelector(`.${entity}-${primaryKey}`) || row.querySelector(`.${primaryKey}`);
+                id = pkCell?.innerText?.trim() || "";
+            }
+
             utils.setInputValue(`edit${utils.capitalize(entity)}Id`, id);
 
             fields.forEach(field => {
@@ -90,18 +109,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
             utils.setInputValue("editRegDate", editBtn.dataset.reg || "");
             utils.setInputValue("editModDate", editBtn.dataset.mod || "");
-            utils.setInputValue("editPhoneNumber", editBtn.dataset.phoneNumber || "");
+
             return;
         }
 
         const deleteBtn = e.target.closest(".btn-delete");
         if (deleteBtn) {
             const id = deleteBtn.dataset.id;
-            const name = deleteBtn.dataset.name || "선택된 고객"; // data-name 속성 활용
+            const name = deleteBtn.dataset.name;
+
             utils.setInputValue(`delete${utils.capitalize(entity)}Id`, id);
 
             const msg = document.getElementById("deleteConfirmMessage");
-            if (msg) msg.textContent = `정말로 ${name} 님을 삭제하시겠습니까?`;
+            if (msg) {
+                const displayName = name && name.trim() !== "" ? name : id;
+                msg.textContent = `정말로 ${displayName}을 삭제하시겠습니까?`;
+            }
             return;
         }
 
@@ -132,57 +155,55 @@ document.addEventListener("DOMContentLoaded", function () {
         new bootstrap.Collapse(document.getElementById(`collapse-${rowIndex}`), { toggle: true });
     }
 
-    function renderAccordionRow(data, index) {
-        const accordionLabels = JSON.parse(document.body.dataset.accordionLabels || "[]");
-        const buttonAttrs = utils.renderDataAttrs(data, fields);
+   function renderAccordionRow(data, index) {
+       const accordionLabels = JSON.parse(document.body.dataset.accordionLabels || "[]");
 
-        return `
-            <td colspan="99">
-                <div class="accordion" id="accordionDetail-${index}">
-                    <div class="accordion-item">
-                        <div id="collapse-${index}" class="accordion-collapse collapse">
-                            <div class="accordion-body p-0">
-                                <table class="table table-bordered mb-0 align-middle">
-                                    <thead>
-                                        <tr>
-                                            ${
-                                                accordionFields.map((f, i) =>
-                                                    `<th>${accordionLabels[i] || f}</th>`
-                                                ).join("")
-                                            }
-                                            <th>수정/삭제</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            ${
-                                                accordionFields.map(f =>
-                                                    `<td>${data[f]}</td>`
-                                                ).join("")
-                                            }
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-primary btn-edit"
-                                                    data-bs-toggle="modal" data-bs-target="#editModal"
-                                                    data-id="${data.id}" ${buttonAttrs}
-                                                    data-reg="${data.reg || ''}"
-                                                    data-mod="${data.mod || ''}">
-                                                    수정
-                                                </button>
-                                                <button class="btn btn-sm btn-outline-info btn-delete"
-                                                    data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                                    data-id="${data.id}" data-name="${data.name}">
-                                                    삭제
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </td>`;
-    }
+       const buttonAttrs = utils.renderDataAttrs(data, fields);
+
+       return `
+           <td colspan="99">
+               <div class="accordion" id="accordionDetail-${index}">
+                   <div class="accordion-item">
+                       <div id="collapse-${index}" class="accordion-collapse collapse">
+                           <div class="accordion-body p-0">
+                               <table class="table table-bordered mb-0 align-middle">
+                                   <thead>
+                                       <tr>
+                                           ${accordionFields.map((f, i) =>
+                                               `<th>${accordionLabels[i] || f}</th>`).join("")}
+                                           <th>수정/삭제</th>
+                                       </tr>
+                                   </thead>
+                                   <tbody>
+                                       <tr>
+                                           ${accordionFields.map(f =>
+                                               `<td>${data[f]}</td>`).join("")}
+                                           <td>
+                                               <button class="btn btn-sm btn-outline-primary btn-edit"
+                                                   data-bs-toggle="modal" data-bs-target="#editModal"
+                                                   data-id="${data[primaryKey]}"
+                                                   data-customerid="${data.customerId}"
+                                                   ${utils.renderDataAttrs(data, fields)}
+                                                   data-reg="${data.reg || ''}"
+                                                   data-mod="${data.mod || ''}">
+                                                   수정
+                                               </button>
+                                               <button class="btn btn-sm btn-outline-info btn-delete"
+                                                   data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                                   data-id="${data[primaryKey]}" data-name="${data.name || ''}">
+                                                   삭제
+                                               </button>
+                                           </td>
+                                       </tr>
+                                   </tbody>
+                               </table>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </td>`;
+   }
+
 
 
     // 수정 및 삭제 form 처리
@@ -254,8 +275,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 classes: ["rawMaterialSupplier-id", "rawMaterialSupplier-name", "rawMaterialSupplier-contact", "rawMaterialSupplier-address", "rawMaterialSupplier-email", "rawMaterialSupplier-phone", "rawMaterialSupplier-reg", "rawMaterialSupplier-mod"],
                 sheetName: "공급업체 목록",
                 fileName: "공급업체_현재보기.xlsx"
+            },
+            customerOrders: {
+                headers: ["주문 ID", "고객 ID", "주문일", "수량", "상태", "등록일", "수정일"],
+                classes: [
+                    "customerOrders-orderId",
+                    "customerOrders-customerId",
+                    "customerOrders-orderDate",
+                    "customerOrders-totalAmount",
+                    "customerOrders-status",
+                    "customerOrders-reg",
+                    "customerOrders-mod"
+                ],
+                sheetName: "주문 목록",
+                fileName: "주문_현재보기.xlsx"
             }
-            // 필요한 다른 entity 추가 가능
         };
 
         const config = exportConfig[entity];
@@ -287,14 +321,28 @@ document.addEventListener("DOMContentLoaded", function () {
            customer: {
                headers: ["코드", "이름", "연락처", "주소", "등록일", "수정일"],
                classes: ["customer-id", "customer-name", "customer-contact", "customer-address", "customer-reg", "customer-mod"],
-               fileName: "고객_검색결과.csv",
-               sheetName: "고객 목록"
+               sheetName: "고객 목록",
+               fileName: "고객_검색결과.csv"
            },
            rawMaterialSupplier: {
                headers: ["코드", "이름", "연락처", "주소", "이메일", "전화번호", "등록일", "수정일"],
                classes: ["rawMaterialSupplier-id", "rawMaterialSupplier-name", "rawMaterialSupplier-contact", "rawMaterialSupplier-address", "rawMaterialSupplier-email", "rawMaterialSupplier-phone", "rawMaterialSupplier-reg", "rawMaterialSupplier-mod"],
-               fileName: "공급업체_검색결과.csv",
-               sheetName: "공급업체 목록"
+               sheetName: "공급업체 목록",
+               fileName: "공급업체_검색결과.csv"
+           },
+           customerOrders: {
+               headers: ["주문 ID", "고객 ID", "주문일", "수량", "상태", "등록일", "수정일"],
+               classes: [
+                   "customerOrders-orderId",
+                   "customerOrders-customerId",
+                   "customerOrders-orderDate",
+                   "customerOrders-totalAmount",
+                   "customerOrders-status",
+                   "customerOrders-reg",
+                   "customerOrders-mod"
+               ],
+               sheetName: "주문 목록",
+               fileName: "주문_검색결과.csv"
            }
        };
 
