@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", function() {
     let productionAmounts = window.productionAmountsJson || [];
     let dayList = window.daysJson || [];
 
+    console.log("dayList: " + dayList);
+
     try {
         if (typeof productionAmountsJson === 'string') {
             productionAmounts = JSON.parse(productionAmountsJson);
@@ -55,32 +57,86 @@ function fetchProductionData() {
 
 // 생산량 차트 초기화
 function initializeProductionAmountChart(productionAmounts, dayList) {
+    // productionAmounts 데이터 확인
+    if (!productionAmounts || !Array.isArray(productionAmounts) || productionAmounts.length === 0) {
+        console.warn("productionAmounts 데이터가 비어 있습니다.");
+        return; // 데이터가 없으면 차트를 그리지 않음
+    }
 
-    const formattedDayList = dayList.map(timestamp => {
-        // 타임스탬프가 문자열인지 숫자인지 확인하고 처리
-        let date;
-        if (typeof timestamp === 'string') {
-            // 문자열이 숫자로만 이루어져 있는지 확인
-            if (/^\d+$/.test(timestamp)) {
-                date = new Date(Number(timestamp));
+    // 데이터 길이 확인 (첫 번째 기계의 데이터 길이 사용)
+    const dataLength = productionAmounts[0].data ? productionAmounts[0].data.length : 0;
+
+    // 날짜 데이터가 없거나 유효하지 않은 경우, 데이터 길이에 맞는 날짜 생성
+    if (!dayList || !Array.isArray(dayList) || dayList.length === 0 || dayList.length !== dataLength) {
+        console.warn("dayList가 없거나 데이터 길이와 일치하지 않습니다. 데이터에 맞는 날짜를 생성합니다.");
+        dayList = [];
+        const today = new Date();
+
+        // 데이터 길이에 맞게 날짜 생성 (dataLength일 전부터 오늘까지)
+        for (let i = dataLength - 1; i >= 0; i--) {
+            const date = new Date();
+            date.setDate(today.getDate() - i);
+            dayList.push(date.getTime());
+        }
+    }
+
+    // 날짜 형식화 - 더 강력한 오류 처리 추가
+    const formattedDayList = dayList.map((timestamp, index) => {
+        try {
+            // 1. timestamp가 문자열이면 숫자로 변환 시도
+            let numericTimestamp;
+            if (typeof timestamp === 'string') {
+                // 숫자 형태의 문자열인지 확인
+                if (/^\d+$/.test(timestamp)) {
+                    numericTimestamp = Number(timestamp);
+                } else {
+                    // 날짜 형식의 문자열인 경우
+                    const parsedDate = new Date(timestamp);
+                    if (!isNaN(parsedDate.getTime())) {
+                        numericTimestamp = parsedDate.getTime();
+                    } else {
+                        throw new Error('유효하지 않은 날짜 문자열');
+                    }
+                }
+            } else if (typeof timestamp === 'number') {
+                numericTimestamp = timestamp;
             } else {
-                date = new Date(timestamp);
+                throw new Error('지원되지 않는 타임스탬프 유형');
             }
-        } else {
-            date = new Date(timestamp);
-        }
 
-        // 유효한 날짜인지 확인
-        if (isNaN(date.getTime())) {
-            console.error('Invalid date from timestamp:', timestamp);
-            return 'Invalid';
-        }
+            // 2. 유효한 타임스탬프인지 확인
+            const date = new Date(numericTimestamp);
+            if (isNaN(date.getTime())) {
+                console.error(`유효하지 않은 날짜(인덱스 ${index}): ${timestamp}`);
+                // 대체 날짜 사용 (현재 날짜에서 인덱스만큼 뺌)
+                const fallbackDate = new Date();
+                fallbackDate.setDate(fallbackDate.getDate() - (dataLength - 1 - index));
+                return fallbackDate.toLocaleDateString('ko-KR', {
+                    month: '2-digit',
+                    day: '2-digit'
+                });
+            }
 
-        return date.toLocaleDateString('ko-KR', {
-            month: '2-digit',
-            day: '2-digit'
-        });
+            // 3. 정상적인 날짜 형식화
+            return date.toLocaleDateString('ko-KR', {
+                month: '2-digit',
+                day: '2-digit'
+            });
+        } catch (error) {
+            console.error('날짜 변환 오류:', error, '인덱스:', index, '타임스탬프:', timestamp);
+            // 대체 날짜 사용 (현재 날짜에서 인덱스만큼 뺌)
+            const fallbackDate = new Date();
+            fallbackDate.setDate(fallbackDate.getDate() - (dataLength - 1 - index));
+            return fallbackDate.toLocaleDateString('ko-KR', {
+                month: '2-digit',
+                day: '2-digit'
+            });
+        }
     });
+
+    // 디버깅을 위한 로그 추가
+    console.log("원본 dayList:", dayList);
+    console.log("변환된 formattedDayList:", formattedDayList);
 
     productionAmountLineChartOptions = {
         chart: {
@@ -101,12 +157,61 @@ function initializeProductionAmountChart(productionAmounts, dayList) {
 
 // 생산량 차트 업데이트
 function updateProductionAmountChart(productionAmounts, dayList) {
-    const formattedDayList = dayList.map(timestamp => {
-        const date = new Date(Number(timestamp));
-        return date.toLocaleDateString('ko-KR', {
-            month: '2-digit',
-            day: '2-digit'
-        });
+    // 데이터 길이 확인 (첫 번째 기계의 데이터 길이 사용)
+    const dataLength = productionAmounts[0].data ? productionAmounts[0].data.length : 0;
+
+    // 날짜 형식화 - 더 강력한 오류 처리 추가
+    const formattedDayList = dayList.map((timestamp, index) => {
+        try {
+            // 1. timestamp가 문자열이면 숫자로 변환 시도
+            let numericTimestamp;
+            if (typeof timestamp === 'string') {
+                // 숫자 형태의 문자열인지 확인
+                if (/^\d+$/.test(timestamp)) {
+                    numericTimestamp = Number(timestamp);
+                } else {
+                    // 날짜 형식의 문자열인 경우
+                    const parsedDate = new Date(timestamp);
+                    if (!isNaN(parsedDate.getTime())) {
+                        numericTimestamp = parsedDate.getTime();
+                    } else {
+                        throw new Error('유효하지 않은 날짜 문자열');
+                    }
+                }
+            } else if (typeof timestamp === 'number') {
+                numericTimestamp = timestamp;
+            } else {
+                throw new Error('지원되지 않는 타임스탬프 유형');
+            }
+
+            // 2. 유효한 타임스탬프인지 확인
+            const date = new Date(numericTimestamp);
+            if (isNaN(date.getTime())) {
+                console.error(`유효하지 않은 날짜(인덱스 ${index}): ${timestamp}`);
+                // 대체 날짜 사용 (현재 날짜에서 인덱스만큼 뺌)
+                const fallbackDate = new Date();
+                fallbackDate.setDate(fallbackDate.getDate() - (dataLength - 1 - index));
+                return fallbackDate.toLocaleDateString('ko-KR', {
+                    month: '2-digit',
+                    day: '2-digit'
+                });
+            }
+
+            // 3. 정상적인 날짜 형식화
+            return date.toLocaleDateString('ko-KR', {
+                month: '2-digit',
+                day: '2-digit'
+            });
+        } catch (error) {
+            console.error('날짜 변환 오류:', error, '인덱스:', index, '타임스탬프:', timestamp);
+            // 대체 날짜 사용 (현재 날짜에서 인덱스만큼 뺌)
+            const fallbackDate = new Date();
+            fallbackDate.setDate(fallbackDate.getDate() - (dataLength - 1 - index));
+            return fallbackDate.toLocaleDateString('ko-KR', {
+                month: '2-digit',
+                day: '2-digit'
+            });
+        }
     });
 
     if (productionAmountLineChart) {

@@ -4,7 +4,6 @@ import com.team1.team1project.domain.MachineGuiInfo;
 import com.team1.team1project.domain.MachineHistory;
 import com.team1.team1project.dto.MachineGuiInfoDTO;
 import com.team1.team1project.dto.MachineHistoryDTO;
-import com.team1.team1project.dto.MachineRawMaterialConsumeDTO;
 import com.team1.team1project.productProcessManagement.dto.*;
 import com.team1.team1project.productProcessManagement.mapper.*;
 import com.team1.team1project.productProcessManagement.repository.MachineGuiInfoRepository;
@@ -49,7 +48,7 @@ public class ProductProcessManagementServiceImpl implements ProductProcessManage
 
     @Override
     public MachineHistoryDaysDTO getProductionAmount2Week() {
-        List<ProductionData> dtoList = new ArrayList<>();
+        List<ProductionDataDTO> dtoList = new ArrayList<>();
 
         List<String> machines = machineHistoryRepository.findAll()
                 .stream()
@@ -59,8 +58,8 @@ public class ProductProcessManagementServiceImpl implements ProductProcessManage
         for (String machineId : machines) {
             List<Integer> productionAmounts = machineHistoryMapper.selectProductAmount2Week(machineId);
 
-            ProductionData productionData = new ProductionData(productionAmounts, machineId);
-            dtoList.add(productionData);
+            ProductionDataDTO productionDataDTO = new ProductionDataDTO(productionAmounts, machineId);
+            dtoList.add(productionDataDTO);
         }
 
         List<Date> dayList = new ArrayList<>();

@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MachineHistoryDaysDTO {
-    private List<ProductionData> dtoList;
+    private List<ProductionDataDTO> dtoList;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private List<Date> dayList;

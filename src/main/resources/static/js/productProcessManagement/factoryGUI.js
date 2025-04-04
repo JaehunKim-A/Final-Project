@@ -1173,3 +1173,4 @@ function updateProductionTargetChart() {
         renderProductionTargetChart(chartLine);
     });
 }
+

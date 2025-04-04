@@ -72,6 +72,8 @@ async function loadDashboardData() {
 
         const dashboardData = await response.json();
 
+        console.log("dashboardData: " + dashboardData)
+
         // 데이터 전역 변수로 설정 (기존 스크립트와 호환성 유지)
         window.machineGuiInfoJson = dashboardData.machineGuiInfo || [];
 

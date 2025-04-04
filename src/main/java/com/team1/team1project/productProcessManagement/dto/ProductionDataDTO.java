@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductionData {
+public class ProductionDataDTO {
     public List<Integer> productionAmountData;
     public String machineId;
 }
