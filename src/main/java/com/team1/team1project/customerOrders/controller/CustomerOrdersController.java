@@ -25,13 +25,8 @@ public class CustomerOrdersController {
 		List<CustomerOrdersDTO> customerOrders = customerOrdersService.getAllCustomerOrders();
 		List<CustomerDTO> customers = customerService.getAllCustomers();
 
-		List<String> columnNames = List.of(
-				"orderId", "customerId", "orderDate", "status", "totalAmount", "regDate", "modDate"
-		);
-
 		model.addAttribute("customerOrders", customerOrders);
 		model.addAttribute("customers", customers);
-		model.addAttribute("columns", columnNames);
 
 		return "customerOrders/table";
 	}

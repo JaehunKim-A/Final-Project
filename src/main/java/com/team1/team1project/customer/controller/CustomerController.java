@@ -22,12 +22,7 @@ public class CustomerController {
 	public String showCustomerList(Model model) {
 		List<CustomerDTO> customers = customerService.getAllCustomers();
 
-		List<String> columnNames = List.of(
-				"customerId", "customerName", "contactInfo", "address", "regDate", "modDate"
-		);
-
 		model.addAttribute("customers", customers);
-		model.addAttribute("columns", columnNames);
 
 		return "customer/table";
 	}

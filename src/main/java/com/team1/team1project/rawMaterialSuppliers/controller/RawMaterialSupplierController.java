@@ -22,12 +22,7 @@ public class RawMaterialSupplierController {
 	public String showRawMaterialSupplierList(Model model) {
 		List<RawMaterialSupplierDTO> rawMaterialSuppliers = rawMaterialSupplierService.getAllRawMaterialSuppliers();
 
-		List<String> columnNames = List.of(
-				"supplierId", "supplierName", "contactInfo", "address","email", "phoneNumber", "regDate", "modDate"
-		);
-
 		model.addAttribute("suppliers", rawMaterialSuppliers);
-		model.addAttribute("columns", columnNames);
 
 		return "rawMaterialSupplier/table";
 	}
