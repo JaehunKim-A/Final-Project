@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 @Service
 @RequiredArgsConstructor
@@ -28,172 +27,182 @@ public class UploadService {
 
 	public void processCustomerCsv(MultipartFile file) {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+			String header = reader.readLine();
+			if (header == null) throw new RuntimeException("CSV 파일이 비어 있습니다.");
+			int columnCount = header.split("\\|").length;
+
 			String line;
-			boolean isFirst = true;
-
 			while ((line = reader.readLine()) != null) {
-				if (isFirst) {
-					isFirst = false;
-					continue;
-				}
-
 				if (line.trim().isEmpty()) continue;
-
 				String[] fields = line.split("\\|");
-				if (fields.length < 4) {
-					System.err.println("잘못된 고객 CSV 라인 (필드 부족): " + line);
-					continue;
+
+				if (fields.length != columnCount) {
+					throw new RuntimeException("고객 CSV 형식 오류: [" + line + "] 필드 수가 예상과 다릅니다.");
 				}
 
-				int customerId;
-				try {
-					customerId = Integer.parseInt(fields[0].trim());
-				} catch (NumberFormatException e) {
-					System.err.println("유효하지 않은 고객 ID: " + fields[0]);
-					continue;
-				}
+				if (columnCount == 4) {
+					int customerId = Integer.parseInt(fields[0].trim());
+					String name = fields[1].trim();
+					String contact = fields[2].trim();
+					String address = fields[3].trim();
 
-				String customerName = fields[1].trim();
-				String contactInfo = fields[2].trim();
-				String address = fields[3].trim();
+					var existing = customerService.getCustomerById(customerId).orElse(null);
+					if (existing != null) {
+						existing.setCustomerName(name);
+						existing.setContactInfo(contact);
+						existing.setAddress(address);
+						customerService.updateCustomer(customerId, existing);
+					} else {
+						CustomerDTO newCustomer = CustomerDTO.builder()
+								.customerName(name)
+								.contactInfo(contact)
+								.address(address)
+								.build();
+						customerService.createCustomer(newCustomer);
+					}
+				} else if (columnCount == 3) {
+					String name = fields[0].trim();
+					String contact = fields[1].trim();
+					String address = fields[2].trim();
 
-				CustomerDTO existing = customerService.getCustomerById(customerId).orElse(null);
-				if (existing != null) {
-					existing.setCustomerName(customerName);
-					existing.setContactInfo(contactInfo);
-					existing.setAddress(address);
-					customerService.updateCustomer(existing.getCustomerId(), existing);
-				} else {
-					System.out.println("등록되지 않은 고객 이름: " + customerName);
+					CustomerDTO newCustomer = CustomerDTO.builder()
+							.customerName(name)
+							.contactInfo(contact)
+							.address(address)
+							.build();
+					customerService.createCustomer(newCustomer);
 				}
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("고객 CSV 처리 중 오류 발생", e);
+			throw new RuntimeException("고객 CSV 처리 중 오류 발생: " + e.getMessage(), e);
 		}
 	}
 
 	public void processSupplierCsv(MultipartFile file) {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+			String header = reader.readLine();
+			if (header == null) throw new RuntimeException("CSV 파일이 비어 있습니다.");
+			int columnCount = header.split("\\|").length;
+
 			String line;
-			boolean isFirst = true;
-
 			while ((line = reader.readLine()) != null) {
-				if (isFirst) {
-					isFirst = false;
-					continue;
-				}
-
 				if (line.trim().isEmpty()) continue;
-
 				String[] fields = line.split("\\|");
-				if (fields.length < 6) {
-					System.err.println("잘못된 공급사 CSV 라인 (필드 부족): " + line);
-					continue;
+
+				if (fields.length != columnCount) {
+					throw new RuntimeException("공급사 CSV 형식 오류: [" + line + "] 필드 수가 예상과 다릅니다.");
 				}
 
-				int supplierId;
+				if (columnCount == 6) {
+					int supplierId = Integer.parseInt(fields[0].trim());
+					String name = fields[1].trim();
+					String contact = fields[2].trim();
+					String address = fields[3].trim();
+					String email = fields[4].trim();
+					String phone = fields[5].trim();
 
-				try {
-					supplierId = Integer.parseInt(fields[0].trim());
-				} catch (NumberFormatException e) {
-					System.err.println("유효하지 않은 공급사 ID: " + fields[0]);
-					continue;
-				}
+					var existing = rawMaterialSupplierService.getRawMaterialSupplierById(supplierId).orElse(null);
+					if (existing != null) {
+						existing.setSupplierName(name);
+						existing.setContactInfo(contact);
+						existing.setAddress(address);
+						existing.setEmail(email);
+						existing.setPhoneNumber(phone);
+						rawMaterialSupplierService.updateRawMaterialSupplier(supplierId, existing);
+					} else {
+						RawMaterialSupplierDTO newSupplier = RawMaterialSupplierDTO.builder()
+								.supplierName(name)
+								.contactInfo(contact)
+								.address(address)
+								.email(email)
+								.phoneNumber(phone)
+								.build();
+						rawMaterialSupplierService.createRawMaterialSupplier(newSupplier);
+					}
+				} else if (columnCount == 5) {
+					String name = fields[0].trim();
+					String contact = fields[1].trim();
+					String address = fields[2].trim();
+					String email = fields[3].trim();
+					String phone = fields[4].trim();
 
-				String supplierName = fields[1].trim();
-				String contactInfo = fields[2].trim();
-				String address = fields[3].trim();
-				String email = fields[4].trim();
-				String phoneNumber = fields[5].trim();
-
-				RawMaterialSupplierDTO existing = rawMaterialSupplierService.getRawMaterialSupplierById(supplierId).orElse(null);
-				if (existing != null) {
-					existing.setSupplierName(supplierName);
-					existing.setContactInfo(contactInfo);
-					existing.setAddress(address);
-					existing.setEmail(email);
-					existing.setPhoneNumber(phoneNumber);
-					rawMaterialSupplierService.updateRawMaterialSupplier(existing.getSupplierId(), existing);
-				} else {
-					System.out.println("등록되지 않은 공급사 ID: " + supplierId);
+					RawMaterialSupplierDTO newSupplier = RawMaterialSupplierDTO.builder()
+							.supplierName(name)
+							.contactInfo(contact)
+							.address(address)
+							.email(email)
+							.phoneNumber(phone)
+							.build();
+					rawMaterialSupplierService.createRawMaterialSupplier(newSupplier);
 				}
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("공급사 CSV 처리 중 오류 발생", e);
+			throw new RuntimeException("공급사 CSV 처리 중 오류 발생: " + e.getMessage(), e);
 		}
 	}
 
 	public void processOrdersCsv(MultipartFile file) {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+			String header = reader.readLine();
+			if (header == null) throw new RuntimeException("CSV 파일이 비어 있습니다.");
+			int columnCount = header.split("\\|").length;
+
 			String line;
-			boolean isFirst = true;
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
 			while ((line = reader.readLine()) != null) {
-				if (isFirst) {
-					isFirst = false;
-					continue;
-				}
-
 				if (line.trim().isEmpty()) continue;
-
 				String[] fields = line.split("\\|");
-				if (fields.length < 5) {
-					System.err.println("잘못된 주문 CSV 라인 (필드 부족): " + line);
-					continue;
+
+				if (fields.length != columnCount) {
+					throw new RuntimeException("주문 CSV 형식 오류: [" + line + "] 필드 수가 예상과 다릅니다.");
 				}
 
-				int orderId;
-				try {
-					orderId = Integer.parseInt(fields[0].trim());
-				} catch (NumberFormatException e) {
-					System.err.println("유효하지 않은 주문 ID: " + fields[0]);
-					continue;
-				}
+				if (columnCount == 5) {
+					int orderId = Integer.parseInt(fields[0].trim());
+					int customerId = Integer.parseInt(fields[1].trim());
 
-				int customerId;
-				try {
-					customerId = Integer.parseInt(fields[1].trim());
-				} catch (NumberFormatException e) {
-					System.err.println("유효하지 않은 고객 ID: " + fields[1]);
-					continue;
-				}
+					if (!customerService.getCustomerById(customerId).isPresent()) {
+						throw new RuntimeException("주문 CSV 오류: customerId [" + customerId + "] 는 존재하지 않는 고객입니다.");
+					}
 
-				LocalDateTime orderDate;
-				try {
-					orderDate = LocalDateTime.parse(fields[2].trim(), formatter);
-				} catch (DateTimeParseException e) {
-					System.err.println("유효하지 않은 날짜 형식: " + fields[2]);
-					continue;
-				}
+					LocalDateTime orderDate = LocalDateTime.parse(fields[2].trim(), formatter);
+					BigDecimal totalAmount = new BigDecimal(fields[3].trim());
+					String status = fields[4].trim();
 
-				BigDecimal totalAmount;
-				try {
-					totalAmount = new BigDecimal(fields[3].trim());
-				} catch (NumberFormatException e) {
-					System.err.println("유효하지 않은 총 금액: " + fields[3]);
-					continue;
-				}
+					var existing = customerOrdersService.getCustomerOrderById(orderId).orElse(null);
+					if (existing != null) {
+						existing.setCustomerId(customerId);
+						existing.setOrderDate(orderDate);
+						existing.setTotalAmount(totalAmount);
+						existing.setStatus(status);
+						customerOrdersService.updateCustomerOrder(orderId, existing);
+					} else {
+						CustomerOrdersDTO newOrder = CustomerOrdersDTO.builder()
+								.customerId(customerId)
+								.orderDate(orderDate)
+								.totalAmount(totalAmount)
+								.status(status)
+								.build();
+						customerOrdersService.createCustomerOrder(newOrder);
+					}
+				} else if (columnCount == 4) {
+					int customerId = Integer.parseInt(fields[0].trim());
+					LocalDateTime orderDate = LocalDateTime.parse(fields[1].trim(), formatter);
+					BigDecimal totalAmount = new BigDecimal(fields[2].trim());
+					String status = fields[3].trim();
 
-				String status = fields[4].trim();
-
-				CustomerOrdersDTO existing = customerOrdersService.getCustomerOrderById(orderId).orElse(null);
-				if (existing != null) {
-					existing.setCustomerId(customerId);
-					existing.setOrderDate(orderDate);
-					existing.setTotalAmount(totalAmount);
-					existing.setStatus(status);
-
-					customerOrdersService.updateCustomerOrder(orderId, existing);
-				} else {
-					System.out.println("등록되지 않은 주문 ID: " + orderId);
+					CustomerOrdersDTO newOrder = CustomerOrdersDTO.builder()
+							.customerId(customerId)
+							.orderDate(orderDate)
+							.totalAmount(totalAmount)
+							.status(status)
+							.build();
+					customerOrdersService.createCustomerOrder(newOrder);
 				}
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("주문 CSV 처리 중 오류 발생", e);
+			throw new RuntimeException("주문 CSV 처리 중 오류 발생: " + e.getMessage(), e);
 		}
 	}
-
-
-
 }
