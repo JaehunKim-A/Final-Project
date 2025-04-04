@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team1.team1project.productProcessManagement.mapper.MachineGuiInfoMapper">
+    <select id="selectMachineGuiInformations" resultType="com.team1.team1project.productProcessManagement.dto.MachineGuiInformationsDTO">
+        SELECT
+            a.gui_id as guiId, a.machine_id as machineId, a.x_coordinate as xCoordinate, a.y_coordinate as yCoordinate, a.machine_type as machineType, c.material_code as materialCode, b.stock
+        FROM
+            machine_gui_info a
+        JOIN
+            machine_raw_material_reserve b
+        ON
+            a.machine_id = b.machine_id
+        JOIN
+            raw_materials c
+        ON
+            b.material_code = c.material_code
+    </select>
+
+    <insert id="insertMachineGuiInfo" useGeneratedKeys="true" keyProperty="guiId" parameterType="com.team1.team1project.domain.MachineGuiInfo">
+        INSERT INTO
+            machine_gui_info (machine_id, x_coordinate, y_coordinate, machine_type)
+        VALUES
+            (#{machineId}, #{xCoordinate}, #{yCoordinate}, #{machineType})
+    </insert>
+
+    <update id="modifyMachineGuiInfo">
+        UPDATE
+            machine_gui_info
+        SET
+            x_coordinate = #{xCoordinate},
+            y_coordinate = #{yCoordinate},
+            machine_type = #{machineType}
+        WHERE
+            machine_id = #{machineId}
+    </update>
+
+    <delete id="deleteMachineGuiInfo">
+        DELETE
+        FROM
+            machine_gui_info
+        WHERE
+            machine_id = #{machineId}
+    </delete>
+
+    <select id="checkCoordinates" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            machine_gui_info
+        WHERE
+            x_coordinate = #{xCoordinate}
+        AND
+            y_coordinate = #{yCoordinate}
+        AND
+            SUBSTRING_INDEX(machine_id, '_', 1) = #{line}
+    </select>
+
+    <select id="selectNotExistOnGuiMachineList" resultType="String">
+        SELECT
+            a.machine_id
+        FROM
+            machine_info a
+        LEFT JOIN
+            machine_gui_info b
+        ON
+            a.machine_id = b.machine_id
+        WHERE
+            b.machine_id IS NULL
+    </select>
+
+
+</mapper>

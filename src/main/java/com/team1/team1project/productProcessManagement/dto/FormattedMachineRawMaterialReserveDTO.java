@@ -1,4 +1,4 @@
-package com.team1.team1project.dto;
+package com.team1.team1project.productProcessManagement.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,13 +7,11 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 
-@Data
 @Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MachineRawMaterialReserveDTO {
-
-    private int reserveId;
+public class FormattedMachineRawMaterialReserveDTO {
 
     @NotEmpty
     private String machineId;

@@ -10,14 +10,16 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class MachineRawMaterialReserve {
+public class MachineGuiInfo extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "reserve_id")
-    private int reserveId;
-    @Column(name = "machine_id")
+    private Integer guiId;
     private String machineId;
-    @Column(name = "material_code")
-    private String materialCode;
-    private int stock;
+    private int xCoordinate;
+    private int yCoordinate;
+    private String machineType;
+
+    public void setGuiId(Integer guiId) {
+        this.guiId = guiId;
+    }
 }

@@ -16,7 +16,7 @@ public class MachineRawMaterialConsumeDTO {
     private int consumeId;
 
     @NotEmpty
-    private int materialId;
+    private String materialCode;
 
     @NotEmpty
     private int quantity;

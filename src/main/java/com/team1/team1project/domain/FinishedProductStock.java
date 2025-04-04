@@ -2,18 +2,22 @@ package com.team1.team1project.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Entity // jpa 에서 관리하는 entity 지정
-@NoArgsConstructor
-@ToString
-@AllArgsConstructor
+@Entity
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class FinishedProductStock extends BaseEntity {
+@ToString
+public class FinishedProductStock {
     @Id
-    private Integer codeId; // 완제품 코드 id 가져올것임
-    private Long stock; // 완제품 재고
-    // stock 은 트리거로 자동 수량 변경 되도록
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "stockId")
+    private Long finishedProductStockId;
+
+    private String productCode;
+    private String productId;
+    @Column(name = "stock")
+    private Long finishedProductStock;
 }

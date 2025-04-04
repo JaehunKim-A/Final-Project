@@ -11,10 +11,9 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RawMaterialStockDTO {
-    private Long rawMaterialStockId; // 원자재 id
-    private Long materialCode;
-    private Long rawMaterialStock; // 원자재 재고
+public class FinishedProductCombosDTO {
+    private Integer productId;  // 완제품 id
+    private Long stock;     // 완제품 재고
     private LocalDateTime regDate;  // 등록일
     private LocalDateTime modDate;  // 수정일
 }
