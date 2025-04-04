@@ -66,11 +66,11 @@ public class DownloadController {
 	public void downloadCustomerSample(HttpServletResponse response) throws IOException {
 		StringBuilder sample = new StringBuilder();
 
-		sample.append("1. 신규등록\n");
+		sample.append("1. 신규등록(업로드시 이 행은 삭제)\n");
 		sample.append("customerName|contactInfo|address\n");
 		sample.append("신규이름|신규연락처|신규주소\n\n");
 
-		sample.append("2. 수정\n");
+		sample.append("2. 수정(업로드시 이 행은 삭제)\n");
 		sample.append("customerId|customerName|contactInfo|address\n");
 		sample.append("기존코드|변경이름|변경연락처|변경주소\n");
 
@@ -85,11 +85,11 @@ public class DownloadController {
 	public void downloadSupplierSample(HttpServletResponse response) throws IOException {
 		StringBuilder sample = new StringBuilder();
 
-		sample.append("1. 신규등록\n");
+		sample.append("1. 신규등록(업로드시 이 행은 삭제)\n");
 		sample.append("supplierName|contactInfo|address|email|phoneNumber\n");
 		sample.append("신규이름|신규연락처|주소|변경이메일|변경전화번호\n\n");
 
-		sample.append("2. 수정\n");
+		sample.append("2. 수정(업로드시 이 행은 삭제)\n");
 		sample.append("supplierId|supplierName|contactInfo|address|email|phoneNumber\n");
 		sample.append("기존공급자코드|변경이름|변경연락처|변경주소|변경이메일|변경전화번호\n");
 
@@ -104,11 +104,11 @@ public class DownloadController {
 	public void downloadOrdersSample(HttpServletResponse response) throws IOException {
 		StringBuilder sample = new StringBuilder();
 
-		sample.append("1. 신규등록\n");
+		sample.append("1. 신규등록(업로드시 이 행은 삭제)\n");
 		sample.append("customerId|orderDate|totalAmount|status\n");
 		sample.append("신규고객코드|주문일|수량|상태\n\n");
 
-		sample.append("2. 수정\n");
+		sample.append("2. 수정(업로드시 이 행은 삭제)\n");
 		sample.append("orderId|customerId|orderDate|totalAmount|status\n");
 		sample.append("기존주문코드|변경고객코드|주문일|수량|상태\n");
 
