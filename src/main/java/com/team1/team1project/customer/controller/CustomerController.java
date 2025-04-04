@@ -12,8 +12,8 @@ import java.util.List;
 
 @Controller
 @Log4j2
-@RequiredArgsConstructor
 @RequestMapping("/table/customer")
+@RequiredArgsConstructor
 public class CustomerController {
 
 	private final CustomerService customerService;
