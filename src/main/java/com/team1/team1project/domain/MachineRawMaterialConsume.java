@@ -16,6 +16,8 @@ public class MachineRawMaterialConsume {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int consumeId;
     @Column(name = "machine_id")
-    private int materialId;
+    private String machineId;
+    @Column(name = "material_code")
+    private String materialCode;
     private int quantity;
 }

@@ -111,16 +111,32 @@ namespace FactoryProcessingBackground
                                         }
 
                                         //  finished_product_production 업데이트
-                                        string updateFinishedQuery = "UPDATE finished_product_production " +
-                                                                     "SET quantity = @quantity " +
-                                                                     "WHERE product_id = @product_id";
+                                        string getProductCodeQuery = "SELECT product_code FROM finished_products WHERE product_id = @product_id";
+                                        string productCode = null;
 
-                                        using (MySqlCommand cmd = new MySqlCommand(updateFinishedQuery, conn))
+                                        using (MySqlCommand cmdGetCode = new MySqlCommand(getProductCodeQuery, conn))
                                         {
-                                            cmd.Parameters.AddWithValue("@quantity", dayProduction);
-                                            cmd.Parameters.AddWithValue("@product_id", productId);
+                                            cmdGetCode.Parameters.AddWithValue("@product_id", productId);
+                                            object codeResult = cmdGetCode.ExecuteScalar();
+                                            if (codeResult != null && codeResult != DBNull.Value)
+                                            {
+                                                productCode = codeResult.ToString();
+                                            }
+                                        }
 
-                                            cmd.ExecuteNonQuery();
+                                        // 변환된 product_code가 있을 경우에만 업데이트
+                                        if (!string.IsNullOrEmpty(productCode))
+                                        {
+                                            string updateFinishedQuery = "UPDATE finished_product_production " +
+                                                                        "SET quantity = @quantity " +
+                                                                        "WHERE product_code = @product_code";
+
+                                            using (MySqlCommand cmd = new MySqlCommand(updateFinishedQuery, conn))
+                                            {
+                                                cmd.Parameters.AddWithValue("@quantity", dayProduction);
+                                                cmd.Parameters.AddWithValue("@product_code", productCode);
+                                                cmd.ExecuteNonQuery();
+                                            }
                                         }
                                     }
                                     else // P2, P3...
@@ -163,13 +179,13 @@ namespace FactoryProcessingBackground
                                     foreach (DataRow consumeRow in machineConsumeTable.Rows)
                                     {
                                         string selectReserveQuery = "SELECT stock FROM machine_raw_material_reserve " +
-                                                                    "WHERE machine_id = @machine_id AND material_id = @material_id";
+                                                                    "WHERE machine_id = @machine_id AND material_code = @material_code";
                                         int currentStock = 0;
 
                                         using (MySqlCommand cmd = new MySqlCommand(selectReserveQuery, conn))
                                         {
                                             cmd.Parameters.AddWithValue("@machine_id", consumeRow["machine_id"].ToString());
-                                            cmd.Parameters.AddWithValue("@material_id", consumeRow["material_id"].ToString());
+                                            cmd.Parameters.AddWithValue("@material_code", consumeRow["material_code"].ToString());
 
                                             object result = cmd.ExecuteScalar();
                                             if (result != null && result != DBNull.Value)
@@ -182,17 +198,15 @@ namespace FactoryProcessingBackground
                                         updatedStock = Math.Max(0, updatedStock);
 
                                         string modifyMachineReserveQuery = "UPDATE machine_raw_material_reserve " +
-                                                                            "SET stock = @stock, " +
-                                                                            "mod_date = @today_date " +
+                                                                            "SET stock = @stock " +
                                                                             "WHERE machine_id = @machine_id " +
-                                                                            "AND material_id = @material_id";
+                                                                            "AND material_code = @material_code";
 
                                         using (MySqlCommand cmd = new MySqlCommand(modifyMachineReserveQuery, conn))
                                         {
                                             cmd.Parameters.AddWithValue("@stock", updatedStock);
-                                            cmd.Parameters.AddWithValue("@today_date", DateTime.Today.AddDays(i));
                                             cmd.Parameters.AddWithValue("@machine_id", row["machine_id"].ToString());
-                                            cmd.Parameters.AddWithValue("@material_id", consumeRow["material_id"].ToString());
+                                            cmd.Parameters.AddWithValue("@material_code", consumeRow["material_code"].ToString());
 
                                             cmd.ExecuteNonQuery();
                                         }
@@ -226,6 +240,72 @@ namespace FactoryProcessingBackground
                             }
                         }
                     }
+                    string getAllMachinesQuery = "SELECT machine_id FROM machine_info";
+                    DataTable allMachinesTable = new DataTable();
+
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(getAllMachinesQuery, conn))
+                    {
+                        adapter.Fill(allMachinesTable);
+                    }
+
+                    foreach (DataRow machineRow in allMachinesTable.Rows)
+                    {
+                        string machineId = machineRow["machine_id"].ToString();
+                        string lineId = machineId.Split('_')[0]; // Line 추출
+
+                        // machine_history에 해당 머신의 데이터가 있는지 확인
+                        string checkHistoryQuery = "SELECT COUNT(*) FROM machine_history WHERE machine_id = @machine_id";
+                        bool hasHistory = false;
+
+                        using (MySqlCommand cmd = new MySqlCommand(checkHistoryQuery, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@machine_id", machineId);
+                            int count = Convert.ToInt32(cmd.ExecuteScalar());
+                            hasHistory = (count > 0);
+                        }
+
+                        // 히스토리가 없는 머신은 오늘 날짜 데이터 생성
+                        if (!hasHistory)
+                        {
+                            string insertTodayQuery = "INSERT INTO machine_history (machine_id, production_amount, defective_amount, production_date, production_date_update) " +
+                                                     "VALUES (@machine_id, 0, 0, @production_date, @production_date_update)";
+
+                            using (MySqlCommand insertCmd = new MySqlCommand(insertTodayQuery, conn))
+                            {
+                                insertCmd.Parameters.AddWithValue("@machine_id", machineId);
+                                insertCmd.Parameters.AddWithValue("@production_date", DateTime.Today);
+                                insertCmd.Parameters.AddWithValue("@production_date_update", DateTime.Today);
+
+                                insertCmd.ExecuteNonQuery();
+                            }
+
+                            // lineMachineGroups에 추가
+                            if (!lineMachineGroups.ContainsKey(lineId))
+                            {
+                                lineMachineGroups[lineId] = new List<DataRow>();
+                            }
+
+                            // 새로 만든 히스토리 데이터 가져오기
+                            string getNewRowQuery = "SELECT * FROM machine_history WHERE machine_id = @machine_id AND DATE(production_date) = @production_date";
+                            DataTable newRowTable = new DataTable();
+
+                            using (MySqlCommand getCmd = new MySqlCommand(getNewRowQuery, conn))
+                            {
+                                getCmd.Parameters.AddWithValue("@machine_id", machineId);
+                                getCmd.Parameters.AddWithValue("@production_date", DateTime.Today.ToString("yyyy-MM-dd"));
+
+                                using (MySqlDataAdapter getAdapter = new MySqlDataAdapter(getCmd))
+                                {
+                                    getAdapter.Fill(newRowTable);
+
+                                    if (newRowTable.Rows.Count > 0)
+                                    {
+                                        lineMachineGroups[lineId].Add(newRowTable.Rows[0]);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -245,7 +325,7 @@ namespace FactoryProcessingBackground
         // 15초마다 실행되는 함수
         private void Run(object sender, EventArgs e)
         {
-            if (machineOn)  // 머신이 켜져 있다면
+            if (machineOn)
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
@@ -270,7 +350,7 @@ namespace FactoryProcessingBackground
                             {
                                 double passChance = 0.99;  // 99% 확률로 통과
 
-                                string selectConsumeQuery = "SELECT material_id, quantity FROM machine_raw_material_consume WHERE machine_id = @machine_id";
+                                string selectConsumeQuery = "SELECT material_code, quantity FROM machine_raw_material_consume WHERE machine_id = @machine_id";
                                 DataTable consumeTable = new DataTable();
 
                                 using (MySqlCommand cmd = new MySqlCommand(selectConsumeQuery, conn))
@@ -287,13 +367,13 @@ namespace FactoryProcessingBackground
                                     int consumeQuantity = Convert.ToInt32(consumeRow["quantity"]);
 
                                     // machine_raw_material_reserve 테이블에서 원자재의 현재 재고를 조회
-                                    string selectStockQuery = "SELECT stock FROM machine_raw_material_reserve WHERE machine_id = @machine_id AND material_id = @material_id";
+                                    string selectStockQuery = "SELECT stock FROM machine_raw_material_reserve WHERE machine_id = @machine_id AND material_code = @material_code";
                                     int currentStock = 0;
 
                                     using (MySqlCommand cmd = new MySqlCommand(selectStockQuery, conn))
                                     {
                                         cmd.Parameters.AddWithValue("@machine_id", row["machine_id"].ToString());
-                                        cmd.Parameters.AddWithValue("@material_id", consumeRow["material_id"].ToString());
+                                        cmd.Parameters.AddWithValue("@material_code", consumeRow["material_code"].ToString());
                                         object result = cmd.ExecuteScalar();
                                         if (result != null && result != DBNull.Value)
                                         {
@@ -308,13 +388,13 @@ namespace FactoryProcessingBackground
                                     // machine_raw_material_reserve 테이블에서 재고 업데이트
                                     string updateReserveQuery = "UPDATE machine_raw_material_reserve " +
                                                                 "SET stock = @stock " +
-                                                                "WHERE machine_id = @machine_id AND material_id = @material_id";
+                                                                "WHERE machine_id = @machine_id AND material_code = @material_code";
 
                                     using (MySqlCommand cmd = new MySqlCommand(updateReserveQuery, conn))
                                     {
                                         cmd.Parameters.AddWithValue("@stock", updatedStock);
                                         cmd.Parameters.AddWithValue("@machine_id", row["machine_id"].ToString());
-                                        cmd.Parameters.AddWithValue("@material_id", consumeRow["material_id"].ToString());
+                                        cmd.Parameters.AddWithValue("@material_code", consumeRow["material_code"].ToString());
 
                                         cmd.ExecuteNonQuery();
                                     }
@@ -398,9 +478,12 @@ namespace FactoryProcessingBackground
         {
             if(product_id != 0)
             {
+                string getProductCodeByProductId = "SELECT product_code FROM finished_products WHERE product_id = @product_id";
+                string product_code = null;
+
                 string updateFinishedQuery = "UPDATE finished_product_production " +
-                                                                     "SET quantity = quantity + 1 " +
-                                                                     "WHERE product_id = @product_id";
+                                             "SET quantity = quantity + 1 " +
+                                             "WHERE product_code = @product_code";
 
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
@@ -408,11 +491,23 @@ namespace FactoryProcessingBackground
                     {
                         conn.Open();
 
-                        using (MySqlCommand cmd = new MySqlCommand(updateFinishedQuery, conn))
+                        using (MySqlCommand cmd = new MySqlCommand(getProductCodeByProductId, conn))
                         {
                             cmd.Parameters.AddWithValue("@product_id", product_id);
+                            object result = cmd.ExecuteScalar();
+                            if (result != null && result != DBNull.Value)
+                            {
+                                product_code = result.ToString();
+                            }
+                        }
 
-                            cmd.ExecuteNonQuery();
+                        if (!string.IsNullOrEmpty(product_code))
+                        {
+                            using (MySqlCommand cmd = new MySqlCommand(updateFinishedQuery, conn))
+                            {
+                                cmd.Parameters.AddWithValue("@product_code", product_code);
+                                cmd.ExecuteNonQuery();
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -427,8 +522,6 @@ namespace FactoryProcessingBackground
         {
             machineOn = true;
         }
-
-
 
         private void ProductionSpeedControl_ValueChanged(object sender, EventArgs e)
         {
