@@ -1,9 +1,7 @@
 package com.team1.team1project.customerOrders.service;
 
 import com.team1.team1project.customerOrders.repository.CustomerOrdersRepository;
-import com.team1.team1project.domain.Customer;
 import com.team1.team1project.domain.CustomerOrders;
-import com.team1.team1project.dto.CustomerDTO;
 import com.team1.team1project.dto.CustomerOrdersDTO;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;

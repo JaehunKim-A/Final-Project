@@ -13,11 +13,12 @@ import java.util.List;
 @Controller
 @Log4j2
 @RequiredArgsConstructor
+@RequestMapping("/table/customer")
 public class CustomerController {
 
 	private final CustomerService customerService;
 
-	@GetMapping("/table/customer")
+	@GetMapping({"", "/"})
 	public String showCustomerList(Model model) {
 		List<CustomerDTO> customers = customerService.getAllCustomers();
 
@@ -32,21 +33,21 @@ public class CustomerController {
 	}
 
 	// 등록 폼
-	@GetMapping("/table/customer/register")
+	@GetMapping("/register")
 	public String showRegistrationForm(Model model) {
 		model.addAttribute("customer", new CustomerDTO());
 		return "customer/register";
 	}
 
 	// 등록 처리
-	@PostMapping("/table/customer/register")
+	@PostMapping("/register")
 	public String registerCustomer(@ModelAttribute("customer") CustomerDTO customerDTO) {
 		customerService.createCustomer(customerDTO);
 		return "redirect:/table/customer";
 	}
 
 	// 수정 폼
-	@GetMapping("/table/customer/edit/{customerId}")
+	@GetMapping("/edit/{customerId}")
 	public String showEditForm(@PathVariable("customerId") int customerId, Model model) {
 		CustomerDTO customerDTO = customerService.getCustomerById(customerId)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid customer Id: " + customerId));
@@ -55,7 +56,7 @@ public class CustomerController {
 	}
 
 	// 수정 처리
-	@PostMapping("/table/customer/edit/{customerId}")
+	@PostMapping("/edit/{customerId}")
 	public String updateCustomer(@PathVariable("customerId") int customerId,
 	                             @ModelAttribute("customer") CustomerDTO customerDTO) {
 		customerService.updateCustomer(customerId, customerDTO);
@@ -63,7 +64,7 @@ public class CustomerController {
 	}
 
 	// 삭제
-	@GetMapping("/table/customer/delete/{customerId}")
+	@GetMapping("/delete/{customerId}")
 	public String deleteCustomer(@PathVariable("customerId") int customerId) {
 		customerService.deleteCustomer(customerId);
 		return "redirect:/table/customer";

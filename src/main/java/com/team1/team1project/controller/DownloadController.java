@@ -31,7 +31,6 @@ public class DownloadController {
 		fileNames.put("rawMaterialSupplier", "공급자_전체.xlsx");
 		fileNames.put("customerOrders", "주문_전체.xlsx");
 
-
 		String fileName = fileNames.getOrDefault(type, type + "_전체.xlsx");
 
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -102,7 +101,6 @@ public class DownloadController {
 		response.setContentType("text/csv");
 		response.setCharacterEncoding("UTF-8");
 
-		// RFC 6266에 따라 filename과 filename*을 함께 제공
 		response.setHeader("Content-Disposition",
 				"attachment; filename=\"" + encodedFileName + "\"; filename*=UTF-8''" + encodedFileName);
 	}
