@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataTable - Mazer Admin Dashboard</title>
+
+    <link rel="shortcut icon" href="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/1999/svg'%20viewBox='0%200%2033%2034'%20fill-rule='evenodd'%20stroke-linejoin='round'%20stroke-miterlimit='2'%20xmlns:v='https://vecta.io/nano'%3e%3cpath%20d='M3%2027.472c0%204.409%206.18%205.552%2013.5%205.552%207.281%200%2013.5-1.103%2013.5-5.513s-6.179-5.552-13.5-5.552c-7.281%200-13.5%201.103-13.5%205.513z'%20fill='%23435ebe'%20fill-rule='nonzero'/%3e%3ccircle%20cx='16.5'%20cy='8.8'%20r='8.8'%20fill='%2341bbdd'/%3e%3c/svg%3e" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/extensions/simple-datatables/style.css">
+    <link rel="stylesheet" href="/assets/compiled/css/table-datatable.css">
+    <link rel="stylesheet" href="/assets/compiled/css/app.css">
+    <link rel="stylesheet" href="/assets/compiled/css/app-dark.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="/css/productProcessManagement/productProcessManagement.css">
+</head>
+
+<body>
+
+<div id="app">
+    <div id="sidebar" th:replace="~{layout/layout :: sidebar}"></div>
+
+    <div id="main" class="layout-navbar navbar-fixed">
+        <header class="mb-3" th:replace="~{layout/layout :: header}"></header>
+
+        <div class="tab-container">
+            <button class="btn btn-primary tab-button active" onclick="openTab('page1', this)">Machine Info</button>
+            <button class="btn btn-primary tab-button" onclick="openTab('page2', this)">Status Chart</button>
+            <button class="btn btn-primary tab-button" onclick="openTab('page3', this)">History</button>
+        </div>
+
+        <div id="page1" class="tab-content active">
+            <div class="row">
+                <div class="col-md-8">
+                    <div id="machine-gui-information-data"></div>
+                    <div class="row">
+                        <div class="row">
+                            <select class="form-select" id="lineSelector">
+                            </select>
+                        </div>
+                        <div>
+                            <button id="addModal" class="btn btn-outline-primary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#add-machine-modal"
+                                    style="margin-top:3px;">Add Machine</button>
+
+                            <!-- add modal -->
+                            <div class="modal fade text-left" id="add-machine-modal" tabindex="-1" role="dialog"
+                                 aria-labelledby="myModalLabel19" aria-hidden="true" data-bs-backdrop="false">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm"
+                                     role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel19">Small Modal</h4>
+                                            <button type="button" class="close" data-bs-dismiss="modal"
+                                                    aria-label="Close">
+                                                <i data-feather="x"></i>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <label for="add-machine-machine-id">Machine ID</label>
+                                                <select class="form-select" id="add-machine-machine-id"></select>
+                                                <label for="add-machine-x-coordinate">X Coordinate</label>
+                                                <select class="form-select" id="add-machine-x-coordinate"></select>
+                                                <label for="add-machine-y-coordinate">Y Coordinate</label>
+                                                <select class="form-select" id="add-machine-y-coordinate"></select>
+                                                <label for="add-machine-machine-type">Machine Type</label>
+                                                <select class="form-select" id="add-machine-machine-type"></select>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-primary btn-sm"
+                                                    data-bs-dismiss="modal"
+                                                    id="machineAddButton">
+                                                <i class="bx bx-x d-block d-sm-none"></i>
+                                                <span class="d-sm-block d-none">Add</span>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-secondary ms-1 btn-sm"
+                                                    data-bs-dismiss="modal"
+                                                    id="MachineAddCancelButton">
+                                                <i class="bx bx-check d-block d-sm-none"></i>
+                                                <span class="d-sm-block d-none">Cancel</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <canvas id="factoryCanvas"></canvas>
+                    </div>
+                    <!-- modify modal -->
+                    <div class="modal fade" id="modifyMachineModal" tabindex="-1" role="dialog" aria-labelledby="modifyMachineModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modifyMachineModalLabel">머신 정보 수정</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="modifyMachineForm">
+                                        <div class="form-group">
+                                            <label for="modify-machine-id">머신 ID</label>
+                                            <input type="text" class="form-control" id="modify-machine-id" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="modify-x-coordinate">X 좌표</label>
+                                            <select class="form-control" id="modify-x-coordinate" required></select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="modify-y-coordinate">Y 좌표</label>
+                                            <select class="form-control" id="modify-y-coordinate" required></select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="modify-machine-type">머신 타입</label>
+                                            <select class="form-control" id="modify-machine-type" required></select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-outline-primary btn-sm"
+                                                    data-bs-dismiss="modal">
+                                                <i class="bx bx-x d-block d-sm-none"></i>
+                                                <span class="d-sm-block d-none">Modify</span>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-secondary ms-1 btn-sm"
+                                                    data-bs-dismiss="modal">
+                                                <i class="bx bx-check d-block d-sm-none"></i>
+                                                <span class="d-sm-block d-none">Cancel</span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row"></div>
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title mb-0">Production Target Ratio</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="production-target-ratio-chart" class="row">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page2" class="tab-content">
+            <div class="row">
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div style="display:flex; gap: 5px; justify-content: space-between">
+                                <h4>Production Amount</h4>
+                                <div class="card-collapse-btn">
+                                    <svg class="bi" width="1em" height="1em" fill="currentColor">
+                                        <use xlink:href="/assets/static/images/bootstrap-icons.svg#dash-square"></use>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div id="production-amount-line-chart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="raw" style="display:flex; gap: 5px;">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div style="display:flex; gap: 5px; justify-content: space-between">
+                                        <h4>P</h4>
+                                        <div class="card-collapse-btn">
+                                            <svg class="bi" width="1em" height="1em" fill="currentColor">
+                                                <use xlink:href="/assets/static/images/bootstrap-icons.svg#dash-square"></use>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <div id="machine-raw-material-reserve-bar-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div style="display:flex; gap: 5px; justify-content: space-between">
+                                        <h4>Consume Ratio</h4>
+                                        <div class="card-collapse-btn">
+                                            <svg class="bi" width="1em" height="1em" fill="currentColor">
+                                                <use xlink:href="/assets/static/images/bootstrap-icons.svg#dash-square"></use>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <div id="machine-raw-material-consume-scatter-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div style="display:flex; gap: 5px; justify-content: space-between">
+                                <h4>Raw Material Reserve Heatmap</h4>
+                                <div class="card-collapse-btn">
+                                    <svg class="bi" width="1em" height="1em" fill="currentColor">
+                                        <use xlink:href="/assets/static/images/bootstrap-icons.svg#dash-square"></use>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div id="machine-raw-material-reserve-heatmap-chart"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div style="display:flex; gap: 5px; justify-content: space-between">
+                                <h4>Production-Defective Ratio</h4>
+                                <div class="card-collapse-btn">
+                                    <svg class="bi" width="1em" height="1em" fill="currentColor">
+                                        <use xlink:href="/assets/static/images/bootstrap-icons.svg#dash-square"></use>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <select id="machineSelect" class="form-control mb-3">
+                            </select>
+                            <div id="product-defective-pie-chart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page3" class="tab-content">
+            <div class="page-heading">
+                <h3>Machine History</h3>
+            </div>
+
+            <div class="page-content">
+                <section class="section">
+                    <!-- search condition-->
+                    <form action="/productProcessManagement/productProcessManagement" method="post">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="machine-history-year-select">Year</label>
+                            <select class="form-select" id="machine-history-year-select" name="year">
+                            </select>
+                            <button class="btn btn-primary btn-submit" id="machine-history-year-select-submit-btn" type="submit">Search</button>
+                        </div>
+                    </form><!-- End search condition -->
+                </section>
+                <section class="section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Machine History Data</h4>
+                        </div>
+
+                        <div class="card-body">
+                            <table class="table table-striped" id="table1">
+                                <thead>
+                                <tr>
+                                    <th th:each="col : ${columns}" th:text="${col}"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="history : ${machineHistoryYearDTO.dtoList}">
+                                    <td th:text="${history.historyId}"></td>
+                                    <td th:text="${history.machineId}"></td>
+                                    <td th:text="${history.productionAmount}"></td>
+                                    <td th:text="${history.defectiveAmount}"></td>
+                                    <td th:text="${history.productionDate}"></td>
+                                    <td th:text="${history.productionDateUpdate}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <footer>
+            <div th:replace="~{layout/layout :: footer}"></div>
+        </footer>
+    </div>
+</div>
+
+<script src="/assets/static/js/initTheme.js"></script>
+<script src="/assets/static/js/components/dark.js"></script>
+<script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="/assets/compiled/js/app.js"></script>
+<!--    datatable js    -->
+<script src="/assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
+<script src="/assets/static/js/pages/simple-datatables.js"></script>
+<!--    apexchart js    -->
+<script src="/assets/extensions/dayjs/dayjs.min.js"></script>
+<script src="/assets/extensions/apexcharts/apexcharts.min.js"></script>
+
+<!--    personal js     -->
+<script src="/js/productProcessManagement/factoryGUI.js"></script>
+<script src="/js/productProcessManagement/ui-apexchart.js"></script>
+<script src="/js/productProcessManagement/productProcessManagement.js"></script>
+
+
+</body>
+</html>

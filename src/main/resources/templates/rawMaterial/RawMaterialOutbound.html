@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataTable - Mazer Admin Dashboard</title>
+
+    <link rel="shortcut icon" href="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/1999/svg'%20viewBox='0%200%2033%2034'%20fill-rule='evenodd'%20stroke-linejoin='round'%20stroke-miterlimit='2'%20xmlns:v='https://vecta.io/nano'%3e%3cpath%20d='M3%2027.472c0%204.409%206.18%205.552%2013.5%205.552%207.281%200%2013.5-1.103%2013.5-5.513s-6.179-5.552-13.5-5.552c-7.281%200-13.5%201.103-13.5%205.513z'%20fill='%23435ebe'%20fill-rule='nonzero'/%3e%3ccircle%20cx='16.5'%20cy='8.8'%20r='8.8'%20fill='%2341bbdd'/%3e%3c/svg%3e" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/extensions/simple-datatables/style.css">
+    <link rel="stylesheet" href="/assets/compiled/css/table-datatable.css">
+    <link rel="stylesheet" href="/assets/compiled/css/app.css">
+    <link rel="stylesheet" href="/assets/compiled/css/app-dark.css">
+</head>
+
+<body>
+
+<div id="app">
+    <div id="sidebar" th:replace="~{layout/layout :: sidebar}"></div>
+
+    <div id="main" class="layout-navbar navbar-fixed">
+        <header class="mb-3" th:replace="~{layout/layout :: header}"></header>
+
+        <h1>원자재 출고 목록</h1>
+
+        <table>
+            <thead>
+            <tr>
+                <th>출고 ID</th>
+                <th>출고 코드</th>
+                <th>출고 날짜</th>
+                <th>원자재 ID</th>
+                <th>수량</th>
+                <th>상태</th>
+                <th>창고</th>
+                <th>등록일시</th>
+                <th>수정일시</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 타임리프를 사용하여 데이터 반복 -->
+            <tr th:each="outbounds : ${outbounds}">
+                <td th:text="${outbounds.outboundId}"></td>
+                <td th:text="${outbounds.outboundCode}"></td>
+                <td th:text="${outbounds.outboundDate}"></td>
+                <td th:text="${outbounds.materialId}"></td>
+                <td th:text="${outbounds.quantity}"></td>
+                <td th:text="${outbounds.status}"></td>
+                <td th:text="${outbounds.warehouse}"></td>
+                <td th:text="${outbounds.regDate}"></td>
+                <td th:text="${outbounds.modDate}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <footer>
+            <div th:replace="~{layout/layout :: footer}"></div>
+        </footer>
+    </div>
+</div>
+<script src="/assets/static/js/initTheme.js"></script>
+<script src="/assets/static/js/components/dark.js"></script>
+<script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="/assets/compiled/js/app.js"></script>

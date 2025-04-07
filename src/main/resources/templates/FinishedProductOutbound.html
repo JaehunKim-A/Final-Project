@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finished-Product-Outbound</title>
+
+    <!-- 스타일 시트 -->
+    <link rel="stylesheet" href="/assets/extensions/simple-datatables/style.css">
+    <link rel="stylesheet" href="/assets/compiled/css/table-datatable.css">
+    <link rel="stylesheet" href="/assets/compiled/css/app.css">
+    <link rel="stylesheet" href="/assets/compiled/css/app-dark.css">
+</head>
+
+<body>
+
+<div id="app">
+    <!-- 사이드바 -->
+    <div id="sidebar" th:replace="~{layout/layout :: sidebar}"></div>
+
+    <div id="main" class="layout-navbar navbar-fixed">
+        <!-- 헤더 -->
+        <header class="mb-3" th:replace="~{layout/layout :: header}"></header>
+
+        <h1>완제품 출고 목록</h1>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>출하 ID</th>
+                <th>출하 코드</th>
+                <th>출하 날짜</th>
+                <th>제품 ID</th>
+                <th>수량</th>
+                <th>등록 날짜</th>
+                <th>수정 날짜</th>
+                <th>상태</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Thymeleaf를 사용하여 데이터 출력 -->
+            <tr th:each="outbound : ${finishedProductOutbounds}">
+                <td th:text="${outbound.outboundId}"></td>
+                <td th:text="${outbound.outboundCode}"></td>
+                <td th:text="${outbound.outboundDate}"></td>
+                <td th:text="${outbound.productId}"></td>
+                <td th:text="${outbound.quantity}"></td>
+                <td th:text="${outbound.regDate}"></td>
+                <td th:text="${outbound.modDate}"></td>
+                <td th:text="${outbound.status}"></td>
+                <td>
+                    <!-- 상태 수정 버튼 폼 -->
+                    <form action="/finished-product/outbound/modify-status" method="POST">
+                        <input type="hidden" name="outboundId" th:value="${outbound.outboundId}">
+                        <select name="status" class="form-select">
+                            <option value="Shipped" th:selected="${outbound.status == 'Shipped'}">Shipped</option>
+                            <option value="Pending" th:selected="${outbound.status == 'Pending'}">Pending</option>
+                            <option value="Cancelled" th:selected="${outbound.status == 'Cancelled'}">Cancelled</option>
+                        </select>
+                        <button type="submit" class="btn btn-outline-warning">수정</button>
+                    </form>
+
+                    <!-- 삭제 버튼 -->
+                    <button class="btn btn-danger delete-btn" name="outboundId" th:value="${outbound.outboundId}">삭제</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- 완제품 출고 모달 -->
+        <div class="modal fade" id="finishedProductOutboundModal" tabindex="-1" aria-labelledby="finishedProductOutboundModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="finishedProductOutboundModalLabel">완제품 입고</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/finished-product/outbounds/register" method="POST">
+                            <div class="mb-3">
+                                <label for="finishedProductId" class="form-label">완제품 ID</label>
+                                <input type="text" class="form-control" id="finishedProductId" name="finishedProductId" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="quantity" class="form-label">수량</label>
+                                <input type="number" class="form-control" id="quantity" name="quantity" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="status" class="form-label">상태</label>
+                                <select id="status" name="status">
+                                    <option value="Shipped">Shipped</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Canceled">Canceled</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">출하 등록</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 삭제 알림 모달 -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">삭제 알림</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="deleteModalMessage">삭제가 완료되었습니다.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div th:replace="~{layout/layout :: footer}"></div>
+        </footer>
+    </div>
+</div>
+
+<!-- 스크립트 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/static/js/initTheme.js"></script>
+<script src="/assets/static/js/components/dark.js"></script>
+<script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="/assets/compiled/js/app.js"></script>
+<script>
+    // 삭제 버튼 처리
+    document.querySelectorAll(".delete-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            let outboundId = this.value;
+
+            // 삭제 확인 후 DELETE 요청 보내기
+            if (confirm("ID"  + outboundId + "을(를) 삭제하시겠습니까?")) {
+                console.log(outboundId);
+                fetch(`/finished-product/outbound/${outboundId}`, {
+
+                    method: "DELETE"
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // 삭제 성공 시 해당 행 제거
+                        this.closest("tr").remove();
+                        showModal("삭제가 완료되었습니다.");
+                    } else {
+                        showModal("삭제 실패! 서버 오류 발생.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    showModal("네트워크 오류 발생.");
+                });
+            }
+        });
+    });
+
+  // 상태 수정 폼 처리
+    document.querySelectorAll('form[action="/finished-product/outbound/modify-status"]').forEach(form => {
+        form.addEventListener("submit", function (event) {
+            event.preventDefault(); // 기본 폼 제출 동작 방지
+
+            let formData = new FormData(form);
+            let status = formData.get("status");
+            let outboundId = formData.get("outboundId");
+
+            // 상태 변경을 위한 POST 요청
+            fetch(`/finished-product/outbound/modify-status`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert(`입고 상태가 ${status}로 변경되었습니다.`);
+                    location.reload(); // 페이지 새로고침
+                } else {
+                    alert("상태 수정 실패! 서버 오류 발생.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("네트워크 오류 발생.");
+            });
+        });
+    });
+
+    // 모달을 표시하는 함수
+    function showModal(message) {
+        // 모달 메시지 설정
+        document.getElementById("deleteModalMessage").textContent = message;
+        // 모달 띄우기
+        let modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        modal.show();
+    }
+</script>
+
+</body>
+</html>
