@@ -10,51 +10,6 @@ document.addEventListener("DOMContentLoaded", function() {
     loadDashboardData();
 });
 
-document.addEventListener("DOMContentLoaded", function() {
-    // 테이블 초기화
-    const tableBody = document.querySelector("#table1");
-    const myDataTable = new simpleDatatables.DataTable(tableBody, {
-        perPage: 10,
-        searchable: true,
-        sortable: true,
-        labels: {
-            placeholder: "고객을 검색하세요...",
-            perPage: "{select} 행을 한 페이지에 표시",
-            noRows: "고객을 찾을 수 없습니다.",
-            info: "전체 {rows}개의 고객 중 {start}에서 {end}까지 표시",
-        },
-    });
-
-    // 연도 선택기 설정
-    const machineHistoryYearSelectInput = document.querySelector("#machine-history-year-select");
-    let startYear = 2020;
-    const currentYear = new Date().getFullYear();
-
-    for(let year = startYear; year <= currentYear; year++) {
-        let option = document.createElement("option");
-        option.value = year;
-        option.textContent = year;
-
-        if (year === currentYear) {
-            option.selected = true;  // 현재 연도일 경우 selected 속성 추가
-        }
-
-        machineHistoryYearSelectInput.appendChild(option);
-    }
-
-    // URL에서 year 파라미터 값을 가져와서 연도 선택기에 반영
-    const urlParams = new URLSearchParams(window.location.search);
-    const yearParam = urlParams.get('year');
-    if (yearParam) {
-        machineHistoryYearSelectInput.value = yearParam;
-    }
-
-    // 검색 버튼 이벤트 추가
-    document.getElementById("machine-history-year-select-submit-btn").addEventListener("click", function() {
-        const year = document.getElementById("machine-history-year-select").value;
-        window.location.href = `/productProcessManagement/productProcessManagement?year=${year}`;
-    });
-});
 
 document.querySelectorAll(".card-collapse-btn").forEach(button => {
     button.addEventListener("click", function() {
@@ -71,8 +26,6 @@ async function loadDashboardData() {
         }
 
         const dashboardData = await response.json();
-
-        console.log("dashboardData: " + dashboardData)
 
         // 데이터 전역 변수로 설정 (기존 스크립트와 호환성 유지)
         window.machineGuiInfoJson = dashboardData.machineGuiInfo || [];
@@ -133,15 +86,6 @@ async function loadDashboardData() {
         // 불량률 데이터
         window.productionDefectiveAmountJson = dashboardData.productionDefectiveData || [];
 
-        // 차트 초기화 전에 데이터 존재 여부 확인
-        console.log("Chart data loaded:", {
-            productionAmounts: window.productionAmountsJson,
-            days: window.daysJson,
-            consume: window.rawMaterialConsumeJson,
-            reserve: window.rawMaterialReserveJson,
-            defective: window.productionDefectiveAmountJson
-        });
-
         if (typeof initializeCharts === 'function') {
             // 약간의 지연 후 차트 초기화 (데이터 설정 보장)
             setTimeout(() => {
@@ -196,4 +140,216 @@ function openTab(pageId, button) {
         // 기계 GUI 정보 로드
         loadMachineGuiInfo();
     }
+}
+
+// Machine History 테이블 불러오기 함수
+async function getMachineHistory({ page = 1, size = 10, sorter = 'historyId', isAsc = false, types = [], keyword = '' }) {
+    const payload = {page, size, sorter, isAsc, types, keyword};
+
+    const result = await axios.post('/api/productProcessManagement/productProcessManagementPost', payload);
+    return result.data;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 초기 상태 설정
+    const state = {
+        page: 1,
+        size: 10,
+        sorter: 'historyId',
+        isAsc: false,
+        type: '',
+        keyword: ''
+    };
+
+    // 처음 로드 시 데이터 가져오기
+    loadMachineHistoryData(state);
+
+    // 검색 버튼 이벤트
+    document.getElementById('machine-history-search-btn').addEventListener('click', function() {
+        state.type = document.getElementById('machine-history-search-type').value;
+        state.keyword = document.getElementById('machine-history-search-keyword').value;
+        state.page = 1; // 검색 시 첫 페이지로 이동
+        loadMachineHistoryData(state);
+    });
+
+    // 정렬 링크 이벤트 설정
+    document.querySelectorAll('.dataTable-sorter').forEach(sorter => {
+        sorter.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const sortField = this.getAttribute('data-sort');
+
+            // 같은 필드로 정렬할 경우 정렬 방향 토글
+            if (state.sorter === sortField) {
+                state.isAsc = !state.isAsc;
+            } else {
+                state.sorter = sortField;
+                state.isAsc = false; // 새 필드로 정렬 시 기본 내림차순
+            }
+
+            // 모든 정렬 링크에서 정렬 방향 클래스 제거
+            document.querySelectorAll('.dataTable-sorter').forEach(el => {
+                el.classList.remove('asc', 'desc');
+            });
+
+            // 현재 정렬 링크에 정렬 방향 클래스 추가
+            this.classList.add(state.isAsc ? 'asc' : 'desc');
+
+            loadMachineHistoryData(state);
+        });
+    });
+
+    // 페이지 크기 변경 이벤트
+    document.getElementById('machine-history-page-size').addEventListener('change', function() {
+        state.size = parseInt(this.value);
+        state.page = 1; // 페이지 크기 변경 시 첫 페이지로 이동
+        loadMachineHistoryData(state);
+    });
+
+    // 페이지네이션 클릭 이벤트는 동적으로 생성된 후 처리합니다
+});
+
+// Machine History 데이터를 불러오는 함수
+async function loadMachineHistoryData(state) {
+    try {
+        // 로딩 상태 표시
+        document.getElementById('machine-history-table-body').innerHTML = '<tr><td colspan="6" class="text-center">Loading...</td></tr>';
+
+        // API 호출을 위한 파라미터 구성
+        const payload = {
+            page: state.page,
+            size: state.size,
+            sorter: state.sorter,
+            isAsc: state.isAsc,
+            // 배열이 아닌 문자열로 변환
+            type: Array.isArray(state.type) ? state.type.join('') : state.type,
+            keyword: state.keyword
+        };
+
+        console.log('Sending payload:', payload); // 디버깅용
+
+        // API 호출
+        const response = await axios.post('/api/productProcessManagement/productProcessManagementPost', payload);
+        const data = response.data;
+
+        console.log('Received data:', data); // 디버깅용
+
+        // 테이블 데이터 렌더링
+        renderTableData(data);
+
+        // 페이지네이션 렌더링
+        renderPagination(data, state);
+
+        // 현재 정렬 상태 표시
+        updateSortIndicators(state);
+
+    } catch (error) {
+        console.error('Error loading machine history data:', error);
+        console.error('Error details:', error.response?.data); // 추가 오류 정보 출력
+        document.getElementById('machine-history-table-body').innerHTML =
+            '<tr><td colspan="6" class="text-center text-danger">Error loading data. Please try again.</td></tr>';
+    }
+}
+
+// 정렬 상태 표시기 업데이트
+function updateSortIndicators(state) {
+    document.querySelectorAll('.dataTable-sorter').forEach(sorter => {
+        sorter.classList.remove('asc', 'desc');
+
+        if (sorter.getAttribute('data-sort') === state.sorter) {
+            sorter.classList.add(state.isAsc ? 'asc' : 'desc');
+        }
+    });
+}
+
+// 테이블 데이터 렌더링 함수
+function renderTableData(data) {
+    const tableBody = document.getElementById('machine-history-table-body');
+
+    if (!data.dtoList || data.dtoList.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="6" class="text-center">No data available</td></tr>';
+        return;
+    }
+
+    let html = '';
+    data.dtoList.forEach(history => {
+        html += `<tr>
+            <td>${history.historyId}</td>
+            <td>${history.machineId}</td>
+            <td>${history.productionAmount}</td>
+            <td>${history.defectiveAmount}</td>
+            <td>${history.productionDate || 'N/A'}</td>
+            <td>${history.productionDateUpdate || 'N/A'}</td>
+        </tr>`;
+    });
+
+    tableBody.innerHTML = html;
+}
+
+// 페이지네이션 렌더링 함수
+function renderPagination(data, state) {
+    const pagination = document.getElementById('machine-history-pagination');
+
+    console.log('Pagination data:', data); // 데이터 구조 확인
+
+    // total 필드 사용
+    const totalItems = data.total || 0;
+    const totalPages = Math.ceil(totalItems / state.size);
+    const currentPage = state.page;
+
+    console.log(`Total items: ${totalItems}, Total pages: ${totalPages}, Current page: ${currentPage}`);
+
+    // 페이지 범위 계산
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, startPage + 4);
+
+    if (endPage - startPage < 4 && totalPages > 5) {
+        startPage = Math.max(1, endPage - 4);
+    }
+
+    let html = '';
+
+    // 이전 버튼
+    html += `<li class="page-item ${currentPage <= 1 ? 'disabled' : ''}">
+        <a class="page-link" href="#" data-page="${currentPage - 1}">
+            <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+        </a>
+    </li>`;
+
+    // 페이지 번호
+    for (let i = startPage; i <= endPage; i++) {
+        html += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+            <a class="page-link" href="#" data-page="${i}">${i}</a>
+        </li>`;
+    }
+
+    // 다음 버튼
+    html += `<li class="page-item ${currentPage >= totalPages || totalPages === 0 ? 'disabled' : ''}">
+        <a class="page-link" href="#" data-page="${currentPage + 1}">
+            <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+        </a>
+    </li>`;
+
+    pagination.innerHTML = html;
+
+    // 페이지 클릭 이벤트 추가
+    pagination.querySelectorAll('.page-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // disabled 클래스가 있는 경우 클릭 무시
+            if (this.parentElement.classList.contains('disabled')) {
+                return;
+            }
+
+            const pageNum = parseInt(this.getAttribute('data-page'));
+            console.log('Clicked page:', pageNum);
+
+            // 유효한 페이지 번호 확인
+            if (!isNaN(pageNum) && pageNum > 0 && pageNum <= totalPages && pageNum !== currentPage) {
+                state.page = pageNum;
+                loadMachineHistoryData(state);
+            }
+        });
+    });
 }

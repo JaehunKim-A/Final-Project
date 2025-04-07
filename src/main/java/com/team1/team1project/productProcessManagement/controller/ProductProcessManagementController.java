@@ -23,21 +23,21 @@ public class ProductProcessManagementController {
 
     @GetMapping("/productProcessManagement")
     public String productProcessManagementPageGet(@RequestParam(required = false) Integer year, Model model) {
-        // 연도 파라미터가 없으면 현재 연도 사용
-        if (year == null) {
-            year = Calendar.getInstance().get(Calendar.YEAR);
-        }
-
-        // 데이터 가져오기
-        MachineHistoryYearDTO machineHistoryYearDTO = productProcessManagementService.getMachineHistoryByYear(year);
-
-        // 컬럼 이름 설정
-        List<String> columns = Arrays.asList("History ID", "Machine ID", "Production Amount",
-                "Defective Amount", "Reg Date", "Mod Date");
-
-        // 모델에 데이터 추가
-        model.addAttribute("machineHistoryYearDTO", machineHistoryYearDTO);
-        model.addAttribute("columns", columns);
+//        // 연도 파라미터가 없으면 현재 연도 사용
+//        if (year == null) {
+//            year = Calendar.getInstance().get(Calendar.YEAR);
+//        }
+//
+//        // 데이터 가져오기
+//        MachineHistoryYearDTO machineHistoryYearDTO = productProcessManagementService.getMachineHistoryByYear(year);
+//
+//        // 컬럼 이름 설정
+//        List<String> columns = Arrays.asList("History ID", "Machine ID", "Production Amount",
+//                "Defective Amount", "Reg Date", "Mod Date");
+//
+//        // 모델에 데이터 추가
+//        model.addAttribute("machineHistoryYearDTO", machineHistoryYearDTO);
+//        model.addAttribute("columns", columns);
 
         return "productProcessManagement/productProcessManagement";
     }

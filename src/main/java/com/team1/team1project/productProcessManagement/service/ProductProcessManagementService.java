@@ -1,9 +1,7 @@
 package com.team1.team1project.productProcessManagement.service;
 
 import com.team1.team1project.domain.MachineGuiInfo;
-import com.team1.team1project.dto.MachineGuiInfoDTO;
-import com.team1.team1project.dto.MachineHistoryDTO;
-import com.team1.team1project.dto.MachineRawMaterialConsumeDTO;
+import com.team1.team1project.dto.*;
 import com.team1.team1project.productProcessManagement.dto.*;
 
 import java.util.List;
@@ -23,4 +21,5 @@ public interface ProductProcessManagementService {
     void modifyMachineGuiInfo(MachineGuiInfoDTO machineGuiInfoDTO);
     void deleteMachineGuiInfo(String machineId);
     List<ProcessBarChartDataDTO> getProductionTargetRatio();
+    PageResponseDTO<MachineHistoryDTO> getMachineHistoryForTable(String sorter, boolean isAsc, PageRequestDTO pageRequestDTO);
 }

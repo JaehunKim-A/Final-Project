@@ -4,6 +4,8 @@ import com.team1.team1project.domain.MachineGuiInfo;
 import com.team1.team1project.domain.MachineHistory;
 import com.team1.team1project.dto.MachineGuiInfoDTO;
 import com.team1.team1project.dto.MachineHistoryDTO;
+import com.team1.team1project.dto.PageRequestDTO;
+import com.team1.team1project.dto.PageResponseDTO;
 import com.team1.team1project.productProcessManagement.dto.*;
 import com.team1.team1project.productProcessManagement.mapper.*;
 import com.team1.team1project.productProcessManagement.repository.MachineGuiInfoRepository;
@@ -11,6 +13,8 @@ import com.team1.team1project.productProcessManagement.repository.MachineHistory
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -184,5 +188,23 @@ public class ProductProcessManagementServiceImpl implements ProductProcessManage
     @Override
     public List<ProcessBarChartDataDTO> getProductionTargetRatio() {
         return machineInfoMapper.selectProductionTargetRatio();
+    }
+
+    @Override
+    public PageResponseDTO<MachineHistoryDTO> getMachineHistoryForTable(String sorter, boolean isAsc, PageRequestDTO pageRequestDTO) {
+        String[] types = pageRequestDTO.getTypes();
+        String keyword = pageRequestDTO.getKeyword();
+        Pageable pageable = pageRequestDTO.getPageable(isAsc, sorter);
+
+        Page<MachineHistory> result = machineHistoryRepository.searchAll(types, keyword, pageable);
+
+        List<MachineHistoryDTO> machineHistoryDTOList = result.getContent().stream()
+                .map(machineHistory -> modelMapper.map(machineHistory, MachineHistoryDTO.class)).collect(Collectors.toList());
+
+        return PageResponseDTO.<MachineHistoryDTO>builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(machineHistoryDTOList)
+                .total((int) result.getTotalElements())
+                .build();
     }
 }
