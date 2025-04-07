@@ -1,29 +1,33 @@
 package com.team1.team1project.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "finished_product_inbounds")
+@Builder
+@ToString
 public class FinishedProductInbound {
 
     @Id
-
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer inboundId; // 입고 ID
+    private Long inboundId;  // 입고 ID
 
-    private Integer productId; // 완제품 ID
-    private Integer quantity; // 입고 수량
-    private String inboundCode; // 입출고 코드
-    private Integer supplierId; // 공급업체 ID
-    private String status; // 상태 (입고 완료 등)
-    private Timestamp inboundCompleteTime; // 입고 완료 시간
+    @ManyToOne(fetch = FetchType.LAZY) // ✅ 제품 테이블과 관계 설정
+    @JoinColumn(name = "product_id", nullable = false)
+    private FinishedProducts product;
+
+    private Long quantity;
+    private String inboundCode;
+    private LocalDateTime inboundCompleteTime;
+    private String status;
+    private Long supplierId;
+
+    public void setQuantity(long l) {
+    }
 }

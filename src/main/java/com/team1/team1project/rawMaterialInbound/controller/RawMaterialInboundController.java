@@ -1,32 +1,72 @@
-package com.team1.team1project.controller;
+package com.team1.team1project.rawMaterialInbound.controller;
 
 import com.team1.team1project.domain.RawMaterialInbound;
-import com.team1.team1project.service.RawMaterialInboundService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import com.team1.team1project.rawMaterialInbound.service.RawMaterialInboundService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
-@RequiredArgsConstructor
+@RequestMapping("/raw-material/inbound")
 public class RawMaterialInboundController {
 
     private final RawMaterialInboundService rawMaterialInboundService;
 
-    // 원자재 입고 목록을 보여주는 메서드
-    @GetMapping("/raw-material-inbounds")
-    public String showRawMaterialInbounds(Model model) {
-        // 원자재 입고 데이터를 서비스에서 가져옴
-        List<RawMaterialInbound> inbounds = rawMaterialInboundService.getAllInbounds();
+    public RawMaterialInboundController(RawMaterialInboundService rawMaterialInboundService) {
+        this.rawMaterialInboundService = rawMaterialInboundService;
+    }
 
-        // 데이터를 모델에 담아서 뷰로 전달
-        model.addAttribute("inbounds", inbounds);
+    // ✅ 1. 입고 목록 조회
+    @GetMapping("/list")
+    public String getRawMaterialInbounds(Model model) {
+        List<RawMaterialInbound> rawMaterialInbounds = rawMaterialInboundService.getAllRawMaterialInbounds();
+        model.addAttribute("rawMaterialInbounds", rawMaterialInbounds);
+        return "RawMaterialInbound"; // 📌 Thymeleaf 템플릿 (RawMaterialInbound.html)
+    }
 
-        // "raw-material-inbounds" 템플릿 이름을 반환
-        return "RawMaterialInbound";  // 타임리프 템플릿 이름
+    // ✅ 2. 입고 등록 (폼 데이터 처리)
+    @PostMapping("/register")
+    public String createRawMaterialInbound(@ModelAttribute RawMaterialInbound rawMaterialInbound, Model model) {
+        try {
+            rawMaterialInboundService.createRawMaterialInbound(rawMaterialInbound);
+            model.addAttribute("message", "등록 성공!");
+        } catch (Exception e) {
+            model.addAttribute("error", "등록 실패: " + e.getMessage());
+        }
+        return "redirect:/raw-material/inbound/list"; // 📌 등록 후 목록 페이지로 이동
+    }
+
+    // ✅ 3. 입고 수정 페이지 렌더링
+    @GetMapping("/edit/{inboundId}")
+    public String editInbound(@PathVariable Long inboundId, Model model) {
+        RawMaterialInbound inbound = rawMaterialInboundService.getRawMaterialInboundById(inboundId);
+        model.addAttribute("inbound", inbound);
+        return "RawMaterialInboundEdit"; // 📌 수정 페이지 Thymeleaf 뷰
+    }
+
+    // ✅ 4. 입고 수정 처리
+    @PostMapping("/update/{inboundId}")
+    public String updateInbound(@PathVariable Long inboundId, @ModelAttribute RawMaterialInbound rawMaterialInbound, Model model) {
+        try {
+            rawMaterialInboundService.updateInbound(inboundId, rawMaterialInbound);
+            model.addAttribute("message", "수정 성공!");
+        } catch (Exception e) {
+            model.addAttribute("error", "수정 실패: " + e.getMessage());
+        }
+        return "redirect:/raw-material/inbound/list"; // 📌 수정 후 목록 페이지로 이동
+    }
+
+    // ✅ 5. 입고 삭제 처리
+    @GetMapping("/delete/{inboundId}")
+    public String deleteRawMaterialInbound(@PathVariable Long inboundId, Model model) {
+        try {
+            rawMaterialInboundService.deleteRawMaterialInbound(inboundId);
+            model.addAttribute("message", "삭제 완료!");
+        } catch (Exception e) {
+            model.addAttribute("error", "삭제 실패: " + e.getMessage());
+        }
+        return "redirect:/raw-material/inbound/list"; // 📌 삭제 후 목록 페이지로 이동
     }
 }

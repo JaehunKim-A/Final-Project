@@ -1,21 +1,21 @@
 package com.team1.team1project.finishedProductOutbound.service;
 
-import com.team1.team1project.domain.FinishedProductOutbound;
-import com.team1.team1project.repository.FinishedProductOutboundRepository;
-import org.springframework.stereotype.Service;
+import com.team1.team1project.dto.FinishedProductInboundDTO;
+import com.team1.team1project.dto.FinishedProductOutboundDTO;
 
 import java.util.List;
 
-@Service
-public class FinishedProductOutboundService {
+public interface FinishedProductOutboundService {
 
-    private final FinishedProductOutboundRepository repository;
+    // 입고 등록
+    void createFinishedProductOutbound(FinishedProductOutboundDTO finishedProductInboundDTO);
 
-    public FinishedProductOutboundService(FinishedProductOutboundRepository repository) {
-        this.repository = repository;
-    }
+    // 입고 상태 수정
+    void modifyOutboundStatus(Long outboundId, String status);
 
-    public List<FinishedProductOutbound> getAllOutbounds() {
-        return repository.findAll();
-    }
+    // 입고 삭제
+    void deleteFinishedProductOutbound(Long outboundId);
+
+    // 모든 입고 목록 조회
+    List<FinishedProductOutboundDTO> getAllFinishedProductOutbounds();
 }
