@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class FinishedProductInboundDTO {
     private Long inboundId;
-    private String productCode; // ✅ 추가
+    private String productCode;
     private Long quantity;
     private String inboundCode;
     private LocalDateTime inboundCompleteTime;
@@ -22,7 +22,6 @@ public class FinishedProductInboundDTO {
     // Entity -> DTO 변환
     public FinishedProductInboundDTO(FinishedProductInbound inbound) {
         this.inboundId = inbound.getInboundId();
-        this.productCode = inbound.getProduct().getProductCode(); // ✅ 제품 코드 추가
         this.quantity = inbound.getQuantity();
         this.status = inbound.getStatus();
         this.inboundCompleteTime = inbound.getInboundCompleteTime();

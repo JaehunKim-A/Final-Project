@@ -12,15 +12,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @ToString
+@Table(name = "finished_product_inbounds")
 public class FinishedProductInbound {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long inboundId;  // 입고 ID
 
-    @ManyToOne(fetch = FetchType.LAZY) // ✅ 제품 테이블과 관계 설정
-    @JoinColumn(name = "product_id", nullable = false)
-    private FinishedProducts product;
+    // ✅ 완전히 제거: product나 productId 없이 사용
+    // private FinishedProducts product;
+    // private Long productId;
 
     private Long quantity;
     private String inboundCode;
@@ -29,5 +30,6 @@ public class FinishedProductInbound {
     private Long supplierId;
 
     public void setQuantity(long l) {
+        this.quantity = l;
     }
 }
