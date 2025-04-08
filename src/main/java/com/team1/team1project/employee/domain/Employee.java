@@ -2,7 +2,9 @@ package com.team1.team1project.employee.domain;
 
 
 import com.team1.team1project.domain.BaseEntity;
+import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -21,7 +23,7 @@ public class Employee extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id")
-    private Integer employeeId;
+    private int employeeId;
 
     @Column(name = "employee_name", nullable = false, length = 255)
     private String employeeName;
@@ -32,9 +34,12 @@ public class Employee extends BaseEntity {
     @Column(name = "phone_number", length = 50)
     private String phoneNumber;
 
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "hire_date")
     private LocalDate hireDate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "resignation_date")
     private LocalDate resignationDate;
 
@@ -50,8 +55,6 @@ public class Employee extends BaseEntity {
     @Column(name = "address", columnDefinition = "TEXT")
     private String address;
 
-    @Column(name = "status", length = 50)
-    private String status;
 
     // reg_date와 mod_date는 LocalDateTime으로 저장
     @Override
