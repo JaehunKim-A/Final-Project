@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.team1.team1project.productProcessManagement.mapper.MachineGuiInfoMapper">
-    <select id="selectMachineGuiInformations" resultType="com.team1.team1project.productProcessManagement.dto.MachineGuiInformationsDTO">
+<mapper namespace="com.team1.team1project.mapper.MachineGuiInfoMapper">
+    <select id="selectMachineGuiInformations" resultType="com.team1.team1project.dto.MachineGuiInformationsDTO">
         SELECT
             a.gui_id as guiId, a.machine_id as machineId, a.x_coordinate as xCoordinate, a.y_coordinate as yCoordinate, a.machine_type as machineType, c.material_code as materialCode, b.stock
         FROM

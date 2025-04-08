@@ -80,7 +80,7 @@
                           th:data-category="${finishedProducts.category}"
                           th:data-unit="${finishedProducts.unit}"
                           th:data-status="${finishedProducts.status}"
-                          th:data-desctription="${finishedProducts.description}"
+                          th:data-description="${finishedProducts.description}"
                   >Edit</button>
                   <button class="btn btn-outline-info btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal" th:data-id="${finishedProducts.productId}">Delete</button>
                 </td>
@@ -102,7 +102,7 @@
             <form action="/finishedProduct/finishedProduct/register" method="POST">
               <div class="modal-body">
                 <div class="mb-3">
-                  <label for="productCode" class="form-label">Raw Product Code</label>
+                  <label for="productCode" class="form-label">Product Code</label>
                   <input type="text" class="form-control" id="productCode" name="productCode" required>
                 </div>
                 <div class="mb-3">
@@ -145,7 +145,7 @@
             </div>
             <form action="/finishedProduct/finishedProduct/modify/{productId}" method="POST" id="editFinishedProductForm">
               <div class="modal-body">
-                <input type="hidden" id="editProductId" name="productId">
+                <input type="hidden" id="editProductId" name="productId" value="${finishedProducts.productId}">
                 <div class="mb-3">
                   <label for="editProductCode" class="form-label">Product Code</label>
                   <input type="text" class="form-control" id="editProductCode" name="productCode" required>
@@ -193,7 +193,7 @@
             </div>
             <div class="modal-footer">
               <form action="#" method="GET" id="deleteFinishedProductForm">
-                <input type="hidden" id="deleteProductId" name="productId">
+                <input type="hidden" id="deleteProductId" name="productId" value="${finishedProducts.productId}">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-danger">Delete</button>
               </form>
@@ -254,8 +254,8 @@
       }
   });
 
-  const editCustomerForm = document.getElementById("editFinishedProductForm");
-  editCustomerForm.addEventListener("submit", (event) => {
+  const editFinishedProductForm = document.getElementById("editFinishedProductForm");
+  editFinishedProductForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const formData = new FormData(editFinishedProductForm);
       const productId = document.getElementById("editProductId").value;

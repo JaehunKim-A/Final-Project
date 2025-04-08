@@ -78,7 +78,7 @@
                                             th:data-name="${rawMaterials.materialName}"
                                             th:data-category="${rawMaterials.category}"
                                             th:data-unit="${rawMaterials.unit}"
-                                            th:data-desctription="${rawMaterials.description}"
+                                            th:data-description="${rawMaterials.description}"
                                             >Edit</button>
                                     <button class="btn btn-outline-info btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal" th:data-id="${rawMaterials.materialId}">Delete</button>
                                 </td>
@@ -137,7 +137,7 @@
                             <h5 class="modal-title" id="editModalLabel">Edit RawMaterial</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="/rawMaterial/rawMaterial/modify/{rawMaterialId}" method="POST" id="editRawMaterialForm">
+                        <form action="/rawMaterial/rawMaterial/edit/{rawMaterialId}" method="POST" id="editRawMaterialForm">
                             <div class="modal-body">
                                 <input type="hidden" id="editMaterialId" name="materialId">
                                 <div class="mb-3">
@@ -242,8 +242,8 @@
             }
         });
 
-        const editCustomerForm = document.getElementById("editRawMaterialForm");
-        editCustomerForm.addEventListener("submit", (event) => {
+        const editRawMaterialForm = document.getElementById("editRawMaterialForm");
+        editRawMaterialForm.addEventListener("submit", (event) => {
             event.preventDefault();
             const formData = new FormData(editRawMaterialForm);
             const materialId = document.getElementById("editMaterialId").value;

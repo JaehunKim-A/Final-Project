@@ -1,6 +1,6 @@
 package com.team1.team1project.service;
 
-import com.team1.team1project.codeManagement.service.CodeManagementService;
+import com.team1.team1project.service.codeManagement.CodeManagementService;
 import com.team1.team1project.dto.CodeManagementDTO;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;

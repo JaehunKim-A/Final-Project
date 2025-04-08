@@ -1,11 +1,11 @@
 package com.team1.team1project.service;
 
-import com.team1.team1project.customer.service.CustomerService;
-import com.team1.team1project.customerOrders.service.CustomerOrdersService;
 import com.team1.team1project.dto.CustomerDTO;
+import com.team1.team1project.service.customer.CustomerService;
+import com.team1.team1project.service.customer.CustomerOrdersService;
 import com.team1.team1project.dto.CustomerOrdersDTO;
 import com.team1.team1project.dto.RawMaterialSupplierDTO;
-import com.team1.team1project.rawMaterialSuppliers.service.RawMaterialSupplierService;
+import com.team1.team1project.service.rawMaterial.RawMaterialSupplierService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
