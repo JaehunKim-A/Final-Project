@@ -87,24 +87,5 @@
 <script src="/assets/compiled/js/app.js"></script>
 <script src="/assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
 <script src="/assets/static/js/pages/simple-datatables.js"></script>
-
-
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-
-  const tableBody = document.querySelector("#table1");
-  const myDataTable = new simpleDatatables.DataTable(tableBody, {
-      perPage: 10,
-      searchable: true,
-      sortable: true,
-      labels: {
-          placeholder: "제품을 검색하세요...",
-          perPage: "{select} 행을 한 페이지에 표시",
-          noRows: "제품을 찾을 수 없습니다.",
-          info: "전체 {rows}개의 제품 중 {start}에서 {end}까지 표시",
-      },
-  });
-</script>
-
 </body>
 </html>
