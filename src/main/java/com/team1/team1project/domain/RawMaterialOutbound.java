@@ -16,12 +16,12 @@ public class RawMaterialOutbound {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer outboundId;      // 출고 ID
+    private Long outboundId;      // 출고 ID
 
     private String outboundCode;     // 출고 코드
     private LocalDateTime outboundDate;  // 출고 날짜
-    private Integer materialId;      // 원자재 ID
-    private Integer quantity;        // 출고 수량
+    private Long materialId;      // 원자재 ID
+    private Long quantity;        // 출고 수량
     private String status;           // 상태
     private String warehouse;        // 창고 위치
 

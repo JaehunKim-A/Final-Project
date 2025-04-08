@@ -1,6 +1,8 @@
 package com.team1.team1project.service.finishedProduct;
 
 import com.team1.team1project.domain.FinishedProductOutbound;
+import com.team1.team1project.dto.FinishedProductInboundDTO;
+import com.team1.team1project.domain.FinishedProductInbound;
 import com.team1.team1project.dto.FinishedProductOutboundDTO;
 import com.team1.team1project.repository.FinishedProductOutboundRepository;
 import org.springframework.stereotype.Service;

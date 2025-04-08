@@ -53,7 +53,7 @@
                     <form action="/finished-product/outbound/modify-status" method="POST">
                         <input type="hidden" name="outboundId" th:value="${outbound.outboundId}">
                         <select name="status" class="form-select">
-                            <option value="Shipped" th:selected="${outbound.status == 'Shipped'}">Shipped</option>
+                            <option value="Complete" th:selected="${outbound.status == 'Complete'}">Complete</option>
                             <option value="Pending" th:selected="${outbound.status == 'Pending'}">Pending</option>
                             <option value="Cancelled" th:selected="${outbound.status == 'Cancelled'}">Cancelled</option>
                         </select>

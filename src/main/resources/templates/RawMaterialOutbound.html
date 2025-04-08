@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raw-Material-Inbound</title>
+    <link rel="shortcut icon" href="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/1999/svg'%20viewBox='0%200%2033%2034'%20fill-rule='evenodd'%20stroke-linejoin='round'%20stroke-miterlimit='2'%20xmlns:v='https://vecta.io/nano'%3e%3cpath%20d='M3%2027.472c0%204.409%206.18%205.552%2013.5%205.552%207.281%200%2013.5-1.103%2013.5-5.513s-6.179-5.552-13.5-5.552c-7.281%200-13.5%201.103-13.5%205.513z'%20fill='%23435ebe'%20fill-rule='nonzero'/%3e%3ccircle%20cx='16.5'%20cy='8.8'%20r='8.8'%20fill='%2341bbdd'/%3e%3c/svg%3e" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/extensions/simple-datatables/style.css">
+    <link rel="stylesheet" href="/assets/compiled/css/table-datatable.css">
+    <link rel="stylesheet" href="/assets/compiled/css/app.css">
+    <link rel="stylesheet" href="/assets/compiled/css/app-dark.css">
+</head>
+<body>
+
+<div id="app">
+    <div id="sidebar" th:replace="~{layout/layout :: sidebar}"></div>
+    <div id="main" class="layout-navbar navbar-fixed">
+        <header class="mb-3" th:replace="~{layout/layout :: header}">
+            <a href="#" class="burger-btn d-block d-xl-none">
+                <i class="bi bi-justify fs-3"></i>
+            </a>
+        </header>
+
+        <h1>완제품 출고 목록</h1>
+
+        <div class="card-body">
+            <table class="table table-striped" id="table1">
+                <thead>
+                <tr>
+                    <th>출고 ID</th>
+                    <th>출고 코드</th>
+                    <th>출고 날짜</th>
+                    <th>원자재 ID</th>
+                    <th>수량</th>
+                    <th>상태</th>
+                    <th>창고</th>
+                    <th>등록일</th>
+                    <th>수정일</th>
+                    <th>관리</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="outbound : ${outbounds}">
+                    <td th:text="${outbound.outboundId}"></td>
+                    <td th:text="${outbound.outboundCode}"></td>
+                    <td th:text="${outbound.outboundDate}"></td>
+                    <td th:text="${outbound.materialId}"></td>
+                    <td th:text="${outbound.quantity}"></td>
+                    <td th:text="${outbound.status}"></td>
+                    <td th:text="${outbound.warehouse}"></td>
+                    <td th:text="${outbound.regDate}"></td>
+                    <td th:text="${outbound.modDate}"></td>
+                    <td>
+                        <button class="btn btn-outline-primary edit-btn"
+                                data-bs-toggle="modal" data-bs-target="#editModal"
+                                th:data-id="${outbound.outboundId}"
+                                th:data-outbound-code="${outbound.outboundCode}"
+                                th:data-outbound-date="${outbound.outboundDate}"
+                                th:data-material-id="${outbound.materialId}"
+                                th:data-quantity="${outbound.quantity}"
+                                th:data-status="${outbound.status}"
+                                th:data-warehouse="${outbound.warehouse}">
+                            Edit
+                        </button>
+                        <button class="btn btn-outline-danger delete-btn"
+                                th:data-id="${outbound.outboundId}">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 수정 모달 -->
+        <div class="modal fade" id="editModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">완제품 출고 수정</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editForm">
+                            <input type="hidden" id="editOutboundId">
+                            <div class="mb-3">
+                                <label class="form-label">출고 코드</label>
+                                <input type="text" class="form-control" id="editOutboundCode" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">출고 날짜</label>
+                                <input type="date" class="form-control" id="editOutboundDate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">원자재 ID</label>
+                                <input type="text" class="form-control" id="editMaterialId" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">수량</label>
+                                <input type="number" class="form-control" id="editQuantity" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">창고</label>
+                                <input type="text" class="form-control" id="editWarehouse">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">상태</label>
+                                <select id="editStatus" class="form-control">
+                                    <option value="Pending">Pending</option>
+                                    <option value="Complete">Complete</option>
+                                    <option value="Canceled">Canceled</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">수정 완료</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 삭제 결과 모달 -->
+        <div class="modal fade" id="deleteModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">알림</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="deleteModalMessage"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- 스크립트 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/static/js/initTheme.js"></script>
+<script src="/assets/static/js/components/dark.js"></script>
+<script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="/assets/compiled/js/app.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // 수정 버튼 클릭
+        document.querySelectorAll(".edit-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                document.getElementById("editOutboundId").value = this.dataset.id;
+                document.getElementById("editOutboundCode").value = this.dataset.outboundCode;
+                document.getElementById("editOutboundDate").value = this.dataset.outboundDate;
+                document.getElementById("editMaterialId").value = this.dataset.materialId;
+                document.getElementById("editQuantity").value = this.dataset.quantity;
+                document.getElementById("editStatus").value = this.dataset.status;
+                document.getElementById("editWarehouse").value = this.dataset.warehouse;
+            });
+        });
+
+        // 수정 제출
+        document.getElementById("editForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const dto = {
+                outboundId: document.getElementById("editOutboundId").value,
+                outboundCode: document.getElementById("editOutboundCode").value,
+                outboundDate: document.getElementById("editOutboundDate").value,
+                materialId: document.getElementById("editMaterialId").value,
+                quantity: document.getElementById("editQuantity").value,
+                warehouse: document.getElementById("editWarehouse").value,
+                status: document.getElementById("editStatus").value
+            };
+
+            fetch(`/raw-material/outbound/${dto.outboundId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dto)
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error();
+                    return res.text();
+                })
+                .then(() => {
+                    alert("수정 완료");
+                    bootstrap.Modal.getInstance(document.getElementById("editModal")).hide();
+                    window.location.reload();
+                })
+                .catch(() => alert("수정 실패"));
+        });
+
+        // 삭제 버튼
+        document.querySelectorAll(".delete-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                const outboundId = this.dataset.id;
+                if (confirm(`${outboundId}번 데이터를 삭제하시겠습니까?`)) {
+                    fetch(`/raw-material/outbound/${outboundId}`, {
+                        method: 'DELETE'
+                    })
+                        .then(res => {
+                            if (!res.ok) throw new Error();
+                            this.closest("tr").remove();
+                            showModal("삭제 완료");
+                        })
+                        .catch(() => showModal("삭제 실패"));
+                }
+            });
+        });
+
+        function showModal(message) {
+            document.getElementById("deleteModalMessage").textContent = message;
+            new bootstrap.Modal(document.getElementById("deleteModal")).show();
+        }
+    });
+</script>
+</body>
+</html>

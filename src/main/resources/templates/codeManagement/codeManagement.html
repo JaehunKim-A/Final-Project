@@ -208,7 +208,6 @@
 <script src="/assets/static/js/pages/simple-datatables.js"></script>
 <script>
   function openProductPopup(button) {
-    let productCodeField = row.querySelector('[name="productCode"]');
     let popup = open("/finishedProduct/searchPopup", "Product Search", "width=600,height=400");
 
     // 팝업에서 데이터를 받아오는 이벤트 처리
@@ -217,7 +216,7 @@
 
         const productData = event.data;
         if (productData && productData.productCode) {
-            productCodeField.value = productData.productCode;
+            document.getElementById('codeValue').value = productData.productCode;
         }
     }, {
         once: true

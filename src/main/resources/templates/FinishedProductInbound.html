@@ -47,7 +47,7 @@
                     <form action="/finished-product/inbound/modify-status" method="POST">
                         <input type="hidden" name="inboundId" th:value="${inbound.inboundId}">
                         <select name="status" class="form-select">
-                            <option value="Completed" th:selected="${inbound.status == 'Completed'}">Completed</option>
+                            <option value="Complete" th:selected="${inbound.status == 'Complete'}">Complete</option>
                             <option value="Pending" th:selected="${inbound.status == 'Pending'}">Pending</option>
                             <option value="Cancelled" th:selected="${inbound.status == 'Cancelled'}">Canceled</option>
                         </select>

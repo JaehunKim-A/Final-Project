@@ -1,5 +1,6 @@
 package com.team1.team1project.service.finishedProduct;
 
+import com.team1.team1project.dto.FinishedProductInboundDTO;
 import com.team1.team1project.dto.FinishedProductOutboundDTO;
 
 import java.util.List;
