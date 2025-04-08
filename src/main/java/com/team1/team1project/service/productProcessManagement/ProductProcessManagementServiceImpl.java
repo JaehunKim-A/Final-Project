@@ -9,6 +9,8 @@ import com.team1.team1project.repository.MachineHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,17 +34,6 @@ public class ProductProcessManagementServiceImpl implements ProductProcessManage
     private final MachineRawMaterialReserveMapper machineRawMaterialReserveMapper;
     private final MachineGuiInfoMapper machineGuiInfoMapper;
     private final MachineInfoMapper machineInfoMapper;
-
-    @Override
-    public MachineHistoryYearDTO getMachineHistoryByYear(int year) {
-        List<MachineHistoryDTO> dtoList = machineHistoryMapper.selectMachineHistoryByYear(year).stream()
-                .map(machineHistory -> modelMapper.map(machineHistory, MachineHistoryDTO.class)).collect(Collectors.toList());
-
-        return MachineHistoryYearDTO.builder()
-                .dtoList(dtoList)
-                .year(year)
-                .build();
-    }
 
     @Override
     public MachineHistoryDaysDTO getProductionAmount2Week() {
@@ -182,5 +173,23 @@ public class ProductProcessManagementServiceImpl implements ProductProcessManage
     @Override
     public List<ProcessBarChartDataDTO> getProductionTargetRatio() {
         return machineInfoMapper.selectProductionTargetRatio();
+    }
+
+    @Override
+    public PageResponseDTO<MachineHistoryDTO> getMachineHistoryForTable(String sorter, boolean isAsc, PageRequestDTO pageRequestDTO) {
+        String[] types = pageRequestDTO.getTypes();
+        String keyword = pageRequestDTO.getKeyword();
+        Pageable pageable = pageRequestDTO.getPageable(isAsc, sorter);
+
+        Page<MachineHistory> result = machineHistoryRepository.searchAll(types, keyword, pageable);
+
+        List<MachineHistoryDTO> machineHistoryDTOList = result.getContent().stream()
+                .map(machineHistory -> modelMapper.map(machineHistory, MachineHistoryDTO.class)).collect(Collectors.toList());
+
+        return PageResponseDTO.<MachineHistoryDTO>builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(machineHistoryDTOList)
+                .total((int) result.getTotalElements())
+                .build();
     }
 }

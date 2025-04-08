@@ -51,4 +51,11 @@ public class FinishedProductsController {
         finishedProductsService.removeOne(productId);
         return "redirect:/finishedProduct/finishedProduct";
     }
+
+    @GetMapping("/searchPopup")
+    public String showProductSearchPopup(Model model) {
+        List<FinishedProducts> productList = finishedProductsService.getAllProducts();
+        model.addAttribute("productList", productList);
+        return "/finishedProduct/searchPopup";
+    }
 }

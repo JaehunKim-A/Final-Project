@@ -273,14 +273,24 @@
             <div class="page-content">
                 <section class="section">
                     <!-- search condition-->
-                    <form action="/productProcessManagement/productProcessManagement" method="post">
-                        <div class="input-group mb-3">
-                            <label class="input-group-text" for="machine-history-year-select">Year</label>
-                            <select class="form-select" id="machine-history-year-select" name="year">
-                            </select>
-                            <button class="btn btn-primary btn-submit" id="machine-history-year-select-submit-btn" type="submit">Search</button>
+                    <div class="row mb-3" style="justify-content:end;">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <label class="input-group-text" for="machine-history-search-type">Search By</label>
+                                <select class="form-select" id="machine-history-search-type">
+                                    <option value="">All</option>
+                                    <option value="h">History ID</option>
+                                    <option value="m">Machine ID</option>
+                                    <option value="p">Production Amount</option>
+                                    <option value="d">Defective Amount</option>
+                                    <option value="r">Production Date</option>
+                                </select>
+                                <input type="text" class="form-control" id="machine-history-search-keyword" placeholder="Search...">
+                                <button class="btn btn-primary" id="machine-history-search-btn">Search</button>
+                            </div>
                         </div>
-                    </form><!-- End search condition -->
+                    </div>
+                    <!-- End search condition -->
                 </section>
                 <section class="section">
                     <div class="card">
@@ -289,23 +299,38 @@
                         </div>
 
                         <div class="card-body">
-                            <table class="table table-striped" id="table1">
+                            <table class="table table-striped" id="machine-history-table">
                                 <thead>
                                 <tr>
-                                    <th th:each="col : ${columns}" th:text="${col}"></th>
+                                    <th><a href="#" class="dataTable-sorter" data-sort="historyId">History ID</a></th>
+                                    <th><a href="#" class="dataTable-sorter" data-sort="machineId">Machine ID</a></th>
+                                    <th><a href="#" class="dataTable-sorter" data-sort="productionAmount">Production Amount</a></th>
+                                    <th><a href="#" class="dataTable-sorter" data-sort="defectiveAmount">Defective Amount</a></th>
+                                    <th><a href="#" class="dataTable-sorter" data-sort="productionDate">Production Date</a></th>
+                                    <th><a href="#" class="dataTable-sorter" data-sort="productionDateUpdate">Last Updated</a></th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <tr th:each="history : ${machineHistoryYearDTO.dtoList}">
-                                    <td th:text="${history.historyId}"></td>
-                                    <td th:text="${history.machineId}"></td>
-                                    <td th:text="${history.productionAmount}"></td>
-                                    <td th:text="${history.defectiveAmount}"></td>
-                                    <td th:text="${history.productionDate}"></td>
-                                    <td th:text="${history.productionDateUpdate}"></td>
-                                </tr>
+                                <tbody id="machine-history-table-body">
+                                <!-- 데이터가 여기에 동적으로 로드됩니다 -->
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="card-footer">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <select class="form-select" id="machine-history-page-size">
+                                        <option value="5">5 per page</option>
+                                        <option value="10" selected>10 per page</option>
+                                        <option value="20">20 per page</option>
+                                        <option value="50">50 per page</option>
+                                    </select>
+                                </div>
+                                <nav>
+                                    <ul class="pagination pagination-primary" id="machine-history-pagination">
+                                        <!-- 페이지네이션이 여기에 동적으로 로드됩니다 -->
+                                    </ul>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -323,8 +348,12 @@
 <script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 <script src="/assets/compiled/js/app.js"></script>
 <!--    datatable js    -->
-<script src="/assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
-<script src="/assets/static/js/pages/simple-datatables.js"></script>
+<!--<script src="/assets/extensions/simple-datatables/umd/simple-datatables.js"></script>-->
+<!--<script src="/assets/static/js/pages/simple-datatables.js"></script>-->
+
+<!--    axios js        -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 <!--    apexchart js    -->
 <script src="/assets/extensions/dayjs/dayjs.min.js"></script>
 <script src="/assets/extensions/apexcharts/apexcharts.min.js"></script>

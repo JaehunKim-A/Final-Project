@@ -5,7 +5,6 @@ import com.team1.team1project.dto.*;
 import java.util.List;
 
 public interface ProductProcessManagementService {
-    MachineHistoryYearDTO getMachineHistoryByYear(int year);
     MachineHistoryDaysDTO getProductionAmount2Week();
     List<FormattedMachineRawMaterialConsumeDTO> getMachineRawMaterialConsume();
     List<FormattedMachineRawMaterialReserveDTO> getMachineRawMaterialReserve();
@@ -19,4 +18,5 @@ public interface ProductProcessManagementService {
     void modifyMachineGuiInfo(MachineGuiInfoDTO machineGuiInfoDTO);
     void deleteMachineGuiInfo(String machineId);
     List<ProcessBarChartDataDTO> getProductionTargetRatio();
+    PageResponseDTO<MachineHistoryDTO> getMachineHistoryForTable(String sorter, boolean isAsc, PageRequestDTO pageRequestDTO);
 }

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -20,18 +21,31 @@ public class ProductProcessManagementRestController {
 
     private final ProductProcessManagementService productProcessManagementService;
 
-    @GetMapping("/machineHistory/year/{year}")
-    public ResponseEntity<MachineHistoryYearDTO> getMachineHistoryByYear(@PathVariable int year) {
-        MachineHistoryYearDTO machineHistoryYearDTO =
-                productProcessManagementService.getMachineHistoryByYear(year);
-        return ResponseEntity.ok(machineHistoryYearDTO);
+    @GetMapping("/productProcessManagementGet")
+    public void getMachineHistory(PageRequestDTO pageRequestDTO, Model model) {
+        PageResponseDTO<MachineHistoryDTO> machineHistoryDTOPageResponseDTO =
+                productProcessManagementService.getMachineHistoryForTable("historyId", false, pageRequestDTO);
+
+        model.addAttribute("machineHistoryYearDTO", machineHistoryDTOPageResponseDTO);
     }
 
-    @GetMapping("/machineHistory/year/current")
-    public ResponseEntity<MachineHistoryYearDTO> getCurrentYearMachineHistory() {
-        MachineHistoryYearDTO machineHistoryYearDTO =
-                productProcessManagementService.getMachineHistoryByYear(LocalDate.now().getYear());
-        return ResponseEntity.ok(machineHistoryYearDTO);
+    @PostMapping("/productProcessManagementPost")
+    @ResponseBody
+    public PageResponseDTO<MachineHistoryDTO> postMachineHistory(@RequestBody MachineHistoryRequestDTO request) {
+        log.info(request.isAsc());
+
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(request.getPage())
+                .size(request.getSize())
+                .type(request.getType())
+                .keyword(request.getKeyword())
+                .build();
+
+        PageResponseDTO<MachineHistoryDTO> result =
+                productProcessManagementService.getMachineHistoryForTable(
+                        request.getSorter(), request.isAsc(), pageRequestDTO);
+
+        return result;
     }
 
     @GetMapping("/machineHistory/twoWeeks")
@@ -91,10 +105,6 @@ public class ProductProcessManagementRestController {
     public ResponseEntity<Map<String, Object>> getDashboardData() {
         Map<String, Object> dashboardData = new HashMap<>();
 
-        // 년도별 기계 이력 데이터
-        MachineHistoryYearDTO machineHistoryYearDTO =
-                productProcessManagementService.getMachineHistoryByYear(LocalDate.now().getYear());
-
         // 2주간 생산량 데이터
         MachineHistoryDaysDTO machineHistoryDaysDTO =
                 productProcessManagementService.getProductionAmount2Week();
@@ -151,7 +161,6 @@ public class ProductProcessManagementRestController {
                 .collect(Collectors.toList());
 
         // 대시보드 데이터에 추가
-        dashboardData.put("machineHistoryYear", machineHistoryYearDTO);
         dashboardData.put("machineHistoryDays", machineHistoryDaysDTO);
         dashboardData.put("daysList", machineHistoryDaysDTO.getDayList());
         dashboardData.put("productionAmounts", groupedProductionAmounts);

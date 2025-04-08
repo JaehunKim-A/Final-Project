@@ -19,7 +19,7 @@ public class CodeManagementController {
     @GetMapping("/codeManagement")
     public void list(Model model){
         List<CodeManagement> codeManagement = codeManagementService.getAllCode();
-        List<String> columns = List.of("codeValue", "codeName", "codeType", "category", "codeDescription");
+        List<String> columns = List.of("CodeValue", "CodeName", "CodeType", "Category", "Description");
         model.addAttribute("columns", columns);
         model.addAttribute("codeManagement", codeManagement);
     }

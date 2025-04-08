@@ -22,22 +22,22 @@ public class CodeManagementServiceImpl implements CodeManagementService {
     public Long registers(CodeManagementDTO codeManagementDTO){
         String[] codeValues = codeManagementDTO.getCodeValue().split(",");
         String[] codeNames = codeManagementDTO.getCodeName().split(",");
-        String[] codeDescriptions = codeManagementDTO.getCodeDescription().split(",");
+        String[] descriptions = codeManagementDTO.getDescription().split(",");
         String[] codeCategories = codeManagementDTO.getCategory().split(",");
         String[] codeTypes = codeManagementDTO.getCodeType().split(",");
         for(int i = 0; i < codeValues.length; i++){
             String codeValue = codeValues[i].trim();
             String codeName = codeNames[i].trim();
-            String codeDescription = codeDescriptions[i].trim();
+            String description = descriptions[i].trim();
             String codeCategory = codeCategories[i].trim();
             String codeType = codeTypes[i].trim();
 
             CodeManagement codeManagement = CodeManagement.builder()
                     .codeValue(codeValue)
                     .codeName(codeName)
-                    .codeDescription(codeDescription)
-                    .category(codeCategory)
                     .codeType(codeType)
+                    .category(codeCategory)
+                    .description(description)
                     .build();
             CodeManagement saveCode = codeManagementRepository.save(codeManagement);
         }
@@ -61,9 +61,10 @@ public class CodeManagementServiceImpl implements CodeManagementService {
         codeManagement.codeChange(
                 codeManagementDTO.getCodeValue(),
                 codeManagementDTO.getCodeName(),
-                codeManagementDTO.getCodeDescription(),
+                codeManagementDTO.getCodeType(),
                 codeManagementDTO.getCategory(),
-                codeManagementDTO.getCodeType());
+                codeManagementDTO.getDescription()
+        );
 
         codeManagementRepository.save(codeManagement);
     }
