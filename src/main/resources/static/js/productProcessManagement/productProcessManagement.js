@@ -27,7 +27,7 @@ async function loadDashboardData() {
 
         const dashboardData = await response.json();
 
-        // 데이터 전역 변수로 설정 (기존 스크립트와 호환성 유지)
+        // 데이터 전역 변수로 설정
         window.machineGuiInfoJson = dashboardData.machineGuiInfo || [];
 
         // 생산량 차트 데이터
@@ -57,7 +57,7 @@ async function loadDashboardData() {
             data: scatterData
         }];
 
-        // 원자재 재고량 데이터 - 형식 변환 추가
+        // 원자재 재고량 데이터
         if (dashboardData.rawMaterialReserve && Array.isArray(dashboardData.rawMaterialReserve)) {
             // 원자재 코드별로 그룹화
             const groupedByMaterial = {};
@@ -87,7 +87,7 @@ async function loadDashboardData() {
         window.productionDefectiveAmountJson = dashboardData.productionDefectiveData || [];
 
         if (typeof initializeCharts === 'function') {
-            // 약간의 지연 후 차트 초기화 (데이터 설정 보장)
+            // 약간의 지연 후 차트 초기화
             setTimeout(() => {
                 initializeCharts();
             }, 100);
@@ -179,21 +179,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const sortField = this.getAttribute('data-sort');
 
-            // 같은 필드로 정렬할 경우 정렬 방향 토글
+            console.log(state.sorter);
+            console.log(sortField);
+
             if (state.sorter === sortField) {
-                state.isAsc = !state.isAsc;
+                if(!state.isAsc) {
+                    state.isAsc = true;
+                }
+                else {
+                    state.isAsc = false;
+                    state.sorter = "historyId";
+                }
             } else {
                 state.sorter = sortField;
                 state.isAsc = false; // 새 필드로 정렬 시 기본 내림차순
             }
 
-            // 모든 정렬 링크에서 정렬 방향 클래스 제거
             document.querySelectorAll('.dataTable-sorter').forEach(el => {
                 el.classList.remove('asc', 'desc');
             });
 
-            // 현재 정렬 링크에 정렬 방향 클래스 추가
-            this.classList.add(state.isAsc ? 'asc' : 'desc');
+            if (state.sorter !== 'historyId') {
+                this.classList.add(state.isAsc ? 'asc' : 'desc');
+            }
 
             loadMachineHistoryData(state);
         });
@@ -206,7 +214,6 @@ document.addEventListener('DOMContentLoaded', function() {
         loadMachineHistoryData(state);
     });
 
-    // 페이지네이션 클릭 이벤트는 동적으로 생성된 후 처리합니다
 });
 
 // Machine History 데이터를 불러오는 함수
@@ -226,13 +233,10 @@ async function loadMachineHistoryData(state) {
             keyword: state.keyword
         };
 
-        console.log('Sending payload:', payload); // 디버깅용
 
         // API 호출
         const response = await axios.post('/api/productProcessManagement/productProcessManagementPost', payload);
         const data = response.data;
-
-        console.log('Received data:', data); // 디버깅용
 
         // 테이블 데이터 렌더링
         renderTableData(data);

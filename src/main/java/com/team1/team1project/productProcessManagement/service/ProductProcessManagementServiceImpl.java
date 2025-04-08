@@ -40,17 +40,6 @@ public class ProductProcessManagementServiceImpl implements ProductProcessManage
     private final MachineInfoMapper machineInfoMapper;
 
     @Override
-    public MachineHistoryYearDTO getMachineHistoryByYear(int year) {
-        List<MachineHistoryDTO> dtoList = machineHistoryMapper.selectMachineHistoryByYear(year).stream()
-                .map(machineHistory -> modelMapper.map(machineHistory, MachineHistoryDTO.class)).collect(Collectors.toList());
-
-        return MachineHistoryYearDTO.builder()
-                .dtoList(dtoList)
-                .year(year)
-                .build();
-    }
-
-    @Override
     public MachineHistoryDaysDTO getProductionAmount2Week() {
         List<ProductionDataDTO> dtoList = new ArrayList<>();
 

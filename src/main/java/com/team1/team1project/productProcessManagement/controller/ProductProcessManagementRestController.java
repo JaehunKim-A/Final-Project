@@ -36,6 +36,8 @@ public class ProductProcessManagementRestController {
     @PostMapping("/productProcessManagementPost")
     @ResponseBody
     public PageResponseDTO<MachineHistoryDTO> postMachineHistory(@RequestBody MachineHistoryRequestDTO request) {
+        log.info(request.isAsc());
+
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
                 .page(request.getPage())
                 .size(request.getSize())
@@ -48,20 +50,6 @@ public class ProductProcessManagementRestController {
                         request.getSorter(), request.isAsc(), pageRequestDTO);
 
         return result;
-    }
-
-    @GetMapping("/machineHistory/year/{year}")
-    public ResponseEntity<MachineHistoryYearDTO> getMachineHistoryByYear(@PathVariable int year) {
-        MachineHistoryYearDTO machineHistoryYearDTO =
-                productProcessManagementService.getMachineHistoryByYear(year);
-        return ResponseEntity.ok(machineHistoryYearDTO);
-    }
-
-    @GetMapping("/machineHistory/year/current")
-    public ResponseEntity<MachineHistoryYearDTO> getCurrentYearMachineHistory() {
-        MachineHistoryYearDTO machineHistoryYearDTO =
-                productProcessManagementService.getMachineHistoryByYear(LocalDate.now().getYear());
-        return ResponseEntity.ok(machineHistoryYearDTO);
     }
 
     @GetMapping("/machineHistory/twoWeeks")
@@ -121,10 +109,6 @@ public class ProductProcessManagementRestController {
     public ResponseEntity<Map<String, Object>> getDashboardData() {
         Map<String, Object> dashboardData = new HashMap<>();
 
-        // 년도별 기계 이력 데이터
-        MachineHistoryYearDTO machineHistoryYearDTO =
-                productProcessManagementService.getMachineHistoryByYear(LocalDate.now().getYear());
-
         // 2주간 생산량 데이터
         MachineHistoryDaysDTO machineHistoryDaysDTO =
                 productProcessManagementService.getProductionAmount2Week();
@@ -181,7 +165,6 @@ public class ProductProcessManagementRestController {
                 .collect(Collectors.toList());
 
         // 대시보드 데이터에 추가
-        dashboardData.put("machineHistoryYear", machineHistoryYearDTO);
         dashboardData.put("machineHistoryDays", machineHistoryDaysDTO);
         dashboardData.put("daysList", machineHistoryDaysDTO.getDayList());
         dashboardData.put("productionAmounts", groupedProductionAmounts);

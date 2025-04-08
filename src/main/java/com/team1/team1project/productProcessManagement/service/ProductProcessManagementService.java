@@ -7,7 +7,6 @@ import com.team1.team1project.productProcessManagement.dto.*;
 import java.util.List;
 
 public interface ProductProcessManagementService {
-    MachineHistoryYearDTO getMachineHistoryByYear(int year);
     MachineHistoryDaysDTO getProductionAmount2Week();
     List<FormattedMachineRawMaterialConsumeDTO> getMachineRawMaterialConsume();
     List<FormattedMachineRawMaterialReserveDTO> getMachineRawMaterialReserve();

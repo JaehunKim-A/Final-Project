@@ -1,5 +1,6 @@
 package com.team1.team1project.productProcessManagement.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,5 +16,6 @@ public class MachineHistoryRequestDTO {
     private String type;
     private String keyword;
     private String sorter;
-    private boolean isAsc;
+    @JsonProperty("isAsc")
+    private boolean asc;
 }
