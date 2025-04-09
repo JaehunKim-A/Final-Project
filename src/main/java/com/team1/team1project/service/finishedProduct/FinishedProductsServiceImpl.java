@@ -78,4 +78,9 @@ public class FinishedProductsServiceImpl implements FinishedProductsService {
     public List<FinishedProducts> getAllProducts(){
         return finishedProductsRepository.findAll();
     }
+    @Override
+    public Optional<FinishedProductsDTO> findByProductCode(String productCode) {
+        return finishedProductsRepository.findByProductCode(productCode)
+                .map(entity -> modelMapper.map(entity, FinishedProductsDTO.class));
+    }
 }

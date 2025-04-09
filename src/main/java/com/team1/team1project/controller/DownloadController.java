@@ -31,6 +31,10 @@ public class DownloadController {
 		fileNames.put("rawMaterialSupplier", "공급자_전체.xlsx");
 		fileNames.put("customerOrders", "주문_전체.xlsx");
 
+		fileNames.put("finishedProduct", "제품_전체.xlsx");
+		fileNames.put("rawMaterial", "원자재_전체.xlsx");
+		fileNames.put("codeManagement", "코드_전체.xlsx");
+
 		String fileName = fileNames.getOrDefault(type, type + "_전체.xlsx");
 
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -48,6 +52,10 @@ public class DownloadController {
 		fileNames.put("customer", "고객_전체.csv");
 		fileNames.put("rawMaterialSupplier", "공급자_전체.csv");
 		fileNames.put("customerOrders", "주문_전체.csv");
+
+		fileNames.put("finishedProduct", "제품_전체.xlsx");
+		fileNames.put("rawMaterial", "원자재_전체.xlsx");
+		fileNames.put("codeManagement", "코드_전체.xlsx");
 
 		String fileName = fileNames.getOrDefault(type, type + "_전체.csv");
 
@@ -127,6 +135,63 @@ public class DownloadController {
 
 		response.setHeader("Content-Disposition",
 				"attachment; filename=\"" + encodedFileName + "\"; filename*=UTF-8''" + encodedFileName);
+	}
+
+	@GetMapping("/sample/codeManagement")
+	public void downloadCodeManagementSample(HttpServletResponse response) throws IOException {
+		StringBuilder sample = new StringBuilder();
+
+		sample.append("1. 신규등록(업로드시 이 행은 삭제)\n");
+		sample.append("codeValue|codeName|type|category|description\n");
+		sample.append("코드|이름|타입|카테고리|설명\n\n");
+
+		sample.append("2. 수정(업로드시 이 행은 삭제)\n");
+		sample.append("codeValue|codeName|type|category|description\n");
+		sample.append("변경코드|변경이름|변경타입|변경카테고리|변경설명\n");
+
+		String fileName = "코드_업로드_샘플.csv";
+		setCsvDownloadHeader(response, fileName);
+
+		response.getWriter().write(sample.toString());
+		response.getWriter().flush();
+	}
+
+	@GetMapping("/sample/rawMaterial")
+	public void downloadRawMaterialSample(HttpServletResponse response) throws IOException {
+		StringBuilder sample = new StringBuilder();
+
+		sample.append("1. 신규등록(업로드시 이 행은 삭제)\n");
+		sample.append("materialCode|materialName|category|unit|description\n");
+		sample.append("신규코드|신규이름|카테고리|포장유닛|설명\n\n");
+
+		sample.append("2. 수정(업로드시 이 행은 삭제)\n");
+		sample.append("materialCode|materialName|category|unit|description\n");
+		sample.append("기존원자재코드|변경이름|변경카테고리|변경유닛|변경설명\n");
+
+		String fileName = "원자재_업로드_샘플.csv";
+		setCsvDownloadHeader(response, fileName);
+
+		response.getWriter().write(sample.toString());
+		response.getWriter().flush();
+	}
+
+	@GetMapping("/sample/finishedProduct")
+	public void downloadProductSample(HttpServletResponse response) throws IOException {
+		StringBuilder sample = new StringBuilder();
+
+		sample.append("1. 신규등록(업로드시 이 행은 삭제)\n");
+		sample.append("productCode|productName|category|unit|status|description\n");
+		sample.append("신규제품코드|이름|카테고리|유닛|상태|설명\n\n");
+
+		sample.append("2. 수정(업로드시 이 행은 삭제)\n");
+		sample.append("productCode|productName|category|unit|status|description\n");
+		sample.append("기존제품코드|변경제품이름|카테고리|유닛|상태|설명\n");
+
+		String fileName = "제품_업로드_샘플.csv";
+		setCsvDownloadHeader(response, fileName);
+
+		response.getWriter().write(sample.toString());
+		response.getWriter().flush();
 	}
 }
 

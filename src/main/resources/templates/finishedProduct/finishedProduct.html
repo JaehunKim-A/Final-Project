@@ -48,14 +48,46 @@
         <div class="card">
           <div class="card-header">
             <h4 class="card-title">Simple Datatable</h4>
-            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Add New FinishedProduct</button>
-
-            <div class="text-end mb-3">
-              <a href="/download/excel/customer" class="btn btn-success">
-                <i class="bi bi-download"></i> 완제품 엑셀 다운로드
-              </a>
+            <div class="d-flex justify-content-between flex-wrap align-items-start gap-3 mb-3">
+              <div class="d-flex flex-column gap-2">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                  <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#registerModal">
+                    제품 등록
+                  </button>
+                  <a href="/download/sample/finishedProduct" class="btn btn-outline-secondary">
+                    <i class="bi bi-download"></i> 완제품 CSV 샘플 다운로드
+                  </a>
+                </div>
+                <form id="csvUploadForm"
+                      method="post"
+                      action="/upload/csv/finishedProduct"
+                      enctype="multipart/form-data"
+                      class="d-flex align-items-center gap-2 flex-wrap">
+                  <input type="file" name="file" accept=".csv" required class="form-control w-auto">
+                  <button type="submit" class="btn btn-outline-primary">
+                    <i class="bi bi-upload"></i> 와제품 CSV 업로드
+                  </button>
+                </form>
+              </div>
+              <div class="d-flex flex-column gap-2 align-items-end">
+                <div class="d-flex gap-2 flex-wrap">
+                  <a href="/download/excel/finishedProduct" class="btn btn-outline-success">
+                    <i class="bi bi-download"></i> 전체 엑셀 다운로드
+                  </a>
+                  <a href="/download/csv/finishedProduct" class="btn btn-outline-secondary">
+                    <i class="bi bi-download"></i> 전체 CSV 다운로드
+                  </a>
+                </div>
+                <div class="d-flex gap-2 flex-wrap">
+                  <button class="btn btn-outline-success" id="downloadVisibleExcel">
+                    <i class="bi bi-download"></i> 검색결과 엑셀 다운로드
+                  </button>
+                  <button class="btn btn-outline-secondary" id="downloadVisibleCsv">
+                    <i class="bi bi-download"></i> 검색결과 CSV 다운로드
+                  </button>
+                </div>
+              </div>
             </div>
-
           </div>
           <div class="card-body">
             <table class="table table-striped" id="table1">
@@ -65,7 +97,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr th:each="finishedProducts : ${productList}">
+              <tr th:each="finishedProducts : ${finishedProducts}">
                 <input type="hidden" value="${finishedProducts.productId}">
                 <td th:text="${finishedProducts.productCode}"></td>
                 <td th:text="${finishedProducts.productName}"></td>

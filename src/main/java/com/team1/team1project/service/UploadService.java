@@ -1,11 +1,15 @@
 package com.team1.team1project.service;
 
 import com.team1.team1project.dto.CustomerDTO;
+import com.team1.team1project.dto.FinishedProductsDTO;
+import com.team1.team1project.service.codeManagement.CodeManagementService;
 import com.team1.team1project.service.customer.CustomerService;
 import com.team1.team1project.service.customer.CustomerOrdersService;
 import com.team1.team1project.dto.CustomerOrdersDTO;
 import com.team1.team1project.dto.RawMaterialSupplierDTO;
+import com.team1.team1project.service.finishedProduct.FinishedProductsService;
 import com.team1.team1project.service.rawMaterial.RawMaterialSupplierService;
+import com.team1.team1project.service.rawMaterial.RawMaterialsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +20,7 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +29,67 @@ public class UploadService {
 	private final CustomerService customerService;
 	private final RawMaterialSupplierService rawMaterialSupplierService;
 	private final CustomerOrdersService customerOrdersService;
+
+	private final FinishedProductsService finishedProductsService;
+	private final RawMaterialsService rawMaterialsService;
+	private final CodeManagementService codeManagementService;
+
+	public void processFinishedProductsCsv(MultipartFile file) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+			String header = reader.readLine();
+			if (header == null) throw new RuntimeException("CSV 파일이 비어 있습니다.");
+			int columnCount = header.split("\\|").length;
+
+			if (columnCount != 6) {
+				throw new RuntimeException("CSV 형식 오류: 열 수가 6개여야 합니다. 현재: " + columnCount);
+			}
+
+			String line;
+			while ((line = reader.readLine()) != null) {
+				if (line.trim().isEmpty()) continue;
+				String[] fields = line.split("\\|");
+
+				if (fields.length != columnCount) {
+					throw new RuntimeException("CSV 형식 오류: [" + line + "] 필드 수가 예상과 다릅니다.");
+				}
+
+				// 데이터 파싱
+				String code = fields[0].trim();
+				String name = fields[1].trim();
+				String category = fields[2].trim();
+				String unit = fields[3].trim();
+				String status = fields[4].trim();
+				String description = fields[5].trim();
+
+				// 제품 코드로 기존 제품 찾기
+				Optional<FinishedProductsDTO> existingProduct = finishedProductsService.findByProductCode(code);
+
+				if (existingProduct.isPresent()) {
+					// 기존 제품 업데이트
+					FinishedProductsDTO productDTO = existingProduct.get();
+					productDTO.setProductName(name);
+					productDTO.setCategory(category);
+					productDTO.setUnit(unit);
+					productDTO.setStatus(status);
+					productDTO.setDescription(description);
+					finishedProductsService.modifyOne(productDTO);
+				} else {
+					// 새 제품 생성
+					FinishedProductsDTO newProductDTO = new FinishedProductsDTO();
+					newProductDTO.setProductCode(code);
+					newProductDTO.setProductName(name);
+					newProductDTO.setCategory(category);
+					newProductDTO.setUnit(unit);
+					newProductDTO.setStatus(status);
+					newProductDTO.setDescription(description);
+					finishedProductsService.registers(newProductDTO);
+				}
+			}
+		} catch (Exception e) {
+			throw new RuntimeException("제품 CSV 처리 중 오류 발생: " + e.getMessage(), e);
+		}
+	}
+
 
 	public void processCustomerCsv(MultipartFile file) {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {

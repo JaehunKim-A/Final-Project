@@ -1,11 +1,19 @@
 package com.team1.team1project.service;
 
+import com.team1.team1project.domain.CodeManagement;
+import com.team1.team1project.domain.FinishedProducts;
+import com.team1.team1project.domain.RawMaterial;
+import com.team1.team1project.domain.RawMaterials;
 import com.team1.team1project.dto.CustomerDTO;
+import com.team1.team1project.dto.FinishedProductsDTO;
+import com.team1.team1project.service.codeManagement.CodeManagementService;
 import com.team1.team1project.service.customer.CustomerOrdersService;
 import com.team1.team1project.service.customer.CustomerService;
 import com.team1.team1project.dto.CustomerOrdersDTO;
 import com.team1.team1project.dto.RawMaterialSupplierDTO;
+import com.team1.team1project.service.finishedProduct.FinishedProductsService;
 import com.team1.team1project.service.rawMaterial.RawMaterialSupplierService;
+import com.team1.team1project.service.rawMaterial.RawMaterialsService;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -22,6 +30,10 @@ public class DownloadService {
 	private final RawMaterialSupplierService rawMaterialSupplierService;
 	private final CustomerOrdersService customerOrdersService;
 
+	private final RawMaterialsService rawMaterialsService;
+	private final FinishedProductsService finishedProductsService;
+	private final CodeManagementService codeManagementService;
+
 	public Workbook createExcelByType(String type) {
 		switch (type) {
 			case "customer":
@@ -30,9 +42,85 @@ public class DownloadService {
 				return createSupplierWorkbook();
 			case "customerOrders":
 				return createOrdersWorkbook();
+			case "finishedProduct":
+				return createFinishedProductWorkbook();
+			case "rawMaterial":
+				return createRawMaterialWorkbook();
+			case "codeManagement":
+				return createCodeManagementWorkbook();
 			default:
 				throw new IllegalArgumentException("Unknown type: " + type);
 		}
+	}
+
+	private Workbook createFinishedProductWorkbook(){
+		List<FinishedProducts> finishedProducts = finishedProductsService.getAllProducts();
+		String[] headers = {"Code", "Name", "Category", "Unit", "Status", "Description"};
+
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("finishedProducts");
+		createHeaderRow(sheet, headers);
+
+		int rowNum = 1;
+		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		for (FinishedProducts f : finishedProducts) {
+			Row row = sheet.createRow(rowNum++);
+			row.createCell(0).setCellValue(f.getProductCode());
+			row.createCell(1).setCellValue(f.getProductName());
+			row.createCell(2).setCellValue(f.getCategory());
+			row.createCell(3).setCellValue(f.getUnit());
+			row.createCell(4).setCellValue(f.getStatus());
+			row.createCell(5).setCellValue(f.getDescription());
+		}
+
+		autoSizeColumns(sheet, headers.length);
+		return workbook;
+	}
+
+	private Workbook createRawMaterialWorkbook(){
+		List<RawMaterials> rawMaterials = rawMaterialsService.getAllMaterials();
+		String[] headers = {"Code", "Name", "Category", "Unit", "Description"};
+
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("rawMaterials");
+		createHeaderRow(sheet, headers);
+
+		int rowNum = 1;
+		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		for (RawMaterials r : rawMaterials) {
+			Row row = sheet.createRow(rowNum++);
+			row.createCell(0).setCellValue(r.getMaterialCode());
+			row.createCell(1).setCellValue(r.getMaterialName());
+			row.createCell(2).setCellValue(r.getCategory());
+			row.createCell(3).setCellValue(r.getUnit());
+			row.createCell(4).setCellValue(r.getDescription());
+		}
+
+		autoSizeColumns(sheet, headers.length);
+		return workbook;
+	}
+
+	private Workbook createCodeManagementWorkbook(){
+		List<CodeManagement> codeManagements = codeManagementService.getAllCode();
+		String[] headers = {"Code", "Name", "Type", "Category", "Description"};
+
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("codeManagements");
+		createHeaderRow(sheet, headers);
+
+		int rowNum = 1;
+		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		for (CodeManagement c : codeManagements) {
+			Row row = sheet.createRow(rowNum++);
+			row.createCell(0).setCellValue(c.getCodeValue());
+			row.createCell(1).setCellValue(c.getCodeName());
+			row.createCell(2).setCellValue(c.getCategory());
+			row.createCell(3).setCellValue(c.getCategory());
+			row.createCell(4).setCellValue(c.getDescription());
+		}
+
+		autoSizeColumns(sheet, headers.length);
+		return workbook;
 	}
 
 	private Workbook createCustomerWorkbook() {
@@ -122,9 +210,57 @@ public class DownloadService {
 				return createSupplierCsv();
 			case "customerOrders":
 				return createOrdersCsv();
+			case "finishedProduct":
+				return createFinishedProductCsv();
+			case "rawMaterial":
+				return createRawMaterialCsv();
+			case "codeManagement":
+				return createCodeManagementCsv();
 			default:
 				throw new IllegalArgumentException("Unknown type: " + type);
 		}
+	}
+
+	private String createFinishedProductCsv() {
+		List<FinishedProducts> finishedProducts = finishedProductsService.getAllProducts();
+		StringBuilder sb = new StringBuilder();
+		sb.append("CODE|NAME|CATEGORY|UNIT|STATUS|DESCRIPTION\n");
+		for (FinishedProducts f : finishedProducts) {
+			sb.append(f.getProductCode()).append("|")
+					.append(f.getProductName()).append("|")
+					.append(f.getCategory()).append("|")
+					.append(f.getUnit()).append("|")
+					.append(f.getDescription()).append("\n");
+		}
+		return sb.toString();
+	}
+
+	private String createRawMaterialCsv() {
+		List<RawMaterials> rawMaterials = rawMaterialsService.getAllMaterials();
+		StringBuilder sb = new StringBuilder();
+		sb.append("CODE|NAME|CATEGORY|UNIT|DESCRIPTION\n");
+		for (RawMaterials r : rawMaterials) {
+			sb.append(r.getMaterialCode()).append("|")
+					.append(r.getMaterialName()).append("|")
+					.append(r.getCategory()).append("|")
+					.append(r.getUnit()).append("|")
+					.append(r.getDescription()).append("\n");
+		}
+		return sb.toString();
+	}
+
+	private String createCodeManagementCsv() {
+		List<CodeManagement> codeManagements = codeManagementService.getAllCode();
+		StringBuilder sb = new StringBuilder();
+		sb.append("CODE|NAME|TYPE|CATEGORY|DESCRIPTION\n");
+		for (CodeManagement c : codeManagements) {
+			sb.append(c.getCodeValue()).append("|")
+					.append(c.getCodeName()).append("|")
+					.append(c.getCategory()).append("|")
+					.append(c.getCodeType()).append("|")
+					.append(c.getDescription()).append("\n");
+		}
+		return sb.toString();
 	}
 
 	private String createCustomerCsv() {

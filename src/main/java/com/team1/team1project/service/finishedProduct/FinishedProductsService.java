@@ -4,6 +4,7 @@ import com.team1.team1project.domain.FinishedProducts;
 import com.team1.team1project.dto.FinishedProductsDTO;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FinishedProductsService {
     // 등록 여러개 가능하도록
@@ -17,4 +18,5 @@ public interface FinishedProductsService {
 
     List<FinishedProducts> getAllProducts();
 
+    Optional<FinishedProductsDTO> findByProductCode(String productCode);
 }
