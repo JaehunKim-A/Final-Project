@@ -103,11 +103,16 @@
                 <div class="mb-3">
                   <label for="codeValue" class="form-label">Code</label>
                   <input type="text" class="form-control" id="codeValue" name="codeValue" readonly>
-                  <button type="button" class="btn btn-primary" onclick="openProductPopup(this);">Search</button>
+                  <button type="button" class="btn btn-primary" onclick="openProductPopup(this);">(P)Search</button>
+                  <button type="button" class="btn btn-secondary" onclick="openMaterialPopup(this);">(M)Search</button>
                 </div>
                 <div class="mb-3">
                   <label for="codeName" class="form-label">Name</label>
                   <input type="text" class="form-control" id="codeName" name="codeName" required>
+                </div>
+                <div class="mb-3">
+                  <label for="codeType" class="form-label">Type</label>
+                  <input type="text" class="form-control" id="codeType" name="codeType" required>
                 </div>
                 <div class="mb-3">
                   <label for="category" class="form-label">Category</label>
@@ -116,10 +121,6 @@
                 <div class="mb-3">
                   <label for="description" class="form-label">Description</label>
                   <input type="text" class="form-control" id="description" name="description" required>
-                </div>
-                <div class="mb-3">
-                  <label for="codeType" class="form-label">Type</label>
-                  <input type="text" class="form-control" id="codeType" name="codeType" required>
                 </div>
               </div>
               <div class="modal-footer">
@@ -208,15 +209,30 @@
 <script src="/assets/static/js/pages/simple-datatables.js"></script>
 <script>
   function openProductPopup(button) {
-    let popup = open("/finishedProduct/searchPopup", "Product Search", "width=600,height=400");
+    let popup = open("/finishedProduct/searchPopup", "Product Search", "width=650,height=400");
 
     // 팝업에서 데이터를 받아오는 이벤트 처리
     addEventListener("message", function(event) {
         if (event.origin !== location.origin) return;
 
         const productData = event.data;
-        if (productData && productData.productCode) {
-            document.getElementById('codeValue').value = productData.productCode;
+        if (productData && productData.unit) {
+            document.getElementById('codeValue').value = productData.unit;
+        }
+    }, {
+        once: true
+    });
+}
+  function openMaterialPopup(button) {
+    let popup = open("/rawMaterial/searchPopup", "Material Search", "width=650,height=400");
+
+    // 팝업에서 데이터를 받아오는 이벤트 처리
+    addEventListener("message", function(event) {
+        if (event.origin !== location.origin) return;
+
+        const materialData = event.data;
+        if (materialData && materialData.unit) {
+            document.getElementById('codeValue').value = materialData.unit;
         }
     }, {
         once: true

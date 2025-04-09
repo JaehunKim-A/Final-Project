@@ -54,8 +54,10 @@ public class FinishedProductsController {
 
     @GetMapping("/searchPopup")
     public String showProductSearchPopup(Model model) {
-        List<FinishedProducts> productList = finishedProductsService.getAllProducts();
-        model.addAttribute("productList", productList);
+        List<FinishedProducts> finishedProducts = finishedProductsService.getAllProducts();
+        List<String> columns = List.of("productCode", "productName", "unit", "category", "status", "description");
+        model.addAttribute("columns", columns);
+        model.addAttribute("finishedProducts", finishedProducts);
         return "/finishedProduct/searchPopup";
     }
 }

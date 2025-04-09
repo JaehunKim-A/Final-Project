@@ -20,16 +20,15 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="finishedProducts : ${finishedProducts}">
-              <input type="hidden" value="${finishedProducts.productId}">
-              <td th:text="${finishedProducts.productCode}"></td>
-              <td th:text="${finishedProducts.productName}"></td>
-              <td th:text="${finishedProducts.category}"></td>
-              <td th:text="${finishedProducts.unit}"></td>
-              <td th:text="${finishedProducts.status}"></td>
-              <td th:text="${finishedProducts.description}"></td>
+            <tr th:each="rawMaterials : ${rawMaterials}">
+              <input type="hidden" value="${rawMaterials.materialId}">
+              <td th:text="${rawMaterials.materialCode}"></td>
+              <td th:text="${rawMaterials.materialName}"></td>
+              <td th:text="${rawMaterials.category}"></td>
+              <td th:text="${rawMaterials.unit}"></td>
+              <td th:text="${rawMaterials.description}"></td>
               <td>
-                <button type="button" th:attr="onclick='selectProduct(\'' + ${finishedProducts.unit} + '\')'">
+                <button type="button" th:attr="onclick='selectMaterial(\'' + ${rawMaterials.unit} + '\')'">
                   Select
                 </button>
               </td>
@@ -46,7 +45,7 @@
 
 </div>
 <script layout:fragment="script" th:inline="javascript">
-  function selectProduct(unit) {
+  function selectMaterial(unit) {
             // 부모 창에 데이터 전달
             opener.postMessage({unit: unit}, opener.location.origin);
             close(); // 팝업 닫기

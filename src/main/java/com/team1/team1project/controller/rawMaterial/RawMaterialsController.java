@@ -1,5 +1,6 @@
 package com.team1.team1project.controller.rawMaterial;
 
+import com.team1.team1project.domain.FinishedProducts;
 import com.team1.team1project.domain.RawMaterials;
 import com.team1.team1project.dto.RawMaterialsDTO;
 import com.team1.team1project.service.rawMaterial.RawMaterialsService;
@@ -57,5 +58,13 @@ public class RawMaterialsController {
     public String remove(@PathVariable("materialId") Long materialId){
         rawMaterialsService.removeOne(materialId);
         return "redirect:/rawMaterial/rawMaterial";
+    }
+    @GetMapping("/searchPopup")
+    public String showMaterialSearchPopup(Model model) {
+        List<RawMaterials> rawMaterials = rawMaterialsService.getAllMaterials();
+        List<String> columns = List.of("materialCode", "materialName", "category", "unit", "description");
+        model.addAttribute("columns", columns);
+        model.addAttribute("rawMaterials", rawMaterials);
+        return "/rawMaterial/searchPopup";
     }
 }

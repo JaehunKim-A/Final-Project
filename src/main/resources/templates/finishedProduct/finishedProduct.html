@@ -65,7 +65,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr th:each="finishedProducts : ${finishedProducts}">
+              <tr th:each="finishedProducts : ${productList}">
                 <input type="hidden" value="${finishedProducts.productId}">
                 <td th:text="${finishedProducts.productCode}"></td>
                 <td th:text="${finishedProducts.productName}"></td>
