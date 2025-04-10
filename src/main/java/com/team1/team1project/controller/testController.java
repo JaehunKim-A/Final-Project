@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class testController {
     @GetMapping("/test")
     public String testPage() {
-        return "dist/index";
+        return "test";
     }
 }
