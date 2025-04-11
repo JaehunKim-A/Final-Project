@@ -1,15 +1,19 @@
 package com.team1.team1project.service.employee;
 
 import com.team1.team1project.domain.Employee;
+import com.team1.team1project.domain.Login;
 import com.team1.team1project.dto.EmployeeDTO;
 import com.team1.team1project.repository.EmployeeRepository;
+import com.team1.team1project.repository.LoginRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,6 +24,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final ModelMapper modelMapper;
     private final EmployeeRepository employeeRepository;
+    private final LoginRepository loginRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * 모든 직원 조회
@@ -47,8 +53,30 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
         Employee employee = modelMapper.map(employeeDTO, Employee .class);
         Employee saved = employeeRepository.save(employee);
+        createLoginAccount(saved);
         return modelMapper.map(saved, EmployeeDTO.class);
     }
+    private void createLoginAccount(Employee employee) {
+        // hire_date를 yyyyMMdd 형식의 문자열로 변환
+        String loginId = employee.getHireDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+        // employeeId를 추가하여 고유성 보장 (동일 입사일에 여러 직원이 있을 경우)
+        loginId = loginId + "_" + employee.getEmployeeId();
+
+        // 기본 비밀번호 설정 및 암호화
+        String defaultPassword = "12345678";
+        String encodedPassword = passwordEncoder.encode(defaultPassword);
+
+        // 로그인 계정 생성 및 저장
+        Login login = Login.builder()
+                .loginId(loginId)
+                .password(encodedPassword)
+                .employee(employee)
+                .build();
+
+        loginRepository.save(login);
+    }
+
 
     @Override
     public EmployeeDTO updateEmployee(int employeeId, EmployeeDTO employeeDTO) {

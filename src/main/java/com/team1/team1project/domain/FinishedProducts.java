@@ -28,16 +28,16 @@ public class FinishedProducts extends BaseEntity {
     private String registeredBy; // 등록자
 
     public void finishedProductsChange(String productCode,
-                                       String description,
+                                       String productName,
                                        String unit,
                                        String category,
-                                       String productName,
-                                       String status){
-        this.status = status;
+                                       String status,
+                                       String description){
         this.productCode = productCode;
         this.productName = productName;
-        this.description = description;
         this.unit = unit;
         this.category = category;
+        this.status = status;
+        this.description = description;
     }
 }

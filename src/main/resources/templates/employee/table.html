@@ -143,6 +143,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <form action="/table/employee/register" method="POST">
+                            <input type="hidden" name="_csrf" th:value="${_csrf.token}">
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label for="employeeName" class="form-label">Employee Name</label>
@@ -200,6 +201,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <form action="/table/employee/edit/{employeeId}" method="POST" id="editEmployeeForm">
+                            <input type="hidden" name="_csrf" th:value="${_csrf.token}">
                             <div class="modal-body">
                                 <input type="hidden" id="editEmployeeId" name="employeeId">
                                 <div class="mb-3">
@@ -261,6 +263,7 @@
                         </div>
                         <div class="modal-footer">
                             <form action="#" method="GET" id="deleteEmployeeForm">
+                                <input type="hidden" name="_csrf" th:value="${_csrf.token}">
                                 <input type="hidden" id="deleteEmployeeId" name="employeeId">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-danger">Delete</button>

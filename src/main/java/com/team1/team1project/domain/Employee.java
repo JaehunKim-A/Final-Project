@@ -21,6 +21,7 @@ public class Employee extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id")
+
     private int employeeId;
 
     @Column(name = "employee_name", nullable = false, length = 255)
@@ -52,6 +53,9 @@ public class Employee extends BaseEntity {
 
     @Column(name = "address", columnDefinition = "TEXT")
     private String address;
+
+    @OneToOne(mappedBy = "employee", fetch = FetchType.EAGER)
+    private Login login;
 
 }
 
