@@ -50,11 +50,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 정적 리소스 접근 허용
                 .antMatchers("/assets/**", "/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
                 .antMatchers("/login", "/signup").permitAll()
-                .antMatchers("/**").authenticated()
                 // 팀장만 접근할 수 있는 경로 설정
                 .antMatchers(HttpMethod.POST, "/**").hasRole("TEAMLEADER") // 모든 POST 요청을 팀장만 가능
                 .antMatchers(HttpMethod.PUT, "/**").hasRole("TEAMLEADER") // 모든 PUT 요청을 팀장만 가능
                 .antMatchers(HttpMethod.DELETE, "/**").hasRole("TEAMLEADER") // 모든 DELETE 요청을 팀장만 가능
+                .antMatchers(HttpMethod.GET, "/**/**/delete/**").hasRole("TEAMLEADER")
                 // 나머지 모든 요청은 인증된 사용자만 접근 가능
                 .anyRequest().authenticated()
                 .and()

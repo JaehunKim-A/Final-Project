@@ -1,5 +1,6 @@
 package com.team1.team1project.controller;
 
+import com.team1.team1project.domain.Employee;
 import com.team1.team1project.security.CustomUserDetails;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ public class LoginController {
     @GetMapping("/dashboard")
     public String dashboard(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
         if (userDetails != null) {
+
             // 로그인한 사용자의 employeeName을 모델에 추가
             model.addAttribute("employeeName", userDetails.getEmployeeName());
             model.addAttribute("employeeId", userDetails.getEmployeeId());

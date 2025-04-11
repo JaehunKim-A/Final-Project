@@ -80,4 +80,9 @@ public class CustomUserDetails implements UserDetails {
     public String getPosition() {
         return login.getEmployee().getPosition();
     }
+
+    //
+    public String getDepartment() {
+        return login.getEmployee().getDepartment();
+    }
 }

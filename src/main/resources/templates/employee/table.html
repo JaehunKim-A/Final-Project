@@ -263,7 +263,6 @@
                         </div>
                         <div class="modal-footer">
                             <form action="#" method="GET" id="deleteEmployeeForm">
-                                <input type="hidden" name="_csrf" th:value="${_csrf.token}">
                                 <input type="hidden" id="deleteEmployeeId" name="employeeId">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-danger">Delete</button>
