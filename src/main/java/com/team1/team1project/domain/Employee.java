@@ -54,7 +54,7 @@ public class Employee extends BaseEntity {
     @Column(name = "address", columnDefinition = "TEXT")
     private String address;
 
-    @OneToOne(mappedBy = "employee", fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Login login;
 
 }
