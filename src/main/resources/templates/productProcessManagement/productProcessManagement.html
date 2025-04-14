@@ -4,7 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DataTable - Mazer Admin Dashboard</title>
+
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <title>ProducProcessManagement</title>
 
     <link rel="shortcut icon" href="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/1999/svg'%20viewBox='0%200%2033%2034'%20fill-rule='evenodd'%20stroke-linejoin='round'%20stroke-miterlimit='2'%20xmlns:v='https://vecta.io/nano'%3e%3cpath%20d='M3%2027.472c0%204.409%206.18%205.552%2013.5%205.552%207.281%200%2013.5-1.103%2013.5-5.513s-6.179-5.552-13.5-5.552c-7.281%200-13.5%201.103-13.5%205.513z'%20fill='%23435ebe'%20fill-rule='nonzero'/%3e%3ccircle%20cx='16.5'%20cy='8.8'%20r='8.8'%20fill='%2341bbdd'/%3e%3c/svg%3e" type="image/x-icon">
     <link rel="stylesheet" href="/assets/extensions/simple-datatables/style.css">
@@ -24,21 +28,33 @@
 <body>
 
 <div id="app">
+    <!-- sidebar-->
     <div id="sidebar" th:replace="~{layout/layout :: sidebar}"></div>
+    <!-- sidebar end -->
 
+    <!-- main -->
     <div id="main" class="layout-navbar navbar-fixed">
+        <!-- header -->
         <header class="mb-3" th:replace="~{layout/layout :: header}"></header>
 
+        <!-- tab container -->
         <div class="tab-container">
             <button class="btn btn-primary tab-button active" onclick="openTab('page1', this)">Machine Info</button>
             <button class="btn btn-primary tab-button" onclick="openTab('page2', this)">Status Chart</button>
             <button class="btn btn-primary tab-button" onclick="openTab('page3', this)">History</button>
         </div>
+        <!-- tab container end -->
 
+        <!-- page1 -->
         <div id="page1" class="tab-content active">
             <div class="row">
+                <!-- left field -->
                 <div class="col-md-8">
+                    <!-- Line Choice -->
                     <div id="machine-gui-information-data"></div>
+                    <!-- Line Choice end -->
+
+                    <!-- add machine part -->
                     <div class="row">
                         <div class="row">
                             <select class="form-select" id="lineSelector">
@@ -50,7 +66,7 @@
                                     data-bs-target="#add-machine-modal"
                                     style="margin-top:3px;">Add Machine</button>
 
-                            <!-- add modal -->
+                            <!-- add machine modal -->
                             <div class="modal fade text-left" id="add-machine-modal" tabindex="-1" role="dialog"
                                  aria-labelledby="myModalLabel19" aria-hidden="true" data-bs-backdrop="false">
                                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm"
@@ -94,10 +110,14 @@
                             </div>
                         </div>
                     </div>
+                    <!-- add machine part end -->
                     <hr>
+                    <!-- canvas GUI part -->
                     <div class="row">
                         <canvas id="factoryCanvas"></canvas>
                     </div>
+                    <!-- canvas GUI part end -->
+
                     <!-- modify modal -->
                     <div class="modal fade" id="modifyMachineModal" tabindex="-1" role="dialog" aria-labelledby="modifyMachineModalLabel">
                         <div class="modal-dialog" role="document">
@@ -143,9 +163,34 @@
                             </div>
                         </div>
                     </div>
+                    <!-- modify modal end -->
                 </div>
+                <!-- left field end -->
+
+                <!-- right field -->
                 <div class="col-md-4">
-                    <div class="row"></div>
+                    <!-- employee info -->
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-body py-4 px-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar-xl">
+                                        <img src="assets/compiled/jpg/1.jpg" alt="Profile Image">
+                                    </div>
+                                    <div class="ms-3 name">
+                                        <h5 class="font-bold" th:text="${employeeName != null ? employeeName : 'Guest'}">John Duck</h5>
+                                        <h6 class="text-muted mb-0" th:text="${department != null ? department : 'Department'}">@johnducky</h6>
+                                        <p class="text-muted mb-0" th:text="${position != null ? position : 'Position'}">Position</p>
+                                        <p class="text-muted mb-0" th:text="${'ID: ' + (employeeId != null ? employeeId : 'N/A')}">ID: N/A</p>
+                                        <span class="badge bg-success" th:if="${isTeamLeader}">Team Leader</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- employee info end -->
+
+                    <!-- Production Target Ratio Chart -->
                     <div class="row">
                         <div class="col-12 mb-3">
                             <div class="card">
@@ -159,10 +204,14 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Production Target Ratio Chart end -->
                 </div>
+                <!-- right field end -->
             </div>
         </div>
+        <!-- page1 end -->
 
+        <!-- page2 -->
         <div id="page2" class="tab-content">
             <div class="row">
             </div>
@@ -195,7 +244,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <div style="display:flex; gap: 5px; justify-content: space-between">
-                                        <h4>P</h4>
+                                        <h4>Machine Raw Material Stock</h4>
                                         <div class="card-collapse-btn">
                                             <svg class="bi" width="1em" height="1em" fill="currentColor">
                                                 <use xlink:href="/assets/static/images/bootstrap-icons.svg#dash-square"></use>
@@ -270,7 +319,9 @@
                 </div>
             </div>
         </div>
+        <!-- page2 end -->
 
+        <!-- page3 -->
         <div id="page3" class="tab-content">
             <div class="page-heading">
                 <h3>Machine History</h3>
@@ -342,13 +393,19 @@
                 </section>
             </div>
         </div>
+        <!-- page3 end -->
 
+        <!-- footer -->
         <footer>
             <div th:replace="~{layout/layout :: footer}"></div>
         </footer>
+        <!-- footer end -->
     </div>
+    <!-- main end -->
 
+    <!-- underbar -->
     <div id="underbar" th:replace="~{layout/layout :: underbar}"></div>
+    <!-- underbar end -->
 </div>
 
 <script src="/assets/static/js/initTheme.js"></script>

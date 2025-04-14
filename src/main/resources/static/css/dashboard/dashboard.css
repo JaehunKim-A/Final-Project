@@ -1,0 +1,30 @@
+.calendar-container {
+  width: 100%;
+  max-width: 350px; /* 필요에 따라 조정 */
+  margin: 0 auto;
+}
+
+.flatpickr-calendar.inline {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.full-width-calendar {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.flatpickr-calendar.inline .flatpickr-days {
+  width: 100% !important;
+}
+
+.flatpickr-calendar.inline .dayContainer {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+}
+
+.flatpickr-day {
+  max-width: none !important;
+  flex-basis: 14.2857% !important; /* 7일로 나눈 비율 */
+}

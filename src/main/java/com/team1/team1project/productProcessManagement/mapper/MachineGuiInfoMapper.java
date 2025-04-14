@@ -1,7 +1,7 @@
 package com.team1.team1project.productProcessManagement.mapper;
 
 import com.team1.team1project.domain.MachineGuiInfo;
-import com.team1.team1project.productProcessManagement.dto.MachineGuiInformationsDTO;
+import com.team1.team1project.dto.MachineGuiInformationsDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

@@ -1,7 +1,6 @@
 package com.team1.team1project.productProcessManagement.mapper;
 
 import com.team1.team1project.domain.MachineHistory;
-import com.team1.team1project.dto.MachineHistoryDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.data.repository.query.Param;
 

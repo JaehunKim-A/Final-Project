@@ -10,15 +10,16 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Builder
-public class CodeManagement {
+public class CodeManagement extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "code_id")
     private Long codeId; // 코드 id
     private String codeValue;  // 예 RM1001
     private String codeName; // 코드 이름
     @Column(name = "description")
-    private String codeDescription; // 코드 기타사항
+    private String description; // 코드 기타사항
     @Column(name = "type")
     private String codeType; // 코드 타입 예) 원자재, 완제품
     private String category; // 코드 구분
@@ -27,14 +28,14 @@ public class CodeManagement {
 
     public void codeChange(String codeValue,
                            String codeName,
-                           String codeDescription,
+                           String codeType,
                            String category,
-                           String codeType)
+                           String description)
     {
         this.codeValue = codeValue;
         this.codeName = codeName;
-        this.codeDescription = codeDescription;
-        this.category = category;
         this.codeType = codeType;
+        this.category = category;
+        this.description = description;
     }
 }

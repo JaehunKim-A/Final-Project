@@ -10,7 +10,7 @@
             machine_info
     </select>
 
-    <select id="selectProductionTargetRatio" resultType="com.team1.team1project.productProcessManagement.dto.ProcessBarChartDataDTO">
+    <select id="selectProductionTargetRatio" resultType="com.team1.team1project.dto.ProcessBarChartDataDTO">
         SELECT DISTINCT
             a.production_target AS productionTarget, a.quantity, b.product_name AS productName, SUBSTRING_INDEX(c.machine_id, '_', 1) AS lineCode
         FROM

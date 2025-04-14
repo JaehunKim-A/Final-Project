@@ -2,11 +2,7 @@ package com.team1.team1project.productProcessManagement.service;
 
 import com.team1.team1project.domain.MachineGuiInfo;
 import com.team1.team1project.domain.MachineHistory;
-import com.team1.team1project.dto.MachineGuiInfoDTO;
-import com.team1.team1project.dto.MachineHistoryDTO;
-import com.team1.team1project.dto.PageRequestDTO;
-import com.team1.team1project.dto.PageResponseDTO;
-import com.team1.team1project.productProcessManagement.dto.*;
+import com.team1.team1project.dto.*;
 import com.team1.team1project.productProcessManagement.mapper.*;
 import com.team1.team1project.productProcessManagement.repository.MachineGuiInfoRepository;
 import com.team1.team1project.productProcessManagement.repository.MachineHistoryRepository;

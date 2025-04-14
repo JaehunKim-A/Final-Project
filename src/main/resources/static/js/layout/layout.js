@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get references to elements
     const chatButton = document.querySelector('.chat-bot');
     const chatModal = document.getElementById('chatModal');
+    const modalDialog = chatModal.querySelector('.modal-dialog');
 
     // Add click event to the chat button
     chatButton.addEventListener('click', function(e) {
@@ -12,19 +13,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const modal = new bootstrap.Modal(chatModal);
         modal.show();
 
-        // Ensure modal has the correct positioning
+        // Initial modal position with no transform
         fixModalPosition();
     });
 
     // Add event listener for when modal is shown
     chatModal.addEventListener('shown.bs.modal', function() {
         fixModalPosition();
+
+        // jQuery를 사용할 수 있다면 드래그 가능하게 설정
+        if (typeof jQuery !== 'undefined' && typeof jQuery.ui !== 'undefined') {
+            initDraggable();
+        } else {
+            // jQuery UI가 없는 경우 기본 JavaScript로 드래그 기능 구현
+            initVanillaDrag();
+        }
     });
 
     // Function to fix modal position
     function fixModalPosition() {
-        const modalDialog = chatModal.querySelector('.modal-dialog');
-
         // Apply fixed positioning
         modalDialog.style.position = 'fixed';
         modalDialog.style.bottom = '90px';
@@ -34,6 +41,71 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Force modal to be visible
         chatModal.style.paddingRight = '0 !important';
+    }
+
+    // jQuery UI를 사용한 드래그 기능 초기화
+    function initDraggable() {
+        $(modalDialog).draggable({
+            handle: '.card-header', // 카드 헤더를 드래그 핸들로 사용
+            containment: 'window',  // 윈도우 내에서만 드래그 가능하도록 제한
+            scroll: false
+        });
+    }
+
+    // 바닐라 JavaScript로 드래그 기능 구현
+    function initVanillaDrag() {
+        const header = chatModal.querySelector('.card-header');
+
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        // 드래그 시작
+        header.addEventListener('mousedown', function(e) {
+            isDragging = true;
+
+            // 클릭한 위치와 모달 위치의 차이 계산
+            const rect = modalDialog.getBoundingClientRect();
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+
+            // 사용자 선택 방지
+            modalDialog.style.userSelect = 'none';
+        });
+
+        // 드래그 중
+        document.addEventListener('mousemove', function(e) {
+            if (!isDragging) return;
+
+            // 새 위치 계산 및 설정
+            const newX = e.clientX - offsetX;
+            const newY = e.clientY - offsetY;
+
+            // 윈도우 경계 확인
+            const maxX = window.innerWidth - modalDialog.offsetWidth;
+            const maxY = window.innerHeight - modalDialog.offsetHeight;
+
+            // 경계 내에서만 이동 허용
+            const constX = Math.max(0, Math.min(newX, maxX));
+            const constY = Math.max(0, Math.min(newY, maxY));
+
+            modalDialog.style.left = constX + 'px';
+            modalDialog.style.top = constY + 'px';
+            modalDialog.style.right = 'auto';
+            modalDialog.style.bottom = 'auto';
+
+            e.preventDefault();
+        });
+
+        // 드래그 종료
+        document.addEventListener('mouseup', function() {
+            isDragging = false;
+            modalDialog.style.userSelect = '';
+        });
+
+        // 창 밖으로 나가는 경우 드래그 종료
+        document.addEventListener('mouseleave', function() {
+            isDragging = false;
+        });
     }
 
     // Fix issue with modal backdrop
@@ -96,7 +168,7 @@ async function getGeminiResponse(userMessage) {
 
         // API 요청용 메시지 준비
         let fullPrompt = INITIAL_PROMPT + "\n\n";
-        
+
         // 이전 대화 내용을 포함 (최대 5개 메시지)
         const recentMessages = chatHistory.slice(-5);
         for (const msg of recentMessages) {
@@ -132,13 +204,13 @@ async function getGeminiResponse(userMessage) {
 
         // 응답 데이터 파싱
         const responseData = await response.json();
-        
+
         // 응답 텍스트 추출
         const responseText = responseData.candidates[0].content.parts[0].text.trim();
-        
+
         // AI 응답을 채팅 기록에 추가
         chatHistory.push({ role: "assistant", content: responseText });
-        
+
         return responseText;
     } catch (error) {
         console.error("Gemini 응답 오류:", error);
@@ -150,7 +222,7 @@ async function getGeminiResponse(userMessage) {
 document.addEventListener('DOMContentLoaded', function() {
     // 채팅 입력란과 메시지 전송 이벤트 설정
     const chatInput = document.querySelector('.message-form input');
-    
+
     // 기존 전송 버튼 찾기 (HTML에 이미 존재함)
     const sendButton = document.querySelector('.send-button');
 
@@ -216,22 +288,3 @@ document.addEventListener('DOMContentLoaded', function() {
         chatInput.focus();
     });
 });
-
-// 추가 CSS 스타일
-const style = document.createElement('style');
-style.textContent = `
-    .typing-indicator {
-        color: #888;
-        font-style: italic;
-    }
-
-    .send-button {
-        cursor: pointer;
-    }
-
-    .chat-box-card .card-body {
-        overflow-y: auto;
-        max-height: 300px;
-    }
-`;
-document.head.appendChild(style);

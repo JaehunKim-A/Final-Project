@@ -3,6 +3,8 @@ package com.team1.team1project.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -27,15 +29,15 @@ public class RawMaterials extends BaseEntity {
 
 
     //수정할 사항 * 원자재 ID 랑 코드 ID 는 변경 불가하게 하고 설명, 단위만 변경 가능하게
-    public void rawMaterialsChange(String description,
-                                   String unit,
-                                   String materialCode,
+    public void rawMaterialsChange(String materialCode,
                                    String materialName,
-                                   String category) {
-        this.category = category;
+                                   String category,
+                                   String unit,
+                                   String description) {
         this.materialName = materialName;
         this.materialCode = materialCode;
-        this.description = description;
+        this.category = category;
         this.unit = unit;
+        this.description = description;
     }
 }

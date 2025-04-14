@@ -1,6 +1,6 @@
 package com.team1.team1project.productProcessManagement.mapper;
 
-import com.team1.team1project.productProcessManagement.dto.FormattedMachineRawMaterialConsumeDTO;
+import com.team1.team1project.dto.FormattedMachineRawMaterialConsumeDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

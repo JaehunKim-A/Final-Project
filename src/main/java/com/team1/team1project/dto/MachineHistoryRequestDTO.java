@@ -1,4 +1,4 @@
-package com.team1.team1project.productProcessManagement.dto;
+package com.team1.team1project.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

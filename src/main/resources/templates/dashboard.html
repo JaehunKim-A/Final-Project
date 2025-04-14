@@ -18,6 +18,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@0.24.0/dist/index.min.js"></script>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="/css/dashboard/dashboard.css">
+
     <link rel="stylesheet" href="/css/layout/layout.css">
 </head>
 
@@ -30,6 +34,73 @@
         <header class="mb-3" th:replace="~{layout/layout :: header}"></header>
 
         <!--    Main Content        -->
+        <div class="row">
+            <div class="col-md-12" style="display:flex;">
+                <div class="col-md-8">
+                    <div class="row"></div>
+                    <div class="row" stlye="">
+                        <!--  달력  -->
+                        <div class="col-md-6">
+                            <div class="calendar-container">
+                               <input type="text" class="form-control flatpickr-calendar" placeholder="Select date.." readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row"></div>
+                            <div class="row"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-body py-4 px-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar-xl">
+                                        <img src="assets/compiled/jpg/1.jpg" alt="Face 1">
+                                    </div>
+                                    <div class="ms-3 name">
+                                        <h5 class="font-bold">John Duck</h5>
+                                        <h6 class="text-muted mb-0">@johnducky</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="card-content pb-4">
+                            <div class="recent-message d-flex px-4 py-3">
+                                <div class="avatar avatar-lg">
+                                    <img src="assets/compiled/jpg/4.jpg">
+                                </div>
+                                <div class="name ms-4">
+                                    <h5 class="mb-1">Hank Schrader</h5>
+                                    <h6 class="text-muted mb-0">@johnducky</h6>
+                                </div>
+                            </div>
+                            <div class="recent-message d-flex px-4 py-3">
+                                <div class="avatar avatar-lg">
+                                    <img src="assets/compiled/jpg/5.jpg">
+                                </div>
+                                <div class="name ms-4">
+                                    <h5 class="mb-1">Dean Winchester</h5>
+                                    <h6 class="text-muted mb-0">@imdean</h6>
+                                </div>
+                            </div>
+                            <div class="recent-message d-flex px-4 py-3">
+                                <div class="avatar avatar-lg">
+                                    <img src="assets/compiled/jpg/1.jpg">
+                                </div>
+                                <div class="name ms-4">
+                                    <h5 class="mb-1">John Dodol</h5>
+                                    <h6 class="text-muted mb-0">@dodoljohn</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!--    Main Content End    -->
 
@@ -48,6 +119,7 @@
 <script src="/assets/compiled/js/app.js"></script>
 
 <script src="/js/layout/layout.js"></script>
+<script src="/js/dashboard/dashboard.js"></script>
 
 </body>
 </html>

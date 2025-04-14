@@ -1,3 +1,5 @@
+const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 /**
  * 공장 GUI 렌더링 스크립트 (factoryGUI.js)
  * 공장 GUI 시각화 파트
@@ -695,9 +697,9 @@ async function renderFactory(data = factoryData) {
 async function loadMachineGuiInfo() {
     try {
         const response = await fetch('/api/productProcessManagement/machine/guiInfo');
-        if (!response.ok) {
-            throw new Error('서버 응답 오류: ' + response.status);
-        }
+                if (!response.ok) {
+                    throw new Error('서버 응답 오류: ' + response.status);
+                }
 
         const guiInfoData = await response.json();
         window.machineGuiInfoJson = guiInfoData;
@@ -809,7 +811,8 @@ document.addEventListener('DOMContentLoaded', function() {
             fetch('/api/productProcessManagement/modifyMachine/update', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    [header]: token
                 },
                 body: JSON.stringify(updateData)
             })
@@ -844,7 +847,10 @@ document.addEventListener('machineDelete', function(e) {
     if (confirm(`정말로 "${machineId}" 머신을 삭제하시겠습니까?`)) {
         // 삭제 API 호출
         fetch(`/api/productProcessManagement/deleteMachine/delete/${machineId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                [header]: token
+            }
         })
         .then(response => {
             if (!response.ok) {

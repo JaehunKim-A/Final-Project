@@ -1,4 +1,4 @@
-package com.team1.team1project.productProcessManagement.dto;
+package com.team1.team1project.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

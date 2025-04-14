@@ -1,8 +1,6 @@
 package com.team1.team1project.productProcessManagement.service;
 
-import com.team1.team1project.domain.MachineGuiInfo;
 import com.team1.team1project.dto.*;
-import com.team1.team1project.productProcessManagement.dto.*;
 
 import java.util.List;
 
