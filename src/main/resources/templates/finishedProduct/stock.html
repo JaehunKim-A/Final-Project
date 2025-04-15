@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raw Materials</title>
+
+  <link rel="shortcut icon" href="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/1999/svg'%20viewBox='0%200%2033%2034'%20fill-rule='evenodd'%20stroke-linejoin='round'%20stroke-miterlimit='2'%20xmlns:v='https://vecta.io/nano'%3e%3cpath%20d='M3%2027.472c0%204.409%206.18%205.552%2013.5%205.552%207.281%200%2013.5-1.103%2013.5-5.513s-6.179-5.552-13.5-5.552c-7.281%200-13.5%201.103-13.5%205.513z'%20fill='%23435ebe'%20fill-rule='nonzero'/%3e%3ccircle%20cx='16.5'%20cy='8.8'%20r='8.8'%20fill='%2341bbdd'/%3e%3c/svg%3e" type="image/x-icon">
+
+  <link rel="stylesheet" href="/assets/extensions/simple-datatables/style.css">
+  <link rel="stylesheet" href="/assets/compiled/css/table-datatable.css">
+  <link rel="stylesheet" href="/assets/compiled/css/app.css">
+  <link rel="stylesheet" href="/assets/compiled/css/app-dark.css">
+</head>
+
+<body>
+
+<div id="app">
+  <div id="sidebar" th:replace="~{layout/layout :: sidebar}"></div>
+  <div id="main" class="layout-navbar navbar-fixed">
+    <header class="mb-3" th:replace="~{layout/layout :: header}">
+      <a href="#" class="burger-btn d-block d-xl-none">
+        <i class="bi bi-justify fs-3"></i>
+      </a>
+    </header>
+
+    <div class="page-heading">
+      <div class="page-title">
+        <div class="row">
+          <div class="col-12 col-md-6 order-md-1 order-last">
+            <h3>FinishedProduct Stock</h3>
+            <p class="text-subtitle text-muted">Finished Product Stock Page.</p>
+          </div>
+        </div>
+      </div>
+
+      <section class="section">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Stock</h4>
+
+            <div class="text-end mb-3">
+              <a href="/download/excel/customer" class="btn btn-success">
+                <i class="bi bi-download"></i> 완제품 재고 엑셀 다운로드
+              </a>
+            </div>
+
+          </div>
+          <div class="card-body">
+            <table class="table table-striped" id="table1">
+              <thead>
+              <tr>
+                <th th:each="col : ${columns}" th:text="${col}"></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="finishedProductStock : ${finishedProductStock}">
+                <input type="hidden" value="${finishedProductStock.finishedProductStockId}">
+                <td th:text="${finishedProductStock.productCode}"></td>
+                <td th:text="${finishedProductStock.finishedProductStock}"></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <div th:replace="~{layout/layout :: footer}"></div>
+      </footer>
+
+      <div id="underbar" th:replace="~{layout/layout :: underbar}"></div>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/static/js/initTheme.js"></script>
+<script src="/assets/static/js/components/dark.js"></script>
+<script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="/assets/compiled/js/app.js"></script>
+<script src="/assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
+<script src="/assets/static/js/pages/simple-datatables.js"></script>
+</body>
+</html>

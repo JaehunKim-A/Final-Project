@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team1.team1project.mapper.MachineInfoMapper">
+    <select id="getMachineIdAll" resultType="String">
+        SELECT
+            machine_id
+        FROM
+            machine_info
+    </select>
+
+    <select id="selectProductionTargetRatio" resultType="com.team1.team1project.dto.ProcessBarChartDataDTO">
+        SELECT DISTINCT
+            a.production_target AS productionTarget, a.quantity, b.product_name AS productName, SUBSTRING_INDEX(c.machine_id, '_', 1) AS lineCode
+        FROM
+            finished_product_production a
+        JOIN
+            finished_products b
+        ON
+            a.product_code = b.product_code
+        JOIN
+            machine_info c
+        ON
+            c.product_id = b.product_id
+    </select>
+</mapper>

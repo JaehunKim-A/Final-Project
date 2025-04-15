@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 - 직원 관리 시스템</title>
+    <link rel="shortcut icon" href="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2033%2034'%20fill-rule='evenodd'%20stroke-linejoin='round'%20stroke-miterlimit='2'%20xmlns:v='https://vecta.io/nano'%3e%3cpath%20d='M3%2027.472c0%204.409%206.18%205.552%2013.5%205.552%207.281%200%2013.5-1.103%2013.5-5.513s-6.179-5.552-13.5-5.552c-7.281%200-13.5%201.103-13.5%205.513z'%20fill='%23435ebe'%20fill-rule='nonzero'/%3e%3ccircle%20cx='16.5'%20cy='8.8'%20r='8.8'%20fill='%2341bbdd'/%3e%3c/svg%3e" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/assets/compiled/css/app.css}">
+    <link rel="stylesheet" th:href="@{/assets/compiled/css/app-dark.css}">
+    <link rel="stylesheet" th:href="@{/assets/compiled/css/auth.css}">
+</head>
+
+<body>
+<script th:src="@{/assets/static/js/initTheme.js}"></script>
+<div id="auth">
+
+    <div class="row h-100">
+        <div class="col-lg-5 col-12">
+            <div id="auth-left">
+                <div class="auth-logo">
+                    <a href="/login"><img th:src="@{/img/logo.jpg}" style="width: 120px; height: 120px; position:absolute;"/></a>
+                </div>
+                <h1 class="auth-title">LOGIN</h1>
+                <p class="auth-subtitle mb-5">GO! WORK!</p>
+                <!-- Spring Security Form 양식에 맞게 수정 -->
+                <form th:action="@{/login}" method="post">
+                    <div class="form-group position-relative has-icon-left mb-4">
+                        <input type="text" class="form-control form-control-xl" placeholder="loginId" name="loginId">
+                        <div class="form-control-icon">
+                            <i class="bi bi-person"></i>
+                        </div>
+                    </div>
+                    <div class="form-group position-relative has-icon-left mb-4">
+                        <input type="password" class="form-control form-control-xl" placeholder="password" name="password">
+                        <div class="form-control-icon">
+                            <i class="bi bi-shield-lock"></i>
+                        </div>
+                    </div>
+                    <!-- CSRF 토큰 추가 -->
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                    <div class="form-check form-check-lg d-flex align-items-end">
+                        <input class="form-check-input me-2" type="checkbox" name="remember-me" id="remember-me">
+                        <label class="form-check-label text-gray-600" for="remember-me">
+                            remember me
+                        </label>
+                    </div>
+                    <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5">Login</button>
+                </form>
+                <!-- 로그인 에러 메시지 -->
+                <p th:if="${param.error}" class="text-danger mt-3">Wrong Information</p>
+                <!-- 로그아웃 메시지 -->
+                <p th:if="${param.logout}" class="text-success mt-3">Logout</p>
+
+            </div>
+        </div>
+        <div class="col-lg-7 d-none d-lg-block">
+            <div id="auth-right">
+                <!-- 오른쪽 배경 영역 -->
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+
+</html>

@@ -1,0 +1,115 @@
+.chat-bot {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.chat-bot:hover {
+    transform: scale(1.05);
+}
+
+.chat-modal .modal-dialog {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    margin: 0;
+    max-width: 400px;
+    width: 100%;
+    z-index: 1055;
+    transition: all 0.3s ease;
+    transform: none !important;
+}
+
+.chat-modal .modal-content {
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+    overflow: hidden;
+}
+
+.chat-modal .card-body {
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.chat-modal.fade.show {
+    padding-right: 0 !important;
+}
+
+@media (max-width: 576px) {
+    .chat-modal .modal-dialog {
+        right: 20px;
+        bottom: 90px;
+        margin: 0;
+        max-width: 90%;
+    }
+}
+
+.typing-indicator {
+    color: #888;
+    font-style: italic;
+}
+
+.send-button {
+    cursor: pointer;
+}
+
+.chat-box-card .card-body {
+    overflow-y: auto;
+    max-height: 300px;
+}
+
+.chat-box-card .card-header {
+    cursor: move;
+    position: relative;
+}
+
+.modal-dialog.dragging {
+    opacity: 0.9;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.card-header::before {
+    content: '⋮⋮';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 14px;
+    pointer-events: none;
+}
+
+.modal-content {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.3s ease;
+}
+
+.modal-content:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.chat-modal {
+    overflow: hidden !important;
+}
+
+.modal-content * {
+    user-select: none;
+}
+
+.chat-message, .message-form input {
+    user-select: text !important;
+}
+
+.modal-backdrop {
+    pointer-events: none;
+}
+
+body.dragging {
+    user-select: none !important;
+}

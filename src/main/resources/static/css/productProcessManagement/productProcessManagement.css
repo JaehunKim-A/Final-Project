@@ -1,0 +1,55 @@
+.tab-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.tab-button.active {
+    color: var(--bs-btn-hover-color);
+    background-color: var(--bs-btn-hover-bg);
+    border-color: var(--bs-btn-hover-border-color);
+}
+.tab-content {
+    max-height: 0; /* 기본적으로 숨김 */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 95%;
+    margin: auto;
+    opacity: 0;
+    transition: max-height 0.6 ease-out, opacity 0.4s ease-out;
+}
+.tab-content.active {
+    max-height: 10000px; /* 활성화된 탭만 표시 */
+    overflow: hidden;
+    transition: max-height 0.6s ease-out, opacity 0.4s ease-out;
+    opacity: 1;
+}
+.card-body{
+    max-height: 1000px; /* Set a large max-height */
+    overflow: hidden;
+    transition: max-height 0.6s ease-out, opacity 0.4s ease-out;
+    opacity: 1;
+}
+.card.collapsed-card > .card-body{
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.6 ease-out, opacity 0.4s ease-out;
+}
+.burger-btn {
+    float: left;
+}
+.card-collapse-btn {
+    float: right;
+}
+.card-collapse-btn::hover {
+    cursor: pointer;
+}
+.card-header {
+    background-color: #e6eef5;
+}
+canvas {
+    display: block;
+    margin: auto;
+}

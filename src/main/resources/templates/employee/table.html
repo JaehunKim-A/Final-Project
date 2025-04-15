@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataTable - Mazer Admin Dashboard</title>
+
+    <link rel="shortcut icon" href="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/1999/svg'%20viewBox='0%200%2033%2034'%20fill-rule='evenodd'%20stroke-linejoin='round'%20stroke-miterlimit='2'%20xmlns:v='https://vecta.io/nano'%3e%3cpath%20d='M3%2027.472c0%204.409%206.18%205.552%2013.5%205.552%207.281%200%2013.5-1.103%2013.5-5.513s-6.179-5.552-13.5-5.552c-7.281%200-13.5%201.103-13.5%205.513z'%20fill='%23435ebe'%20fill-rule='nonzero'/%3e%3ccircle%20cx='16.5'%20cy='8.8'%20r='8.8'%20fill='%2341bbdd'/%3e%3c/svg%3e" type="image/x-icon">
+
+    <link rel="stylesheet" href="/assets/extensions/simple-datatables/style.css">
+    <link rel="stylesheet" href="/assets/compiled/css/table-datatable.css">
+    <link rel="stylesheet" href="/assets/compiled/css/app.css">
+    <link rel="stylesheet" href="/assets/compiled/css/app-dark.css">
+
+</head>
+
+<body       data-entity="employee"
+            data-fields='["name", "email", "phoneNumber", "hireDate", "resignationDate", "department", "position", "salary", "address"]'
+            data-label="사원"
+            data-accordion-fields='["id", "name", "email", "phoneNumber", "hireDate", "resignationDate", "department", "position", "salary", "address"]'
+            data-accordion-labels='["사원번호", "이름", "이메일", "연락처", "입사일", "퇴사일", "부서", "직급", "급여", "주소"]'>
+
+
+
+<div id="app">
+    <div id="sidebar" th:replace="~{layout/layout :: sidebar}"></div>
+    <div id="main" class="layout-navbar navbar-fixed">
+        <header class="mb-3" th:replace="~{layout/layout :: header}">
+            <a href="#" class="burger-btn d-block d-xl-none">
+                <i class="bi bi-justify fs-3"></i>
+            </a>
+        </header>
+
+        <div class="page-heading">
+            <div class="page-title">
+                <div class="row">
+                    <div class="col-12 col-md-6 order-md-1 order-last">
+                        <h3>Employee</h3>
+                    </div>
+                    <div class="col-12 col-md-6 order-md-2 order-first">
+                        <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">DataTable</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <section class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Simple Datatable</h4>
+                        <div class="d-flex justify-content-between flex-wrap align-items-start gap-3 mb-3">
+                            <div class="d-flex flex-column gap-2">
+                            <!-- Left Side: Add + Upload -->
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#registerModal">
+                                    사원 등록
+                                </button>
+                                <a href="/download/sample/employee" class="btn btn-outline-secondary">
+                                    <i class="bi bi-download"></i> 사원 CSV 샘플 다운로드
+                                </a>
+                            </div>
+
+                                <form id="csvUploadForm" method="post" th:action="@{/upload/csv/employee}" enctype="multipart/form-data" class="d-flex align-items-center gap-2">
+                                    <input type="file" name="file" accept=".csv" required class="form-control w-auto">
+                                    <button type="submit" class="btn btn-outline-primary">
+                                        <i class="bi bi-upload"></i> 사원 CSV 업로드
+                                    </button>
+                                </form>
+
+
+                            </div>
+                            <div class="d-flex flex-column gap-2 align-items-end">
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <a href="/download/excel/employee" class="btn btn-outline-success">
+                                        <i class="bi bi-download"></i> 전체 엑셀 다운로드
+                                    </a>
+                                    <a href="/download/csv/employee" class="btn btn-outline-secondary">
+                                        <i class="bi bi-download"></i> 전체 CSV 다운로드
+                                    </a>
+                                </div>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <button class="btn btn-outline-success" id="downloadVisibleExcel">
+                                        <i class="bi bi-download"></i> 검색결과 엑셀 다운로드
+                                    </button>
+                                    <button class="btn btn-outline-secondary" id="downloadVisibleCsv">
+                                        <i class="bi bi-download"></i> 검색결과 CSV 다운로드
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped" id="table1">
+                            <thead>
+                            <tr>
+                                <th>이름</th>
+                                <th>이메일</th>
+                                <th>연락처</th>
+                                <th>입사일</th>
+                                <th>퇴사일</th>
+                                <th>부서</th>
+                                <th>직급</th>
+                                <th>급여</th>
+                                <th>주소</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="employee : ${employees}">
+                                <input type="hidden" value="${employee.employeeId}">
+                                <td th:text="${employee.employeeName}" class="employee-name employee-detail-toggle" style="cursor: pointer;"></td>
+                                <td th:text="${employee.email}" class="employee-email employee-detail-toggle" style="cursor: pointer;"></td>
+                                <td th:text="${employee.phoneNumber}" class="employee-phoneNumber employee-detail-toggle" style="cursor: pointer;"></td>
+                                <td th:text="${employee.hireDate}" class="employee-hireDate employee-detail-toggle" style="cursor: pointer;"></td>
+                                <td th:text="${employee.resignationDate}" class="employee-resignationDate employee-detail-toggle" style="cursor: pointer;"></td>
+                                <td th:text="${employee.department}" class="employee-department employee-detail-toggle" style="cursor: pointer;"></td>
+                                <td th:text="${employee.position}" class="employee-position employee-detail-toggle" style="cursor: pointer;"></td>
+                                <td th:text="${employee.salary}" class="employee-salary employee-detail-toggle" style="cursor: pointer;"></td>
+                                <td th:text="${employee.address}" class="employee-address employee-detail-toggle" style="cursor: pointer;"></td>
+
+
+                                <td class="d-none employee-id" th:text="${employee.employeeId}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- 사원 등록 모달 -->
+            <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="registerModalLabel">Register New Employee</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="/table/employee/register" method="POST">
+                            <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="employeeName" class="form-label">Employee Name</label>
+                                    <input type="text" class="form-control" id="employeeName" name="employeeName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="text" class="form-control" id="email" name="email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="phoneNumber" class="form-label">PhoneNumber</label>
+                                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="hireDate" class="form-label">HireDate</label>
+                                    <input type="date" class="form-control" id="hireDate" name="hireDate" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="resignationDate" class="form-label">ResignationDate</label>
+                                    <input type="date" class="form-control" id="resignationDate" name="resignationDate">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="department" class="form-label">Department</label>
+                                    <input type="text" class="form-control" id="department" name="department" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="position" class="form-label">Position</label>
+                                    <input type="text" class="form-control" id="position" name="position" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="salary" class="form-label">Salary</label>
+                                    <input type="text" class="form-control" id="salary" name="salary" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="address" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="address" name="address" required>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Register</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 사원 수정 모달 -->
+            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editModalLabel">Edit Employee</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="/table/employee/edit/{employeeId}" method="POST" id="editEmployeeForm">
+                            <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                            <div class="modal-body">
+                                <input type="hidden" id="editEmployeeId" name="employeeId">
+                                <div class="mb-3">
+                                    <label for="editName" class="form-label">EmployeeName</label>
+                                    <input type="text" class="form-control" id="editName" name="employeeName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editEmail" class="form-label">Email</label>
+                                    <input type="text" class="form-control" id="editEmail" name="email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editPhoneNumber" class="form-label">PhoneNumber</label>
+                                    <input type="text" class="form-control" id="editPhoneNumber" name="phoneNumber" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editHireDate" class="form-label">HireDate</label>
+                                    <input type="date" class="form-control" id="editHireDate" name="hireDate" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editResignationDate" class="form-label">ResignationDate</label>
+                                    <input type="date" class="form-control" id="editResignationDate" name="resignationDate">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editDepartment" class="form-label">Department</label>
+                                    <input type="text" class="form-control" id="editDepartment" name="department" required >
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editPosition" class="form-label">Position</label>
+                                    <input type="text" class="form-control" id="editPosition" name="position" required >
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editSalary" class="form-label">Salary</label>
+                                    <input type="text" class="form-control" id="editSalary" name="salary" required >
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editAddress" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="editAddress" name="address" required >
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 사원 삭제 모달 -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Delete Employee</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="deleteConfirmMessage">정말로 이 사원을 삭제하시겠습니까?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form action="#" method="GET" id="deleteEmployeeForm">
+                                <input type="hidden" id="deleteEmployeeId" name="employeeId">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer>
+                <div th:replace="~{layout/layout :: footer}"></div>
+            </footer>
+
+            <div id="underbar" th:replace="~{layout/layout :: underbar}"></div>
+        </div>
+    </div>
+</div>
+
+
+    <script src="/assets/static/js/initTheme.js"></script>
+    <script src="/assets/static/js/components/dark.js"></script>
+    <script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="/assets/compiled/js/app.js"></script>
+    <script src="/assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
+<!--    <script src="/assets/static/js/pages/simple-datatables.js"></script>-->
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <script src="/gyojin/js/entityTable.js"></script>
+
+</body>
+</html>

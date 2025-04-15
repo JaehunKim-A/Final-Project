@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team1.team1project.mapper.MachineHistoryMapper">
+
+    <select id="selectMachineHistoryByYear" resultType="com.team1.team1project.domain.MachineHistory">
+        select
+            history_id as historyId,
+            machine_id as machineId,
+            production_amount as productionAmount,
+            defective_amount as defectiveAmount,
+            production_date as productionDate,
+            production_date_update as productionDateUpdate
+        from
+            machine_history
+        where
+            YEAR(production_date) = #{year}
+    </select>
+
+    <select id="selectProductAmount2Week" resultType="java.lang.Integer">
+        SELECT
+            production_amount AS productionAmount
+        FROM
+            machine_history
+        WHERE
+            production_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 13 DAY) AND CURDATE()
+        AND
+            machine_id = #{machineId}
+        ORDER BY
+            production_date;
+    </select>
+
+    <select id="selectMachineHistoryToday" resultType="com.team1.team1project.domain.MachineHistory">
+        SELECT
+            history_id as historyId,
+            machine_id as machineId,
+            production_amount as productionAmount,
+            defective_amount as defectiveAmount,
+            production_date as productionDate,
+            production_date_update as productionDateUpdate
+        FROM
+            machine_history
+        WHERE
+            DATE(production_date) = CURDATE();
+    </select>
+
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team1.team1project.mapper.MachineRawMaterialConsumeMapper">
+
+    <select id="selectFormattedMachineRawMaterialConsume" resultType="com.team1.team1project.dto.FormattedMachineRawMaterialConsumeDTO">
+        SELECT
+            a.machine_id AS machineId, b.material_code AS materialCode, a.quantity as quantity
+        FROM
+            machine_raw_material_consume a
+        JOIN
+            raw_materials b
+        ON
+            a.material_code = b.material_code
+    </select>
+
+</mapper>
