@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/api/geocode")
 @Log4j2
+@PropertySource("classpath:apiSecretKey.properties")
 public class GeocodeProxyController {
 
 	private final RestTemplate restTemplate = new RestTemplate();
