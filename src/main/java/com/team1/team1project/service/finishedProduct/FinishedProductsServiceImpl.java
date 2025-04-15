@@ -37,10 +37,10 @@ public class FinishedProductsServiceImpl implements FinishedProductsService {
             FinishedProducts finishedProducts = FinishedProducts.builder()
                     .productCode(productCode)
                     .productName(productName)
-                    .description(description)
+                    .category(category)
                     .unit(unit)
                     .status(status)
-                    .category(category)
+                    .description(description)
                     .build();
             FinishedProducts saveProducts = finishedProductsRepository.save(finishedProducts);
         }
@@ -63,11 +63,12 @@ public class FinishedProductsServiceImpl implements FinishedProductsService {
 
         finishedProducts.finishedProductsChange(
                 finishedProductsDTO.getProductCode(),
-                finishedProductsDTO.getDescription(),
-                finishedProductsDTO.getCategory(),
                 finishedProductsDTO.getProductName(),
+                finishedProductsDTO.getCategory(),
+                finishedProductsDTO.getUnit(),
                 finishedProductsDTO.getStatus(),
-                finishedProductsDTO.getUnit());
+                finishedProductsDTO.getDescription()
+        );
 
         finishedProductsRepository.save(finishedProducts);
     }

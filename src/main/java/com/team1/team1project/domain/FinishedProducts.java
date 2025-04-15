@@ -29,14 +29,14 @@ public class FinishedProducts extends BaseEntity {
 
     public void finishedProductsChange(String productCode,
                                        String productName,
-                                       String unit,
                                        String category,
+                                       String unit,
                                        String status,
                                        String description){
         this.productCode = productCode;
         this.productName = productName;
-        this.unit = unit;
         this.category = category;
+        this.unit = unit;
         this.status = status;
         this.description = description;
     }

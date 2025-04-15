@@ -60,8 +60,8 @@ public class RawMaterialsServiceImpl implements RawMaterialsService{
         rawMaterials.rawMaterialsChange(
                 rawMaterialsDTO.getMaterialCode(),
                 rawMaterialsDTO.getMaterialName(),
-                rawMaterialsDTO.getUnit(),
                 rawMaterialsDTO.getCategory(),
+                rawMaterialsDTO.getUnit(),
                 rawMaterialsDTO.getDescription()
         );
         rawMaterialsRepository.save(rawMaterials);

@@ -4,6 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
     <title>DataTable - Mazer Admin Dashboard</title>
 
     <script src="/assets/static/js/initTheme.js"></script>
@@ -20,8 +24,8 @@
         data-entity="customerOrders"
         data-fields='["customerId", "orderDate", "totalAmount", "status"]'
         data-label="주문"
-        data-accordion-fields='["orderId", "customerId", "customerName", "orderDate", "totalAmount", "status", "reg", "mod"]'
-        data-accordion-labels='["주문코드", "고객코드", "고객명", "주문일", "수량", "상태", "등록일", "수정일"]'>
+        data-accordion-fields='["orderId", "customerId", "customerName", "orderDate", "status", "totalAmount", "reg", "mod"]'
+        data-accordion-labels='["주문코드", "고객코드", "고객명", "주문일", "상태", "수량", "등록일", "수정일"]'>
 
 <div id="app">
     <div id="sidebar" th:replace="~{layout/layout :: sidebar}"></div>
@@ -37,15 +41,6 @@
                 <div class="row">
                     <div class="col-12 col-md-6 order-md-1 order-last">
                         <h3>Customer Orders</h3>
-                        <p class="text-subtitle text-muted">A sortable, searchable, paginated table without dependencies thanks to simple-datatables.</p>
-                    </div>
-                    <div class="col-12 col-md-6 order-md-2 order-first">
-                        <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Customer Orders</li>
-                            </ol>
-                        </nav>
                     </div>
                 </div>
             </div>
@@ -53,7 +48,6 @@
             <section class="section">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Simple Datatable</h4>
                         <div class="d-flex justify-content-between flex-wrap align-items-start gap-3 mb-3">
                             <div class="d-flex flex-column gap-2">
                                 <div class="d-flex align-items-center gap-2 flex-wrap">
@@ -64,7 +58,7 @@
                                         <i class="bi bi-download"></i> 주문 CSV 샘플 다운로드
                                     </a>
                                 </div>
-                                <form id="csvUploadForm" method="post" action="/upload/csv/customerOrders" enctype="multipart/form-data" class="d-flex align-items-center gap-2 flex-wrap">
+                                <form id="csvUploadForm" action="/upload/csv/customerOrders" enctype="multipart/form-data" class="d-flex align-items-center gap-2 flex-wrap">
                                     <input type="file" name="file" accept=".csv" required class="form-control w-auto">
                                     <button type="submit" class="btn btn-outline-primary">
                                         <i class="bi bi-upload"></i> 주문 CSV 업로드
@@ -92,35 +86,31 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <table class="table table-striped invisible" id="table1" style="table-layout: fixed;">
-                            <colgroup>
-                                <col style="width: 30%">
-                                <col style="width: 30%">
-                                <col style="width: 40%">
-                            </colgroup>
+                        <table class="table table-striped" id="table1">
                             <thead>
                             <tr>
+                                <th>주문코드</th>
                                 <th>고객코드</th>
+                                <th>고객명</th>
                                 <th>주문일</th>
+                                <th>상태</th>
                                 <th>수량</th>
+                                <th>등록일</th>
+                                <th>수정일</th>
+                            </tr>
+                            <tr id="search-row">
+                                <th><input type="text" class="form-control form-control-sm column-search" data-column="orderId" placeholder="주문코드 검색"></th>
+                                <th><input type="text" class="form-control form-control-sm column-search" data-column="customerId" placeholder="고객코드 검색"></th>
+                                <th><input type="text" class="form-control form-control-sm column-search" data-column="customerName" placeholder="고객명 검색"></th>
+                                <th><input type="text" class="form-control form-control-sm column-search" data-column="orderDate" placeholder="주문일 검색"></th>
+                                <th><input type="text" class="form-control form-control-sm column-search" data-column="status" placeholder="상태 검색"></th>
+                                <th><input type="text" class="form-control form-control-sm column-search" data-column="totalAmount" placeholder="수량 검색"></th>
+                                <th><input type="text" class="form-control form-control-sm column-search" data-column="reg" placeholder="등록일 검색"></th>
+                                <th><input type="text" class="form-control form-control-sm column-search" data-column="mod" placeholder="수정일 검색"></th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="order : ${customerOrders}">
-                                <td th:text="${order.customerId}" class="customerOrders-customerId customerOrders-detail-toggle" style="cursor: pointer;"></td>
-                                <td th:text="${order.orderDate}" class="customerOrders-orderDate customerOrders-detail-toggle" style="cursor: pointer;"></td>
-                                <td th:text="${order.totalAmount}" class="customerOrders-totalAmount customerOrders-detail-toggle" style="cursor: pointer;"></td>
 
-                                <td class="d-none customerOrders-orderId id" th:text="${order.orderId}"></td>
-                                <td class="d-none customerOrders-customerName">
-                                    <span th:each="c : ${customers}"
-                                          th:if="${c.customerId == order.customerId}"
-                                          th:text="${c.customerName}"></span>
-                                </td>
-                                <td class="d-none customerOrders-status status" th:text="${order.status}"></td>
-                                <td class="d-none customerOrders-reg reg" th:text="${order.regDate}"></td>
-                                <td class="d-none customerOrders-mod mod" th:text="${order.modDate}"></td>
-                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -135,7 +125,7 @@
                             <h5 class="modal-title" id="registerModalLabel">주문 등록</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="/table/customerOrders/register" method="POST">
+                        <form id="registerCustomerOrdersForm">
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label for="customerId" class="form-label">고객</label>
@@ -177,7 +167,7 @@
                             <h5 class="modal-title" id="editModalLabel">주문 수정</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form method="POST" id="editCustomerOrdersForm">
+                        <form id="editCustomerOrdersForm">
                             <div class="modal-body">
                                 <input type="hidden" id="editCustomerOrdersId" name="orderId">
                                 <div class="mb-3">
@@ -232,7 +222,7 @@
                             <p id="deleteConfirmMessage">정말로 이 주문을 삭제하시겠습니까?</p>
                         </div>
                         <div class="modal-footer">
-                            <form method="GET" id="deleteCustomerOrdersForm">
+                            <form id="deleteCustomerOrdersForm">
                                 <input type="hidden" id="deleteCustomerOrdersId" name="orderId">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-danger">Delete</button>
@@ -255,11 +245,7 @@
 <script src="/assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
 <!--<script src="/assets/static/js/pages/simple-datatables.js"></script>-->
 <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
-<script src="/jiyeon/js/entityTable.js"></script>
+<script src="/js/customer/entityTable.js"></script>
 
 </body>
 </html>
-
-
-
-

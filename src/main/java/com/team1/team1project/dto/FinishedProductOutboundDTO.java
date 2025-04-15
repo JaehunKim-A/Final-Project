@@ -20,18 +20,5 @@ public class FinishedProductOutboundDTO {
     private LocalDate outboundDate;  // 출고 날짜
     private String outboundCode;  // 출고 코드
     private String status;  // 상태 (예: 완료, 보류 등)
-    private LocalDateTime regDate;  // 등록 일시
-    private LocalDateTime modDate;  // 수정 일시
 
-    // 엔티티 객체를 DTO로 변환하는 생성자
-    public FinishedProductOutboundDTO(FinishedProductOutbound outbound) {
-        this.outboundId = outbound.getOutboundId();
-        this.productId = outbound.getProductId();
-        this.quantity = outbound.getQuantity();
-        this.outboundDate = outbound.getOutboundDate();
-        this.outboundCode = outbound.getOutboundCode();
-        this.status = outbound.getStatus();
-        this.regDate = outbound.getRegDate();
-        this.modDate = outbound.getModDate();
-    }
 }

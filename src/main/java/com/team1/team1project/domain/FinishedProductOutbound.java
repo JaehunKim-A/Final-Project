@@ -37,6 +37,4 @@ public class FinishedProductOutbound extends BaseEntity{
     @Column(length = 50, nullable = false)
     private String status;  // ✅ 상태 (예: 완료, 보류 등)
 
-    private String productCode;
-
 }

@@ -1,4 +1,4 @@
-package com.team1.team1project.dto;
+package com.team1.team1project.repository;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

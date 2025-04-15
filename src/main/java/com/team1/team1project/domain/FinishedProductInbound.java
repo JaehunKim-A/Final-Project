@@ -17,15 +17,14 @@ public class FinishedProductInbound {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long inboundId;  // 입고 ID
-
-    // ✅ 완전히 제거: product나 productId 없이 사용
-    // private FinishedProducts product;
-    // private Long productId;
+    private Long inboundId;
 
     private Long quantity;
     private String inboundCode;
-    private LocalDateTime inboundCompleteTime;
+
+    // ✅ 필드명 통일 (inboundCompleteTime → completeTime)
+    private LocalDateTime completeTime;
+
     private String status;
     private Long supplierId;
 

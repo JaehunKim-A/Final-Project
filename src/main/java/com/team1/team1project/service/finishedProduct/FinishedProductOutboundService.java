@@ -1,21 +1,24 @@
 package com.team1.team1project.service.finishedProduct;
 
-import com.team1.team1project.dto.FinishedProductInboundDTO;
-import com.team1.team1project.dto.FinishedProductOutboundDTO;
-
-import java.util.List;
+import com.team1.team1project.dto.*;
 
 public interface FinishedProductOutboundService {
 
-    // 입고 등록
-    void createFinishedProductOutbound(FinishedProductOutboundDTO finishedProductInboundDTO);
+    // ✅ 1. 페이징 + 검색 목록
+    PageResponseDTO<FinishedProductOutboundDTO> getPagedFinishedProductOutbounds(PageRequestDTO pageRequestDTO);
 
-    // 입고 상태 수정
-    void modifyOutboundStatus(Long outboundId, String status);
+    // ✅ 2. 입고 상세조회
+    FinishedProductOutboundDTO getFinishedProductOutbound(Long outboundId);
 
-    // 입고 삭제
+    // ✅ 3. 입고 등록
+    void createFinishedProductOutbound(FinishedProductOutboundDTO dto);
+
+    // ✅ 4. 입고 상태 수정 (전체 or 상태만)
+    void modifyOutboundStatus(Long outboundId, FinishedProductOutboundDTO dto);
+
+    // ✅ 5. 입고 삭제
     void deleteFinishedProductOutbound(Long outboundId);
 
-    // 모든 입고 목록 조회
-    List<FinishedProductOutboundDTO> getAllFinishedProductOutbounds();
+    // ✅ 6. 히스토리 조회
+    PageResponseDTO<FinishedProductOutboundDTO> getFinishedProductOutboundHistoryForTable(String sorter, boolean isAsc, PageRequestDTO pageRequestDTO);
 }

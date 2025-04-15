@@ -38,9 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 더미 계정 추가 (인메모리 사용자)
         auth.inMemoryAuthentication()
-                .withUser("admin")
-                .password(passwordEncoder().encode("admin1234"))
-                .authorities("ROLE_TEAMLEADER");
+                .withUser("guest1231")
+                .password(passwordEncoder().encode("guest1234"))
+                .authorities("ROLE_USER");
+
 
     }
 
@@ -56,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/**").hasAuthority("ROLE_TEAMLEADER")
                 .antMatchers(HttpMethod.PUT, "/**").hasAuthority("ROLE_TEAMLEADER")
                 .antMatchers(HttpMethod.DELETE, "/**").hasAuthority("ROLE_TEAMLEADER")
+                .antMatchers(HttpMethod.GET, "/**/delete/**").hasAnyAuthority("ROLE_TEAMLEADER")
 
                 // 나머지 모든 요청은 인증된 사용자만 접근 가능
                 .anyRequest().authenticated()
@@ -80,7 +82,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenValiditySeconds(86400) // 24시간
                 .rememberMeParameter("remember-me") // 템플릿의 체크박스 name과 일치
                 .and()
-                .csrf().ignoringAntMatchers("/api/**"); // CSRF 보호 활성화 (API 요청은 제외)
+                .csrf().ignoringAntMatchers("/api/**")
+        ; // CSRF 보호 활성화 (API 요청은 제외)
 
         // 디버깅을 위한 추가 설정
         http.exceptionHandling().accessDeniedPage("/access-denied");

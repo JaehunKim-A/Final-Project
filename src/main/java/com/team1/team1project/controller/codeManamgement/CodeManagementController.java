@@ -52,7 +52,7 @@ public class CodeManagementController {
         codeManagementService.modifyOne(codeManagementDTO);
         return "/codeManagement/codeManagement";
     }
-    @PostMapping("/codeManagement/delete/{codeId}")
+    @GetMapping("/codeManagement/delete/{codeId}")
     public String remove(@PathVariable("codeId") Long codeId){
         codeManagementService.removeOne(codeId);
         return "redirect:/codeManagement/codeManagement";
