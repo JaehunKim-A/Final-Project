@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 // 정적 리소스 접근 허용
-                .antMatchers("/assets/**", "/css/**", "/js/**", "/images/**", "/favicon.ico", "/error/**").permitAll()
+                .antMatchers("/assets/**", "/css/**", "/js/**", "/images/**", "/favicon.ico", "/error/**","/img/**").permitAll()
                 .antMatchers("/login", "/signup").permitAll()
 
                 // 팀장만 접근할 수 있는 경로 설정 (hasAuthority 사용)

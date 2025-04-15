@@ -19,11 +19,10 @@
         <div class="col-lg-5 col-12">
             <div id="auth-left">
                 <div class="auth-logo">
-                    <a href="/login"><img src="../static/img/logo.jpg"></a>
+                    <a href="/login"><img th:src="@{/img/logo.jpg}" style="width: 120px; height: 120px; position:absolute;"/></a>
                 </div>
                 <h1 class="auth-title">LOGIN</h1>
                 <p class="auth-subtitle mb-5">GO! WORK!</p>
-
                 <!-- Spring Security Form 양식에 맞게 수정 -->
                 <form th:action="@{/login}" method="post">
                     <div class="form-group position-relative has-icon-left mb-4">
