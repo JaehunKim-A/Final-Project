@@ -131,7 +131,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         employeeRepository.save(employee);
     }
-
-
-
+    /**
+     * 부서별 직원 목록 조회
+     * @param department 부서명
+     * @return 해당 부서의 직원 목록
+     */
+    @Override
+    public List<EmployeeDTO> findByDepartment(String department) {
+        return employeeRepository.findByDepartment(department).stream()
+                .map(employee -> modelMapper.map(employee, EmployeeDTO.class))
+                .collect(Collectors.toList());
+    }
 }

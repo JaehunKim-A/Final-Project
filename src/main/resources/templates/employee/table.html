@@ -65,7 +65,7 @@
                                 </a>
                             </div>
 
-                                <form id="csvUploadForm" method="post" action="/upload/csv/employee" enctype="multipart/form-data" class="d-flex align-items-center gap-2">
+                                <form id="csvUploadForm" method="post" th:action="@{/upload/csv/employee}" enctype="multipart/form-data" class="d-flex align-items-center gap-2">
                                     <input type="file" name="file" accept=".csv" required class="form-control w-auto">
                                     <button type="submit" class="btn btn-outline-primary">
                                         <i class="bi bi-upload"></i> 사원 CSV 업로드
@@ -274,6 +274,8 @@
             <footer>
                 <div th:replace="~{layout/layout :: footer}"></div>
             </footer>
+
+            <div id="underbar" th:replace="~{layout/layout :: underbar}"></div>
         </div>
     </div>
 </div>

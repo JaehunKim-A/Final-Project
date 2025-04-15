@@ -98,7 +98,7 @@
                             <h5 class="modal-title" id="registerModalLabel">Register New RawMaterials</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="/rawMaterial/rawMaterial/register" method="POST">
+                        <form th:action="@{/rawMaterial/rawMaterial/register}" method="POST">
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label for="materialCode" class="form-label">Raw Material Code</label>
@@ -138,7 +138,7 @@
                             <h5 class="modal-title" id="editModalLabel">Edit RawMaterial</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="/rawMaterial/rawMaterial/edit/{rawMaterialId}" method="POST" id="editRawMaterialForm">
+                        <form th:action="@{/rawMaterial/rawMaterial/edit/{rawMaterialId}}" method="POST" id="editRawMaterialForm">
                             <div class="modal-body">
                                 <input type="hidden" id="editMaterialId" name="materialId">
                                 <div class="mb-3">
@@ -195,6 +195,8 @@
             <footer>
                 <div th:replace="~{layout/layout :: footer}"></div>
             </footer>
+
+            <div id="underbar" th:replace="~{layout/layout :: underbar}"></div>
         </div>
     </div>
 </div>

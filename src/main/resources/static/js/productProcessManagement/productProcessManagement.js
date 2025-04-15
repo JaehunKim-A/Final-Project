@@ -146,7 +146,14 @@ function openTab(pageId, button) {
 async function getMachineHistory({ page = 1, size = 10, sorter = 'historyId', isAsc = false, types = [], keyword = '' }) {
     const payload = {page, size, sorter, isAsc, types, keyword};
 
-    const result = await axios.post('/api/productProcessManagement/productProcessManagementPost', payload);
+    const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    const result = await axios.post('/api/productProcessManagement/productProcessManagementPost', payload, {
+        headers: {
+            [header]: token
+        }
+    });
     return result.data;
 }
 
@@ -233,9 +240,15 @@ async function loadMachineHistoryData(state) {
             keyword: state.keyword
         };
 
+        const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
         // API 호출
-        const response = await axios.post('/api/productProcessManagement/productProcessManagementPost', payload);
+        const response = await axios.post('/api/productProcessManagement/productProcessManagementPost', payload,{
+            headers: {
+                [header]: token
+            }
+        });
         const data = response.data;
 
         // 테이블 데이터 렌더링

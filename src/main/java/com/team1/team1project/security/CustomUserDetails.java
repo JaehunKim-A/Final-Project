@@ -22,13 +22,32 @@ public class CustomUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
+        // 기본적으로 모든 사용자에게 USER 권한 부여
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        if(login.getEmployee() != null && "팀장".equals(login.getEmployee().getPosition())){
-            authorities.add(new SimpleGrantedAuthority("ROLE_TEAMLEADER"));
-        }
-        return authorities;
+        // position 정보가 있는지 확인 후 처리
+        if(login.getEmployee() != null) {
+            String position = login.getEmployee().getPosition();
 
+            // 디버깅을 위한 로그 추가
+            System.out.println("현재 로그인 사용자 정보:");
+            System.out.println("- ID: " + login.getLoginId());
+            System.out.println("- 직급: " + position);
+
+            // 직급이 null이 아니고, 값이 있는 경우 처리
+            if(position != null && !position.trim().isEmpty()) {
+                // 대소문자 구분 없이, 앞뒤 공백 제거 후 '팀장'인지 확인
+                if("팀장".equals(position.trim())) {
+                    authorities.add(new SimpleGrantedAuthority("ROLE_TEAMLEADER"));
+                    System.out.println("ROLE_TEAMLEADER 권한이 추가되었습니다!");
+                }
+            }
+        }
+
+        // 최종 부여된 권한 로그 출력
+        System.out.println("최종 부여된 권한: " + authorities);
+
+        return authorities;
     }
 
     @Override

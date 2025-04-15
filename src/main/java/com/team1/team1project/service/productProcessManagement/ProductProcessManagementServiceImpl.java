@@ -116,11 +116,11 @@ public class ProductProcessManagementServiceImpl implements ProductProcessManage
 
         // ModelMapper 대신 생성자를 사용하여 Entity 생성
         MachineGuiInfo machineEntity = new MachineGuiInfo(
-            null, // guiId는 자동 생성
-            machine.getMachineId(),
-            machine.getXCoordinate(),
-            machine.getYCoordinate(),
-            machine.getMachineType()
+                null, // guiId는 자동 생성
+                machine.getMachineId(),
+                machine.getXCoordinate(),
+                machine.getYCoordinate(),
+                machine.getMachineType()
         );
 
         machineGuiInfoMapper.insertMachineGuiInfo(machineEntity);

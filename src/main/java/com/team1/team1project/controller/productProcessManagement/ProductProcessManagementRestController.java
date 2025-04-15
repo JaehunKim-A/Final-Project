@@ -1,6 +1,7 @@
-package com.team1.team1project.controller.productProcessManagement;
+package com.team1.team1project.productProcessManagement.controller;
 
 import com.team1.team1project.dto.*;
+
 import com.team1.team1project.service.productProcessManagement.ProductProcessManagementService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

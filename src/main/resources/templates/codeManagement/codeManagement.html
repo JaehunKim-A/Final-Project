@@ -199,6 +199,8 @@
       <footer>
         <div th:replace="~{layout/layout :: footer}"></div>
       </footer>
+
+      <div id="underbar" th:replace="~{layout/layout :: underbar}"></div>
     </div>
   </div>
 </div>
@@ -209,39 +211,6 @@
 <script src="/assets/compiled/js/app.js"></script>
 <script src="/assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
 <script src="/assets/static/js/pages/simple-datatables.js"></script>
-<script>
-  function openProductPopup(button) {
-    let popup = open("/finishedProduct/searchPopup", "Product Search", "width=650,height=400");
 
-    // 팝업에서 데이터를 받아오는 이벤트 처리
-    addEventListener("message", function(event) {
-        if (event.origin !== location.origin) return;
-
-        const productData = event.data;
-        if (productData && productData.unit) {
-            document.getElementById('codeValue').value = productData.unit;
-            document.getElementById('editCodeValue').value = productData.unit;
-        }
-    }, {
-        once: true
-    });
-}
-  function openMaterialPopup(button) {
-    let popup = open("/rawMaterial/searchPopup", "Material Search", "width=650,height=400");
-
-    // 팝업에서 데이터를 받아오는 이벤트 처리
-    addEventListener("message", function(event) {
-        if (event.origin !== location.origin) return;
-
-        const materialData = event.data;
-        if (materialData && materialData.unit) {
-            document.getElementById('codeValue').value = materialData.unit;
-            document.getElementById('editCodeValue').value = materialData.unit;
-        }
-    }, {
-        once: true
-    });
-}
-</script>
 </body>
 </html>

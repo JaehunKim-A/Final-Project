@@ -41,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("admin")
                 .password(passwordEncoder().encode("admin1234"))
                 .authorities("ROLE_TEAMLEADER");
+
     }
 
     @Override
@@ -48,13 +49,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 // 정적 리소스 접근 허용
-                .antMatchers("/assets/**", "/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
+                .antMatchers("/assets/**", "/css/**", "/js/**", "/images/**", "/favicon.ico", "/error/**").permitAll()
                 .antMatchers("/login", "/signup").permitAll()
-                // 팀장만 접근할 수 있는 경로 설정
-                .antMatchers(HttpMethod.POST, "/**").hasRole("TEAMLEADER") // 모든 POST 요청을 팀장만 가능
-                .antMatchers(HttpMethod.PUT, "/**").hasRole("TEAMLEADER") // 모든 PUT 요청을 팀장만 가능
-                .antMatchers(HttpMethod.DELETE, "/**").hasRole("TEAMLEADER") // 모든 DELETE 요청을 팀장만 가능
-                .antMatchers(HttpMethod.GET, "/**/**/delete/**").hasRole("TEAMLEADER")
+
+                // 팀장만 접근할 수 있는 경로 설정 (hasAuthority 사용)
+                .antMatchers(HttpMethod.POST, "/**").hasAuthority("ROLE_TEAMLEADER")
+                .antMatchers(HttpMethod.PUT, "/**").hasAuthority("ROLE_TEAMLEADER")
+                .antMatchers(HttpMethod.DELETE, "/**").hasAuthority("ROLE_TEAMLEADER")
+
                 // 나머지 모든 요청은 인증된 사용자만 접근 가능
                 .anyRequest().authenticated()
                 .and()
@@ -78,7 +80,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenValiditySeconds(86400) // 24시간
                 .rememberMeParameter("remember-me") // 템플릿의 체크박스 name과 일치
                 .and()
-                .csrf()
-                ; // CSRF 보호 활성화
+                .csrf().ignoringAntMatchers("/api/**"); // CSRF 보호 활성화 (API 요청은 제외)
+
+        // 디버깅을 위한 추가 설정
+        http.exceptionHandling().accessDeniedPage("/access-denied");
     }
 }

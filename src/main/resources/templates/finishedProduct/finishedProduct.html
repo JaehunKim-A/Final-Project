@@ -60,7 +60,7 @@
                 </div>
                 <form id="csvUploadForm"
                       method="post"
-                      action="/upload/csv/finishedProduct"
+                      th:action="@{/upload/csv/finishedProduct}"
                       enctype="multipart/form-data"
                       class="d-flex align-items-center gap-2 flex-wrap">
                   <input type="file" name="file" accept=".csv" required class="form-control w-auto">
@@ -132,7 +132,7 @@
               <h5 class="modal-title" id="registerModalLabel">Register New FinishedProduct</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="/finishedProduct/finishedProduct/register" method="POST">
+            <form th:action="@{/finishedProduct/finishedProduct/register}" method="POST">
               <div class="modal-body">
                 <div class="mb-3">
                   <label for="productCode" class="form-label">Product Code</label>
@@ -176,7 +176,7 @@
               <h5 class="modal-title" id="editModalLabel">Edit FinishedProduct</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="/finishedProduct/finishedProduct/modify/{productId}" method="POST" id="editFinishedProductForm">
+            <form th:action="@{/finishedProduct/finishedProduct/modify/{productId}}" method="POST" id="editFinishedProductForm">
               <div class="modal-body">
                 <input type="hidden" id="editProductId" name="productId" value="${finishedProducts.productId}">
                 <div class="mb-3">
@@ -237,6 +237,8 @@
       <footer>
         <div th:replace="~{layout/layout :: footer}"></div>
       </footer>
+
+      <div id="underbar" th:replace="~{layout/layout :: underbar}"></div>
     </div>
   </div>
 </div>

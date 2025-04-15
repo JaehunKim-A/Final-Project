@@ -156,17 +156,17 @@
 //
 //    @GetMapping("/error-403")
 //    public String error403() {
-//        return "dist/error-403"; // error-403.html
+//        return "dist/error-403"; // 403.html
 //    }
 //
 //    @GetMapping("/error-404")
 //    public String error404() {
-//        return "dist/error-404"; // error-404.html
+//        return "dist/error-404"; // 404.html
 //    }
 //
 //    @GetMapping("/error-500")
 //    public String error500() {
-//        return "dist/error-500"; // error-500.html
+//        return "dist/error-500"; // 500.html
 //    }
 //
 //    @GetMapping("/extra-component-avatar")

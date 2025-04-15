@@ -35,10 +35,35 @@
 
         <!--    Main Content        -->
         <div class="row">
-            <div class="col-md-12" style="display:flex;">
+            <div class="col-md-12" style="display:flex;gap:2em;">
                 <div class="col-md-8">
-                    <div class="row"></div>
-                    <div class="row" stlye="">
+                    <div class="row" style="padding-left: 2em">
+                        <h2>환영합니다!</h2>
+                        <h2 class="font-bold" th:text="${employeeName != null ? employeeName : 'Guest'}">Guest</h2>
+                        <hr>
+                    </div>
+                    <br>
+                    <!-- Notice -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-info shadow-sm position-relative overflow-hidden">
+                                <div class="d-flex align-items-center">
+                                    <div class="alert-icon me-3">
+                                        <i class="bi bi-info-circle-fill fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="alert-heading text-dark fw-bold" id="dailyGreeting">오늘의 알림</h5>
+                                        <p class="mb-0 text-dark" id="dailyMessage">오늘도 좋은 하루 되세요!</p>
+                                    </div>
+                                </div>
+                                <div class="position-absolute top-0 end-0 p-3">
+                                    <span class="badge bg-light text-dark" id="currentDate">2024년 6월 30일</span>
+                                </div>
+                                <div class="decoration-shape"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <!--  달력  -->
                         <div class="col-md-6">
                             <div class="calendar-container">
@@ -46,8 +71,8 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="row"></div>
-                            <div class="row"></div>
+                            <div class="row row-1"></div> <!-- 요일별 일일 일정 -->
+                            <div class="row row-2 mt-3"></div> <!-- 고정 버튼 -->
                         </div>
                     </div>
                 </div>
@@ -60,40 +85,31 @@
                                         <img src="assets/compiled/jpg/1.jpg" alt="Face 1">
                                     </div>
                                     <div class="ms-3 name">
-                                        <h5 class="font-bold">John Duck</h5>
-                                        <h6 class="text-muted mb-0">@johnducky</h6>
+                                        <h5 class="font-bold" th:text="${employeeName != null ? employeeName : 'Guest'}">Guest</h5>
+                                        <h6 class="text-muted mb-0" th:text="${department != null ? department : 'User'}">Team</h6>
+                                        <h6 class="text-muted mb-0" th:text="${position != null ? position : 'Guest'}">Guest</h6>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="card-content pb-4">
-                            <div class="recent-message d-flex px-4 py-3">
-                                <div class="avatar avatar-lg">
-                                    <img src="assets/compiled/jpg/4.jpg">
-                                </div>
-                                <div class="name ms-4">
-                                    <h5 class="mb-1">Hank Schrader</h5>
-                                    <h6 class="text-muted mb-0">@johnducky</h6>
-                                </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title" th:text="${department != null ? department + ' 부서 동료' : '부서 동료'}">부서 동료</h4>
                             </div>
-                            <div class="recent-message d-flex px-4 py-3">
-                                <div class="avatar avatar-lg">
-                                    <img src="assets/compiled/jpg/5.jpg">
+                            <div class="card-content pb-4">
+                                <!-- 동일 부서 직원 목록 (Thymeleaf를 사용하여 동적으로 데이터 표시) -->
+                                <div class="recent-message d-flex px-4 py-3" th:each="employee : ${departmentEmployees}">
+                                    <div class="name ms-4">
+                                        <h5 class="mb-1" th:text="${employee.employeeName}">직원명</h5>
+                                        <h6 class="text-muted mb-0" th:text="${employee.position}">직급</h6>
+                                    </div>
                                 </div>
-                                <div class="name ms-4">
-                                    <h5 class="mb-1">Dean Winchester</h5>
-                                    <h6 class="text-muted mb-0">@imdean</h6>
-                                </div>
-                            </div>
-                            <div class="recent-message d-flex px-4 py-3">
-                                <div class="avatar avatar-lg">
-                                    <img src="assets/compiled/jpg/1.jpg">
-                                </div>
-                                <div class="name ms-4">
-                                    <h5 class="mb-1">John Dodol</h5>
-                                    <h6 class="text-muted mb-0">@dodoljohn</h6>
+
+                                <!-- 데이터가 없을 경우 표시할 내용 -->
+                                <div class="px-4 py-3 text-center" th:if="${departmentEmployees == null || departmentEmployees.empty}">
+                                    <p>같은 부서 동료가 없습니다.</p>
                                 </div>
                             </div>
                         </div>

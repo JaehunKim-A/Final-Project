@@ -15,4 +15,5 @@ public interface EmployeeService {
     boolean deleteEmployee(int employeeId);
     EmployeeDTO getEmployeeByName(String employeeName);
     void updateEmployeeByName(Integer employeeId, EmployeeDTO employeeDTO);
+    List<EmployeeDTO> findByDepartment(String department);
 }

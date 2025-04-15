@@ -79,3 +79,36 @@ document.addEventListener("DOMContentLoaded", function() {
         location.href = `/codeManagement/codeManagement/delete/${codeId}`;
     });
 });
+
+  function openProductPopup(button) {
+    let popup = open("/finishedProduct/searchPopup", "Product Search", "width=650,height=400");
+
+    // 팝업에서 데이터를 받아오는 이벤트 처리
+    addEventListener("message", function(event) {
+        if (event.origin !== location.origin) return;
+
+        const productData = event.data;
+        if (productData && productData.unit) {
+            document.getElementById('codeValue').value = productData.unit;
+            document.getElementById('editCodeValue').value = productData.unit;
+        }
+    }, {
+        once: true
+    });
+}
+function openMaterialPopup(button) {
+    let popup = open("/rawMaterial/searchPopup", "Material Search", "width=650,height=400");
+
+    // 팝업에서 데이터를 받아오는 이벤트 처리
+    addEventListener("message", function(event) {
+        if (event.origin !== location.origin) return;
+
+        const materialData = event.data;
+        if (materialData && materialData.unit) {
+            document.getElementById('codeValue').value = materialData.unit;
+            document.getElementById('editCodeValue').value = materialData.unit;
+        }
+    }, {
+        once: true
+    });
+}
