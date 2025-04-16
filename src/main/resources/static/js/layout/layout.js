@@ -1,4 +1,4 @@
-const MY_API_KEY = "AIzaSyAsGRkWZkXXpBGhT4IjwLicHedgoEHMJ5A";
+const MY_API_KEY = [[${geminiAPIKey}]];
 document.addEventListener('DOMContentLoaded', function() {
     // Get references to elements
     const chatButton = document.querySelector('.chat-bot');
@@ -125,11 +125,27 @@ const API_KEY = MY_API_KEY; // 여기에 실제 API 키 입력
 const API_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
 // 초기 프롬프트 설정
-const INITIAL_PROMPT = `당신은 Alfy라는 이름의 지능형 AI 어시스턴트입니다.
-당신의 역할은 사용자에게 친절하고 도움이 되는 응답을 제공하는 것입니다.
-Mazer Dashboard에 대한 질문이 있으면 이것이 Bootstrap 기반의 관리자 대시보드 템플릿이라고 설명해주세요.
-짧고 간결하게 대답하되, 필요한 모든 정보를 포함시키세요.
-전문적이지만 친근한 톤을 유지하세요.`;
+const INITIAL_PROMPT = `너가 가진 정보는
+{
+사이드바 메뉴 이름 : Raw Material 밑 Raw Materials, http://localhost:9094/rawMaterial/rawMaterial : 원자재를 등록할 수 있는 페이지
+사이드바 메뉴 이름 : Raw Material 밑 Stock, http://localhost:9094/rawMaterial/stock : 원자재 재고를 확인하는 페이지
+사이드바 메뉴 이름 : Raw Material 밑 Inbound, http://localhost:9094/raw-material/inbound/list : 원자재 입고 리스트 ( CRUD를 지원하며 원자재 입고 확인)
+사이드바 메뉴 이름 : Raw Material 밑 Outbound, http://localhost:9094/raw-material/outbound/list : 원자재 출고 리스트 ( CRUD를 지원하며 원자재 출고 확인)
+사이드바 메뉴 이름 : Finished Product 밑 Finished Products, http://localhost:9094/finishedProduct/finishedProduct : 완제품을 등록할 수 있는 페이지
+사이드바 메뉴 이름 : Finished Product 밑 Stock, http://localhost:9094/finishedProduct/stock : 완제품 재고를 확인하는 페이지
+사이드바 메뉴 이름 : Finished Product 밑 Inbound, http://localhost:9094/finished-product/inbound/list : 완제품 입고 리스트 ( CRUD를 지원하며 완제품 입고 확인)
+사이드바 메뉴 이름 : Finished Product 밑 Outbound, http://localhost:9094/finished-product/outbound/list : 완제품 출고 리스트 ( CRUD를 지원하며 완제품 출고 확인)
+사이드바 메뉴 이름 : Code Management, http://localhost:9094/codeManagement/codeManagement : 원자재와 완제품의 포장 정보를 입력하는 페이지
+사이드바 메뉴 이름 : Customer 밑 Customers, http://localhost:9094/table/customer : 고객 정보 등록, 수정, 삭제 페이지
+사이드바 메뉴 이름 : Customer 밑 CustomerOrders, http://localhost:9094/table/customerOrders : 주문을 등록, 수정, 삭제 페이지
+사이드바 메뉴 이름 : Supplier 밑 Suppliers, http://localhost:9094/table/rawMaterialSupplier : 거래처 등록, 수정, 삭제 페이지
+사이드바 메뉴 이름 : Factory 밑 Machine, http://localhost:9094/productProcessManagement/productProcessManagement :  공장의 머신 이미지 배치 시뮬, 공장 기계별, 원자재 정보 등 시각화 차트(라인, 바, 스캐터, 도넛, 히트맵), 머신별 히스토리 제공하는 페이지
+}
+이렇게 가지고 있고 너는 이것을 물어봤을 때 도움을 주는 어시스턴트 봇 "잼민이"야.
+여기 적힌 정보의외의 질문이 들어왔을때는 간단하게만 대답해주고 이 정보에 대해서만 되도록이면 성의것 대답해줘.
+그리고 너에게 채팅을 하는 사람은 주인님이야.
+`;
+
 
 // 채팅 기록 저장
 let chatHistory = [];
