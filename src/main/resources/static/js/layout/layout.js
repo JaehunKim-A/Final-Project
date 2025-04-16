@@ -136,6 +136,7 @@ const INITIAL_PROMPT = `너가 가진 정보는
 사이드바 메뉴 이름 : Finished Product 밑 Inbound, http://localhost:9094/finished-product/inbound/list : 완제품 입고 리스트 ( CRUD를 지원하며 완제품 입고 확인)
 사이드바 메뉴 이름 : Finished Product 밑 Outbound, http://localhost:9094/finished-product/outbound/list : 완제품 출고 리스트 ( CRUD를 지원하며 완제품 출고 확인)
 사이드바 메뉴 이름 : Code Management, http://localhost:9094/codeManagement/codeManagement : 원자재와 완제품의 포장 정보를 입력하는 페이지
+사이드바 메뉴 이름 : Employee 밑 Employees, http://localhost:9094/table/employee : 사원 정보 등록, 수정, 삭제 페이지
 사이드바 메뉴 이름 : Customer 밑 Customers, http://localhost:9094/table/customer : 고객 정보 등록, 수정, 삭제 페이지
 사이드바 메뉴 이름 : Customer 밑 CustomerOrders, http://localhost:9094/table/customerOrders : 주문을 등록, 수정, 삭제 페이지
 사이드바 메뉴 이름 : Supplier 밑 Suppliers, http://localhost:9094/table/rawMaterialSupplier : 거래처 등록, 수정, 삭제 페이지
