@@ -216,20 +216,18 @@ document.addEventListener("DOMContentLoaded", function () {
         if (address) {
             try {
                 const { lat, lng } = await fetchLatLngByAddress(address);
-
-                // ✅ map HTML과 함께 지도 스크립트 실행
-                            setTimeout(() => {
-                                if (typeof naver !== "undefined" && naver.maps) {
-                                    const map = new naver.maps.Map(`map-${id}`, {
-                                        center: new naver.maps.LatLng(lat, lng),
-                                        zoom: 15
-                                    });
-                                    new naver.maps.Marker({
-                                        map,
-                                        position: new naver.maps.LatLng(lat, lng)
-                                    });
-                                }
-                            }, 100); // 지연을 주어 div가 DOM에 렌더링된 뒤 실행
+                setTimeout(() => {
+                    if (typeof naver !== "undefined" && naver.maps) {
+                        const map = new naver.maps.Map(`map-${id}`, {
+                            center: new naver.maps.LatLng(lat, lng),
+                            zoom: 15
+                        });
+                        new naver.maps.Marker({
+                            map,
+                            position: new naver.maps.LatLng(lat, lng)
+                        });
+                    }
+                }, 100);
 
                 return `
                 <td colspan="99">
