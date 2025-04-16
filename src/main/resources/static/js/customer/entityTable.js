@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
             mod: "modDate"
         },
         rawMaterialSupplier: {
-            id: "id",
+            id: "supplierId",
             name: "supplierName",
             contact: "contactInfo",
             address: "address",
@@ -124,19 +124,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function setRowClickEvents() {
         table.removeEventListener("click", rowClickHandler);
         table.addEventListener("click", rowClickHandler);
-
-        document.querySelectorAll(".accordion-toggle").forEach(btn => {
-            btn.addEventListener("click", function () {
-                const row = this.closest("tr");
-                const id = row.querySelector(`.${entity}-id`)?.textContent?.trim();
-                const address = row.querySelector(`.${entity}-address`)?.textContent?.trim();
-
-                if (id && address) {
-                    const mapId = `map-${id}`;
-                    loadDynamicMap(address, mapId);
-                }
-            });
-        });
     }
 
     function rowClickHandler(e) {
@@ -172,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (detailCell) toggleAccordionRow(detailCell.closest("tr"));
     }
 
-    function toggleAccordionRow(row) {
+    async function toggleAccordionRow(row) {
         const nextRow = row.nextElementSibling;
         if (nextRow?.classList.contains("accordion-row")) {
             bootstrap.Collapse.getOrCreateInstance(nextRow.querySelector(".accordion-collapse")).hide();
@@ -190,64 +177,86 @@ document.addEventListener("DOMContentLoaded", function () {
         const rowIndex = row.rowIndex;
         const accordionRow = document.createElement("tr");
         accordionRow.classList.add("accordion-row");
-        accordionRow.innerHTML = renderAccordionRow(data, rowIndex);
+        accordionRow.innerHTML = await renderAccordionRow(data, rowIndex); // ✅ 비동기 await
         row.parentNode.insertBefore(accordionRow, row.nextSibling);
         new bootstrap.Collapse(document.getElementById(`collapse-${rowIndex}`), { toggle: true });
-
-        if (entity === "customer") {
-            loadDynamicMap(data[fieldMap[entity].address], `map-${data[fieldMap[entity].id]}`);
-        }
     }
 
-    function renderAccordionRow(data, index) {
-        const accordionLabels = JSON.parse(document.body.dataset.accordionLabels || "[]");
 
-        // ✅ customer용 지도 포함 레이아웃
-        if (entity === "customer") {
-            return `
-            <td colspan="99">
-                <div class="accordion" id="accordionDetail-${index}">
-                    <div class="accordion-item">
-                        <div id="collapse-${index}" class="accordion-collapse collapse">
-                            <div class="accordion-body p-0">
-                                <div class="d-flex flex-wrap">
-                                    <div class="p-3" style="flex:1 1 300px; min-width: 300px;">
-                                        <table class="table table-sm table-borderless mb-0">
-                                            <tbody>
-                                                ${accordionFields.map((f, i) => `
-                                                    <tr>
-                                                        <th class="text-start text-nowrap" style="width: 100px;">${accordionLabels[i] || f}</th>
-                                                        <td>${data[f] || ""}</td>
-                                                    </tr>
-                                                `).join("")}
-                                                <tr>
-                                                    <td colspan="2">
-                                                        <button class="btn btn-sm btn-outline-primary btn-edit"
-                                                            data-bs-toggle="modal" data-bs-target="#editModal"
-                                                            data-id="${data[fieldMap[entity].id]}"
-                                                            ${utils.renderDataAttrs(data, fields)}
-                                                            data-${fieldMap[entity].reg?.toLowerCase()}="${data[fieldMap[entity].reg] || ''}"
-                                                            data-${fieldMap[entity].mod?.toLowerCase()}="${data[fieldMap[entity].mod] || ''}">수정</button>
-                                                        <button class="btn btn-sm btn-outline-info btn-delete"
-                                                            data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                                            data-id="${data[fieldMap[entity].id]}" data-name="${data[fieldMap[entity].name] || ''}">삭제</button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="p-3" style="flex:1 1 400px; min-width: 300px;">
-                                        <div class="map-container border" id="map-${data[fieldMap[entity].id]}" style="height: 300px;"></div>
+    async function renderAccordionRow(data, index) {
+        const accordionLabels = JSON.parse(document.body.dataset.accordionLabels || "[]");
+        const id = data[fieldMap[entity].id];
+        const addressKey = fieldMap[entity].address;
+        const address = addressKey ? data[addressKey] : null;
+
+        const editableTable = `
+            <div class="p-3" style="flex:1 1 300px; min-width: 300px;">
+                <table class="table table-sm table-borderless mb-0">
+                    <tbody>
+                        ${accordionFields.map((f, i) => `
+                            <tr>
+                                <th class="text-start text-nowrap" style="width: 100px;">${accordionLabels[i] || f}</th>
+                                <td>${data[f] || ""}</td>
+                            </tr>
+                        `).join("")}
+                        <tr>
+                            <td colspan="2">
+                                <button class="btn btn-sm btn-outline-primary btn-edit"
+                                    data-bs-toggle="modal" data-bs-target="#editModal"
+                                    data-id="${id}"
+                                    ${utils.renderDataAttrs(data, fields)}
+                                    data-${fieldMap[entity].reg?.toLowerCase()}="${data[fieldMap[entity].reg] || ''}"
+                                    data-${fieldMap[entity].mod?.toLowerCase()}="${data[fieldMap[entity].mod] || ''}">수정</button>
+                                <button class="btn btn-sm btn-outline-info btn-delete"
+                                    data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                    data-id="${id}" data-name="${data[fieldMap[entity].name] || ''}">삭제</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>`;
+
+        if (address) {
+            try {
+                const { lat, lng } = await fetchLatLngByAddress(address);
+
+                // ✅ map HTML과 함께 지도 스크립트 실행
+                            setTimeout(() => {
+                                if (typeof naver !== "undefined" && naver.maps) {
+                                    const map = new naver.maps.Map(`map-${id}`, {
+                                        center: new naver.maps.LatLng(lat, lng),
+                                        zoom: 15
+                                    });
+                                    new naver.maps.Marker({
+                                        map,
+                                        position: new naver.maps.LatLng(lat, lng)
+                                    });
+                                }
+                            }, 100); // 지연을 주어 div가 DOM에 렌더링된 뒤 실행
+
+                return `
+                <td colspan="99">
+                    <div class="accordion" id="accordionDetail-${index}">
+                        <div class="accordion-item">
+                            <div id="collapse-${index}" class="accordion-collapse collapse">
+                                <div class="accordion-body p-0">
+                                    <div class="d-flex flex-wrap">
+                                        ${editableTable}
+                                        <div class="p-3 map-wrapper" style="flex:1 1 400px; min-width: 300px;">
+                                            <div class="map-container border" id="map-${id}" style="height: 300px;"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </td>`;
+                </td>`;
+            } catch (err) {
+                console.warn("🛑 유효하지 않은 주소, 지도 없이 렌더링:", err);
+            }
         }
 
-        // ✅ 그 외 도메인: 지도 없이 깔끔한 테이블만
+        // fallback: 지도 없이
         return `
         <td colspan="99">
             <div class="accordion" id="accordionDetail-${index}">
@@ -267,13 +276,13 @@ document.addEventListener("DOMContentLoaded", function () {
                                         <td>
                                             <button class="btn btn-sm btn-outline-primary btn-edit"
                                                 data-bs-toggle="modal" data-bs-target="#editModal"
-                                                data-id="${data[fieldMap[entity].id]}"
+                                                data-id="${id}"
                                                 ${utils.renderDataAttrs(data, fields)}
                                                 data-${fieldMap[entity].reg?.toLowerCase()}="${data[fieldMap[entity].reg] || ''}"
                                                 data-${fieldMap[entity].mod?.toLowerCase()}="${data[fieldMap[entity].mod] || ''}">수정</button>
                                             <button class="btn btn-sm btn-outline-info btn-delete"
                                                 data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                                data-id="${data[fieldMap[entity].id]}" data-name="${data[fieldMap[entity].name] || ''}">삭제</button>
+                                                data-id="${id}" data-name="${data[fieldMap[entity].name] || ''}">삭제</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -284,6 +293,9 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
         </td>`;
     }
+
+
+
 
 
 
@@ -789,35 +801,6 @@ document.addEventListener("DOMContentLoaded", function () {
             throw new Error("주소를 찾을 수 없습니다.");
         }
     }
-
-
-
-    async function loadDynamicMap(address, mapId) {
-        const container = document.getElementById(mapId);
-        if (!address || !container) {
-            if (container) container.innerHTML = `<div class="text-center text-muted pt-5">표시할 주소 정보가 없습니다.</div>`;
-            return;
-        }
-
-        try {
-            const { lat, lng } = await fetchLatLngByAddress(address);
-
-            container.innerHTML = ""; // 혹시 이전 텍스트 제거
-            const map = new naver.maps.Map(mapId, {
-                center: new naver.maps.LatLng(lat, lng),
-                zoom: 15
-            });
-
-            new naver.maps.Marker({
-                map,
-                position: new naver.maps.LatLng(lat, lng)
-            });
-        } catch (err) {
-            console.warn("🛑 지도 마커 표시 실패:", err);
-            container.innerHTML = `<div class="text-center text-muted pt-5">표시할 수 있는 위치 정보가 없습니다.</div>`;
-        }
-    }
-
 
     // 초기 실행
     setupColumnSearch();
