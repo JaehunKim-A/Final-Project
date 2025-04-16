@@ -80,7 +80,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-
         dataTable.on("datatable.init", () => {
             refreshPagination();
             setRowClickEvents();
@@ -95,7 +94,6 @@ document.addEventListener("DOMContentLoaded", function () {
         dataTable.on("datatable.sort", refreshPagination);
         dataTable.on("datatable.page", refreshPagination);
     }
-
 
     function refreshPagination() {
         const paginations = dataTable.wrapper.querySelectorAll("ul.dataTable-pagination-list");
@@ -119,7 +117,6 @@ document.addEventListener("DOMContentLoaded", function () {
             );
         }
     }
-
 
     function setRowClickEvents() {
         table.removeEventListener("click", rowClickHandler);
@@ -293,12 +290,6 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
         </td>`;
     }
-
-
-
-
-
-
 
     async function filterAndRender() {
         try {
