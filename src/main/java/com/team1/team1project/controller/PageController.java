@@ -19,7 +19,7 @@ public class PageController {
 
     // 페이지 번호가 1부터 시작하도록 설정
     protected Pageable getPageable(int page, int size, Pageable pageableRaw) {
-        int pageIndex = page - 1;  // 페이지 번호를 1부터 시작하므로 1을 빼주어야 함
+        int pageIndex = page;  // 페이지 번호를 1부터 시작하므로 1을 빼주어야 함
         return PageRequest.of(pageIndex, size, pageableRaw.getSort());
     }
 }

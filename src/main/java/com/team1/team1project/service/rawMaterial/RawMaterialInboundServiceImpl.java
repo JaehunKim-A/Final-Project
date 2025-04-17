@@ -23,7 +23,7 @@ public class RawMaterialInboundServiceImpl implements RawMaterialInboundService 
     /** ✅ 1. 페이징 + 검색 목록 */
     @Override
     public PageResponseDTO<RawMaterialInboundDTO> getPagedRawMaterialInbounds(PageRequestDTO pageRequestDTO) {
-        Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), Sort.by("inboundId").descending());
+        Pageable pageable = PageRequest.of(pageRequestDTO.getPage(), pageRequestDTO.getSize(), Sort.by("inboundId").descending());
 
         // 검색 조건 적용 예시
         Page<RawMaterialInbound> result = repository.searchWithPaging(pageRequestDTO.getKeyword(), pageable);
@@ -32,8 +32,7 @@ public class RawMaterialInboundServiceImpl implements RawMaterialInboundService 
                 .map(entity -> modelMapper.map(entity, RawMaterialInboundDTO.class))
                 .collect(Collectors.toList());
 
-        // ✅ 빌더에 pageRequestDTO, dtoList, total만 전달
-        return PageResponseDTO.<RawMaterialInboundDTO>builder()
+        return PageResponseDTO.<RawMaterialInboundDTO>builder() // 수정
                 .pageRequestDTO(pageRequestDTO)
                 .dtoList(dtoList)
                 .total((int) result.getTotalElements())
@@ -63,8 +62,8 @@ public class RawMaterialInboundServiceImpl implements RawMaterialInboundService 
             entity.setStatus(dto.getStatus());
         }
 
-        if (dto.getMaterialCode() != null) {
-            entity.setMaterialCode(dto.getMaterialCode());
+        if (dto.getInboundDate() != null) {
+            entity.setInboundDate(dto.getInboundDate());
         }
 
         if (dto.getQuantity() != null) {
@@ -75,12 +74,8 @@ public class RawMaterialInboundServiceImpl implements RawMaterialInboundService 
             entity.setInboundCode(dto.getInboundCode());
         }
 
-        if (dto.getMaterialId() != null) {
-            entity.setMaterialId(dto.getMaterialId());
-        }
-
-        if (dto.getInboundDate() != null) {
-            entity.setInboundDate(dto.getInboundDate());
+        if (dto.getMaterialCode() != null) {
+            entity.setMaterialCode(dto.getMaterialCode());
         }
 
         repository.save(entity);
@@ -96,7 +91,7 @@ public class RawMaterialInboundServiceImpl implements RawMaterialInboundService 
     @Override
     public PageResponseDTO<RawMaterialInboundDTO> getRawMaterialInboundHistoryForTable(String sorter, boolean isAsc, PageRequestDTO pageRequestDTO) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), Sort.by(direction, sorter));
+        Pageable pageable = PageRequest.of(pageRequestDTO.getPage(), pageRequestDTO.getSize(), Sort.by(direction, sorter));
 
         Page<RawMaterialInbound> result = repository.searchWithPaging(pageRequestDTO.getKeyword(), pageable);
 
@@ -104,7 +99,7 @@ public class RawMaterialInboundServiceImpl implements RawMaterialInboundService 
                 .map(entity -> modelMapper.map(entity, RawMaterialInboundDTO.class))
                 .collect(Collectors.toList());
 
-        return PageResponseDTO.<RawMaterialInboundDTO>builder()
+        return PageResponseDTO.<RawMaterialInboundDTO>builder() // 수정
                 .pageRequestDTO(pageRequestDTO)
                 .dtoList(dtoList)
                 .total((int) result.getTotalElements())

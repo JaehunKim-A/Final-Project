@@ -14,38 +14,32 @@ public class RawMaterialInboundDTO {
 
     private Long inboundId;
     private String inboundCode;
-    private LocalDate inboundDate;  // LocalDate로 변경
-    private String materialCode;
+    private LocalDate inboundDate;
     private Long quantity;
     private String status;
-    private Long supplierId;
-    private Long materialId;
+    private String materialCode;
 
     // 엔티티를 DTO로 변환하는 메소드
     public static RawMaterialInboundDTO fromEntity(RawMaterialInbound rawMaterialInbound) {
         return new RawMaterialInboundDTO(
                 rawMaterialInbound.getInboundId(),
                 rawMaterialInbound.getInboundCode(),
-                rawMaterialInbound.getInboundDate(),  // Date -> LocalDate로 변환 필요 없음
-                rawMaterialInbound.getMaterialCode(),
+                rawMaterialInbound.getInboundDate(),
                 rawMaterialInbound.getQuantity(),
                 rawMaterialInbound.getStatus(),
-                rawMaterialInbound.getSupplierId(),
-                rawMaterialInbound.getMaterialId()
+                rawMaterialInbound.getMaterialCode() // 추가된 필드
         );
     }
 
-    // DTO를 엔티티로 변환하는 메소드 (옵션)
+    // DTO를 엔티티로 변환하는 메소드
     public static RawMaterialInbound toEntity(RawMaterialInboundDTO dto) {
         RawMaterialInbound inbound = new RawMaterialInbound();
         inbound.setInboundId(dto.getInboundId());
         inbound.setInboundCode(dto.getInboundCode());
-        inbound.setInboundDate(dto.getInboundDate());  // LocalDate 그대로 설정
-        inbound.setMaterialCode(dto.getMaterialCode());
+        inbound.setInboundDate(dto.getInboundDate());
         inbound.setQuantity(dto.getQuantity());
         inbound.setStatus(dto.getStatus());
-        inbound.setSupplierId(dto.getSupplierId());
-        inbound.setMaterialId(dto.getMaterialId());
+        inbound.setMaterialCode(dto.getMaterialCode()); // 추가된 필드
         return inbound;
     }
 }

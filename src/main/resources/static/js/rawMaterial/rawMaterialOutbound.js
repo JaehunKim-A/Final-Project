@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const pageSizeSelector = document.querySelector("#outbound-page-size");
 
   // 최초 로딩
-  fetchInboundList(currentPage);
+  fetchOutboundList(currentPage);
 
   // 검색 버튼 클릭 이벤트
   searchBtn.addEventListener("click", () => {
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     tableBody.innerHTML = "";
 
     if (!Array.isArray(list) || list.length === 0) {
-      tableBody.innerHTML = `<tr><td colspan="6" class="text-center">데이터가 없습니다.</td></tr>`;
+      tableBody.innerHTML = `<tr><td colspan="8" class="text-center">데이터가 없습니다.</td></tr>`;
       return;
     }
 
@@ -136,8 +136,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch(`/raw-material/outbound/api/${outboundId}`);
       const data = await response.json();
 
-      document.querySelector("#editId").value = data.outboundId;
-      document.querySelector("#editmaterialId").value = data.materialId;
+      document.querySelector("#editOutboundId").value = data.outboundId;
+      document.querySelector("#editMaterialId").value = data.materialId;
       document.querySelector("#editOutboundCode").value = data.outboundCode;
       document.querySelector("#editOutboundDate").value = data.outboundDate;
       document.querySelector("#editQuantity").value = data.quantity;
@@ -151,8 +151,8 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // 삭제 모달 열기
-  window.openDeleteModal = (inboundId) => {
-    document.querySelector("#deleteId").value = inboundId;
+  window.openDeleteModal = (outboundId) => {
+    document.querySelector("#deleteId").value = outboundId;
     new bootstrap.Modal(document.querySelector("#deleteModal")).show();
   };
 
@@ -162,8 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = e.target;
 
     const payload = {
-      inboundId: form.outboundId.Value,
-      materialId: form.materialId.Value,
+      materialId: form.materialId.value,
       outboundCode: form.outboundCode.value,
       outboundDate: form.outboundDate.value,
       quantity: form.quantity.value,
@@ -181,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok) throw new Error("등록 실패");
 
       bootstrap.Modal.getInstance(document.querySelector("#registerModal")).hide();
-      fetchInboundList(currentPage, keywordInput.value.trim());
+      fetchOutboundList(currentPage, keywordInput.value.trim());
       form.reset();
     } catch (err) {
       console.error("등록 오류:", err);
@@ -194,15 +193,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = e.target;
 
     const payload = {
-
       outboundId: form.editId.value,
-      materialId: form.editMaterialId.Value,
+      materialId: form.editMaterialId.value,
       outboundCode: form.editOutboundCode.value,
       outboundDate: form.editOutboundDate.value,
       quantity: form.editQuantity.value,
       warehouse: form.editWarehouse.value,
       status: form.editStatus.value,
-
     };
 
     try {
@@ -215,7 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok) throw new Error("수정 실패");
 
       bootstrap.Modal.getInstance(document.querySelector("#editModal")).hide();
-      fetchInboundList(currentPage, keywordInput.value.trim());
+      fetchOutboundList(currentPage, keywordInput.value.trim());
     } catch (err) {
       console.error("수정 오류:", err);
     }
@@ -224,17 +221,18 @@ document.addEventListener("DOMContentLoaded", () => {
   // 삭제 처리
   document.querySelector("#deleteForm").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const inboundId = document.querySelector("#deleteId").value;
+    const outboundId = document.querySelector("#deleteId").value;
 
     try {
       const response = await fetch(`/raw-material/outbound/api/delete/${outboundId}`, {
         method: "DELETE",
+        headers: { [header]: token },
       });
 
       if (!response.ok) throw new Error("삭제 실패");
 
       bootstrap.Modal.getInstance(document.querySelector("#deleteModal")).hide();
-      fetchInboundList(currentPage, keywordInput.value.trim());
+      fetchOutboundList(currentPage, keywordInput.value.trim());
     } catch (err) {
       console.error("삭제 오류:", err);
     }

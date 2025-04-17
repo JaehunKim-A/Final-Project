@@ -7,6 +7,7 @@
 
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
     <link rel="stylesheet" href="/assets/extensions/simple-datatables/style.css">
     <link rel="stylesheet" href="/assets/compiled/css/app.css">
     <link rel="stylesheet" href="/assets/compiled/css/app-dark.css">
@@ -61,10 +62,10 @@
                             <thead>
                             <tr>
                                 <th><a href="#" class="dataTable-sorter" data-sort="outboundCode">OutboundCode</a></th>
+                                <th><a href="#" class="dataTable-sorter" data-sort="productId">ProductId</a></th>
                                 <th><a href="#" class="dataTable-sorter" data-sort="quantity">Quantity</a></th>
-                                <th><a href="#" class="dataTable-sorter" data-sort="outboundDate">OutboundDate</a></th>
                                 <th><a href="#" class="dataTable-sorter" data-sort="status">Status</a></th>
-                                <th><a href="#" class="dataTable-sorter" data-sort="supplierId">SupplierId</a></th>
+                                <th><a href="#" class="dataTable-sorter" data-sort="outboundDate">OutboundDate</a></th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
@@ -95,7 +96,6 @@
                         </div>
                     </div>
                 </div>
-        </div>
         </section>
 
         <!-- 등록 모달 -->
@@ -109,23 +109,27 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="outboundCode" class="form-label">OutboundCode</label>
-                            <input type="number" class="form-control" id="outboundCode" name="outboundCode" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="quantity" class="form-label">Quantity</label>
-                            <input type="text" class="form-control" id="quantity" name="quantity" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="outboundDate" class="form-label">Outbound Date</label>
-                            <input type="datetime-local" class="form-control" id="outboundDate" name="outboundDate" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="status" class="form-label">Status</label>
-                            <input type="text" class="form-control" id="status" name="status" required>
+                            <input type="text" class="form-control" id="outboundCode" name="outboundCode" required>
                         </div>
                         <div class="mb-3">
                             <label for="productId" class="form-label">Product ID</label>
                             <input type="number" class="form-control" id="productId" name="productId" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="complete">Complete</option>
+                                <option value="pending">Pending</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="outboundDate" class="form-label">Outbound Date</label>
+                            <input type="datetime-local" class="form-control" id="outboundDate" name="outboundDate" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -141,22 +145,22 @@
             <div class="modal-dialog">
                 <form id="editForm" method="post" class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">Edit Inbound</h5>
+                        <h5 class="modal-title" id="editModalLabel">Edit Outbound</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <input type="hidden" id="editId" name="outboundId">
                         <div class="mb-3">
                             <label for="editOutboundCode" class="form-label">Outbound Code</label>
-                            <input type="number" class="form-control" id="editOutboundCode" name="editOutboundCode">
+                            <input type="text" class="form-control" id="editOutboundCode" name="editOutboundCode">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editProductId" class="form-label">Product ID</label>
+                            <input type="number" class="form-control" id="editProductId" name="editProductId">
                         </div>
                         <div class="mb-3">
                             <label for="editQuantity" class="form-label">Quantity</label>
                             <input type="text" class="form-control" id="editQuantity" name="editQuantity">
-                        </div>
-                        <div class="mb-3">
-                            <label for="editOutboundDate" class="form-label">Outbound Date</label>
-                            <input type="datetime-local" class="form-control" id="editOutboundDate" name="editOutboundDate">
                         </div>
                         <div class="mb-3">
                             <label for="editStatus" class="form-label">Status</label>
@@ -167,8 +171,8 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="editProductId" class="form-label">Product ID</label>
-                            <input type="number" class="form-control" id="editProductId" name="editProductId">
+                            <label for="editOutboundDate" class="form-label">Outbound Date</label>
+                            <input type="datetime-local" class="form-control" id="editOutboundDate" name="editOutboundDate">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -200,7 +204,8 @@
         </div>
     </div>
 
-    <footer th:replace="~{layout/layout :: footer}"></footer>
+    <footer><div th:replace="~{layout/layout :: footer}"/></footer>
+    <div id="underbar" th:replace="~{layout/layout :: underbar}"></div>
 </div>
 </div>
 

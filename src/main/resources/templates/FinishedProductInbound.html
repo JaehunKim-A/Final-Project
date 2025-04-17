@@ -7,6 +7,7 @@
 
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
     <link rel="stylesheet" href="/assets/extensions/simple-datatables/style.css">
     <link rel="stylesheet" href="/assets/compiled/css/app.css">
     <link rel="stylesheet" href="/assets/compiled/css/app-dark.css">
@@ -41,7 +42,7 @@
             <section class="section">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4 class="card-title mb-0">Inbound List</h4>
+                        <h4 class="card-title mb-0">Finished-Product-Inbound List</h4>
                         <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#registerModal">
                             Add New Inbound
                         </button>
@@ -60,11 +61,11 @@
                         <table class="table table-striped" id="table1">
                             <thead>
                             <tr>
-                                <th><a href="#" class="dataTable-sorter" data-sort="supplierId">SupplierID</a></th>
                                 <th><a href="#" class="dataTable-sorter" data-sort="inboundCode">InboundCode</a></th>
+                                <th><a href="#" class="dataTable-sorter" data-sort="supplierId">SupplierID</a></th>
                                 <th><a href="#" class="dataTable-sorter" data-sort="quantity">Quantity</a></th>
-                                <th><a href="#" class="dataTable-sorter" data-sort="completeTime">CompletTime</a></th>
                                 <th><a href="#" class="dataTable-sorter" data-sort="status">Status</a></th>
+                                <th><a href="#" class="dataTable-sorter" data-sort="completeTime">CompletTime</a></th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
@@ -94,7 +95,6 @@
                             </nav>
                         </div>
                     </div>
-                    </div>
                 </div>
             </section>
 
@@ -108,24 +108,29 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="quantity" class="form-label">Quantity</label>
-                                <input type="number" class="form-control" id="quantity" name="quantity" required>
-                            </div>
-                            <div class="mb-3">
                                 <label for="inboundCode" class="form-label">Inbound Code</label>
                                 <input type="text" class="form-control" id="inboundCode" name="inboundCode" required>
                             </div>
                             <div class="mb-3">
-                                <label for="completeTime" class="form-label">Complete Time</label>
-                                <input type="datetime-local" class="form-control" id="completeTime" name="completeTime" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="status" class="form-label">Status</label>
-                                <input type="text" class="form-control" id="status" name="status" required>
-                            </div>
-                            <div class="mb-3">
                                 <label for="supplierId" class="form-label">Supplier ID</label>
                                 <input type="number" class="form-control" id="supplierId" name="supplierId" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="quantity" class="form-label">Quantity</label>
+                                <input type="number" class="form-control" id="quantity" name="quantity" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select" id="status" name="status">
+                                    <option value="complete">Complete</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="completeTime" class="form-label">Complete Time</label>
+                                <input type="datetime-local" class="form-control" id="completeTime" name="completeTime" required>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -147,12 +152,16 @@
                         <div class="modal-body">
                             <input type="hidden" id="editId" name="inboundId">
                             <div class="mb-3">
-                                <label for="editQuantity" class="form-label">Quantity</label>
-                                <input type="number" class="form-control" id="editQuantity" name="quantity">
-                            </div>
-                            <div class="mb-3">
                                 <label for="editInboundCode" class="form-label">Inbound Code</label>
                                 <input type="text" class="form-control" id="editInboundCode" name="inboundCode">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editSupplierId" class="form-label">Supplier ID</label>
+                                <input type="number" class="form-control" id="editSupplierId" name="supplierId">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editQuantity" class="form-label">Quantity</label>
+                                <input type="number" class="form-control" id="editQuantity" name="quantity">
                             </div>
                             <div class="mb-3">
                                 <label for="editCompleteTime" class="form-label">Complete Time</label>
@@ -165,10 +174,6 @@
                                     <option value="pending">Pending</option>
                                     <option value="cancelled">Cancelled</option>
                                 </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="editSupplierId" class="form-label">Supplier ID</label>
-                                <input type="number" class="form-control" id="editSupplierId" name="supplierId">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -200,7 +205,10 @@
             </div>
         </div>
 
-        <footer th:replace="~{layout/layout :: footer}"></footer>
+        <footer>
+            <div th:replace="~{layout/layout :: footer}"/>
+        </footer>
+        <div id="underbar" th:replace="~{layout/layout :: underbar}"></div>
     </div>
 </div>
 

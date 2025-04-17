@@ -52,11 +52,11 @@ public class PageRequestDTO {
     }
 
     public Pageable getPageable(String... props) {
-        return PageRequest.of(this.page - 1, this.size, Sort.by(props).descending());
+        return PageRequest.of(this.page, this.size, Sort.by(props).descending());
     }
 
     public Pageable getPageable(boolean isAsc, String... props) {
-        return PageRequest.of(this.page - 1, this.size,
+        return PageRequest.of(this.page, this.size,
                 isAsc ? Sort.by(props).ascending() : Sort.by(props).descending());
     }
 

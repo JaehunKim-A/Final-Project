@@ -10,8 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @Controller
 @Log4j2
 @RequestMapping("/raw-material/inbound")
@@ -35,8 +33,8 @@ public class RawMaterialInboundController {
         return ResponseEntity.ok(response);
     }
 
-    /** ✅ 3. 입고 상세 조회 */
-    @GetMapping("/api/{inboundId}")
+    /** ✅ 3. 입고 상세 조회 - 경로 변경 ('/api/detail/{inboundId}') */
+    @GetMapping("/api/detail/{inboundId}")
     @ResponseBody
     public ResponseEntity<RawMaterialInboundDTO> getDetail(@PathVariable Long inboundId) {
         RawMaterialInboundDTO dto = rawMaterialInboundService.getRawMaterialInbound(inboundId);
@@ -67,17 +65,6 @@ public class RawMaterialInboundController {
         return ResponseEntity.ok("입고 수정 완료");
     }
 
-    /** ✅ 7. 상태만 수정 (PATCH JSON) */
-    @PatchMapping("/api/status/{inboundId}")
-    @ResponseBody
-    public ResponseEntity<String> patchStatus(@PathVariable Long inboundId, @RequestBody Map<String, String> statusMap) {
-        String status = statusMap.get("status");
-        RawMaterialInboundDTO dto = new RawMaterialInboundDTO();
-        dto.setStatus(status);
-        rawMaterialInboundService.modifyInboundStatus(inboundId, dto);
-        return ResponseEntity.ok("상태 수정 완료");
-    }
-
     /** ✅ 8. 입고 삭제 (DELETE) */
     @DeleteMapping("/api/delete/{inboundId}")
     @ResponseBody
@@ -93,7 +80,7 @@ public class RawMaterialInboundController {
                 rawMaterialInboundService.getRawMaterialInboundHistoryForTable("historyId", false, pageRequestDTO);
 
         model.addAttribute("historyPage", historyPage);
-        return "raw-material/historyList";
+        return "rawmaterial/historyList";
     }
 
     /** ✅ 10. 히스토리 API (POST JSON + 정렬) */
@@ -112,5 +99,21 @@ public class RawMaterialInboundController {
                         request.getSorter(), request.isAsc(), pageRequestDTO);
 
         return ResponseEntity.ok(result);
+    }
+
+    /** ✅ 11. API 리스트 조회 (GET 방식) */
+    @GetMapping("/api/list")
+    @ResponseBody
+    public ResponseEntity<PageResponseDTO<RawMaterialInboundDTO>> getList(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(page)
+                .size(size)
+                .build();
+
+        PageResponseDTO<RawMaterialInboundDTO> response = rawMaterialInboundService.getPagedRawMaterialInbounds(pageRequestDTO);
+        return ResponseEntity.ok(response);
     }
 }

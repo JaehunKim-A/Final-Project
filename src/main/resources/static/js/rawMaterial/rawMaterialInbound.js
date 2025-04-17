@@ -1,242 +1,321 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-  const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-  let currentPage = 1;
-  const keywordInput = document.querySelector("#searchKeyword");
-  const searchBtn = document.querySelector("#searchButton");
-  const tableBody = document.querySelector("#inboundTableBody");
-  const paginationContainer = document.querySelector("#inbound-pagination");
-  const pageSizeSelector = document.querySelector("#inbound-page-size");
+    const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+    const apiUrl = "/raw-material/inbound/api/list";
+    const tableBody = document.getElementById("inboundTableBody");
+    const pagination = document.getElementById("inbound-pagination");
+    const pageInfo = document.getElementById("inbound-page-info");
 
-  // 최초 로딩
-  fetchInboundList(currentPage);
+    let currentPage = 0; // 백엔드는 0부터 시작
+    let pageSize = 10;
+    let keyword = "";
+    let sortBy = "inboundId";
+    let direction = "asc";
 
-  // 검색 버튼 클릭 이벤트
-  searchBtn.addEventListener("click", () => {
-    currentPage = 1;
-    fetchInboundList(currentPage, keywordInput.value.trim());
-  });
+    // 초기 데이터 로딩
+    fetchAndRender();
 
-  // 페이지 사이즈 변경 이벤트
-  pageSizeSelector.addEventListener("change", () => {
-    currentPage = 1;
-    fetchInboundList(currentPage, keywordInput.value.trim());
-  });
-
-  // 데이터 가져오기 함수
-  async function fetchInboundList(page, keyword = "") {
-    const pageSize = parseInt(pageSizeSelector.value);
-
-    try {
-      const response = await fetch("/raw-material/inbound/api/list", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", [header]: token },
-        body: JSON.stringify({ page, size: pageSize, keyword }),
-      });
-
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-      const data = await response.json();
-      console.log("Fetched data:", data); // ✅ 콘솔 로그 추가
-
-      renderTable(data.dtoList || []);
-      renderPagination(data, { page, size: pageSize }); // ✅ 파라미터 수정
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
-
-  // 테이블 렌더링
-  function renderTable(list) {
-    tableBody.innerHTML = "";
-
-    if (!Array.isArray(list) || list.length === 0) {
-      tableBody.innerHTML = `<tr><td colspan="6" class="text-center">데이터가 없습니다.</td></tr>`;
-      return;
-    }
-
-    list.forEach(item => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${item.inboundId ?? "-"}</td>
-        <td>${item.materialId ?? "-"}</td>
-        <td>${item.inboundCode ?? "-"}</td>
-        <td>${item.materialCode ?? "-"}</td>
-        <td>${item.quantity ?? "-"}</td>
-        <td>${item.inboundDate ?? "-"}</td>
-        <td>${item.status ?? "-"}</td>
-        <td>
-          <button class="btn btn-sm btn-primary" onclick="openEditModal(${item.inboundId})">수정</button>
-          <button class="btn btn-sm btn-danger" onclick="openDeleteModal(${item.inboundId})">삭제</button>
-        </td>
-      `;
-      tableBody.appendChild(row);
+    // 검색 버튼
+    document.getElementById("searchButton").addEventListener("click", () => {
+        keyword = document.getElementById("searchKeyword").value;
+        currentPage = 0;
+        fetchAndRender();
     });
-  }
 
-  // 페이지네이션 렌더링 함수
-  function renderPagination(data, state) {
-    const pagination = document.getElementById('inbound-pagination');
+    // 페이지 크기 변경
+    document.getElementById("inbound-page-size").addEventListener("change", (e) => {
+        pageSize = parseInt(e.target.value);
+        currentPage = 0;
+        fetchAndRender();
+    });
 
-    const totalItems = data.total || 0;
-    const totalPages = Math.ceil(totalItems / state.size);
-    const currentPage = state.page;
+    // 정렬 처리
+    document.querySelectorAll(".dataTable-sorter").forEach(sorter => {
+        sorter.addEventListener("click", (e) => {
+            e.preventDefault();
+            const newSortBy = e.target.getAttribute("data-sort");
 
-    let startPage = Math.max(1, currentPage - 2);
-    let endPage = Math.min(totalPages, startPage + 4);
+            if (sortBy === newSortBy) {
+                direction = direction === "asc" ? "desc" : "asc";
+            } else {
+                sortBy = newSortBy;
+                direction = "asc";
+            }
 
-    if (endPage - startPage < 4 && totalPages > 5) {
-      startPage = Math.max(1, endPage - 4);
-    }
+            fetchAndRender();
+        });
+    });
 
-    let html = '';
-
-    // 이전 버튼
-    html += `<li class="page-item ${currentPage <= 1 ? 'disabled' : ''}">
-        <a class="page-link" href="#" data-page="${currentPage - 1}">
-          <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
-        </a>
-      </li>`;
-
-    // 페이지 번호
-    for (let i = startPage; i <= endPage; i++) {
-      html += `<li class="page-item ${i === currentPage ? 'active' : ''}">
-          <a class="page-link" href="#" data-page="${i}">${i}</a>
-        </li>`;
-    }
-
-    // 다음 버튼
-    html += `<li class="page-item ${currentPage >= totalPages || totalPages === 0 ? 'disabled' : ''}">
-        <a class="page-link" href="#" data-page="${currentPage + 1}">
-          <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
-        </a>
-      </li>`;
-
-    pagination.innerHTML = html;
-
-    // 페이지 클릭 이벤트 추가
-    pagination.querySelectorAll('.page-link').forEach(link => {
-      link.addEventListener('click', function (e) {
+    // 등록
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
         e.preventDefault();
+        const form = e.target;
+        const data = {
+            inboundId: parseInt(form.inboundId.value),
+            inboundCode: form.inboundCode.value,
+            materialCode: form.materialCode.value,
+            quantity: parseInt(form.quantity.value),
+            inboundDate: form.inboundDate.value,
+            status: form.status.value,
+        };
 
-        if (this.parentElement.classList.contains('disabled')) return;
+        try {
+            const response = await fetch("/raw-material/inbound/api/register", {
+                method: "POST",
+                headers: {
+                 "Content-Type": "application/json",
+                [header]: token
+                 },
+                body: JSON.stringify(data)
+            });
 
-        const pageNum = parseInt(this.getAttribute('data-page'));
-
-        if (!isNaN(pageNum) && pageNum > 0 && pageNum <= totalPages && pageNum !== currentPage) {
-          fetchInboundList(pageNum, keywordInput.value.trim()); // ✅ 실제 호출 함수로 연결
+            if (response.ok) {
+                form.reset();
+                const modal = bootstrap.Modal.getInstance(document.getElementById("registerModal"));
+                modal.hide();
+                fetchAndRender();
+            } else {
+                const error = await response.json();
+                alert("등록 실패: " + (error.message || "알 수 없는 오류가 발생했습니다."));
+            }
+        } catch (error) {
+            console.error("등록 중 오류 발생:", error);
+            alert("등록 중 오류가 발생했습니다.");
         }
-      });
     });
-  }
 
-  // 수정 모달 열기
-  window.openEditModal = async (inboundId) => {
-    try {
-      const response = await fetch(`/raw-material/inbound/api/${inboundId}`);
-      const data = await response.json();
+    // 수정
+    document.getElementById("editForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const inboundId = parseInt(form.editInboundId.value);
 
-      document.querySelector("#editId").value = data.inboundId;
-      document.querySelector("#editmaterialId").value = data.materialId;
-      document.querySelector("#editInboundCode").value = data.inboundCode;
-      document.querySelector("#editMaterialCode").value = data.materialCode;
-      document.querySelector("#editQuantity").value = data.quantity;
-      document.querySelector("#editInboundDate").value = data.inboundDate;
-      document.querySelector("#editStatus").value = data.status;
+        const data = {
+            inboundId: inboundId,
+            inboundCode: form.editInboundCode.value,
+            materialCode: form.editMaterialCode.value,
+            quantity: parseInt(form.editQuantity.value),
+            inboundDate: form.editInboundDate.value,
+            status: form.editStatus.value
+        };
 
-      new bootstrap.Modal(document.querySelector("#editModal")).show();
-    } catch (err) {
-      console.error("수정 모달 오류:", err);
+        try {
+            const response = await fetch(`/raw-material/inbound/api/update/${inboundId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json", [header]: token },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById("editModal"));
+                modal.hide();
+                fetchAndRender();
+            } else {
+                const error = await response.json();
+                alert("수정 실패: " + (error.message || "알 수 없는 오류가 발생했습니다."));
+            }
+        } catch (error) {
+            console.error("수정 중 오류 발생:", error);
+            alert("수정 중 오류가 발생했습니다.");
+        }
+    });
+
+    // 삭제
+    document.getElementById("deleteForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const inboundId = document.getElementById("deleteId").value;
+
+        try {
+            const response = await fetch(`/raw-material/inbound/api/delete/${inboundId}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json", [header]: token }
+            });
+
+            if (response.ok) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById("deleteModal"));
+                modal.hide();
+                fetchAndRender();
+            } else {
+                const error = await response.json();
+                alert("삭제 실패: " + (error.message || "알 수 없는 오류가 발생했습니다."));
+            }
+        } catch (error) {
+            console.error("삭제 중 오류 발생:", error);
+            alert("삭제 중 오류가 발생했습니다.");
+        }
+    });
+
+    // 데이터 fetch & 렌더링
+    async function fetchAndRender() {
+        try {
+            // GET 방식으로 변경
+            const url = new URL(apiUrl, window.location.origin);
+            url.searchParams.append('page', currentPage);
+            url.searchParams.append('size', pageSize);
+            url.searchParams.append('sortBy', sortBy);
+            url.searchParams.append('direction', direction);
+            if (keyword) {
+                url.searchParams.append('keyword', keyword);
+            }
+
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error("데이터를 불러오는데 실패했습니다.");
+            }
+
+            const result = await response.json();
+            renderTable(result.dtoList || result.content);
+            renderPagination(result.totalPage || result.totalPages);
+
+            // 페이지 정보 표시 형식 수정 (백엔드가 0부터 시작하는 경우 +1)
+            const currentPageDisplay = (result.page !== undefined) ? result.page : currentPage + 1;
+            const totalItems = result.totalCount || result.totalItems;
+            const totalPages = result.totalPage || result.totalPages;
+
+            renderPageInfo(currentPageDisplay, totalItems, totalPages);
+        } catch (error) {
+            console.error("데이터 로딩 중 오류 발생:", error);
+            alert("데이터를 불러오는데 실패했습니다.");
+        }
     }
-  };
 
-  // 삭제 모달 열기
-  window.openDeleteModal = (inboundId) => {
-    document.querySelector("#deleteId").value = inboundId;
-    new bootstrap.Modal(document.querySelector("#deleteModal")).show();
-  };
+    function renderTable(list) {
+        if (!list || list.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="8" class="text-center">데이터가 없습니다.</td></tr>`;
+            return;
+        }
 
-  // 등록 처리
-  document.querySelector("#registerForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const form = e.target;
-
-    const payload = {
-      inboundId: form.inboundId.Value,
-      materialId: form.materialId.Value,
-      inboundCode: form.inboundCode.value,
-      materialCode: form.materialCode.value,
-      quantity: form.quantity.value,
-      inboundDate: form.inboundDate.value,
-      status: form.status.value,
-    };
-
-    try {
-      const response = await fetch("/raw-material/inbound/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", [header]: token },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) throw new Error("등록 실패");
-
-      bootstrap.Modal.getInstance(document.querySelector("#registerModal")).hide();
-      fetchInboundList(currentPage, keywordInput.value.trim());
-      form.reset();
-    } catch (err) {
-      console.error("등록 오류:", err);
+        tableBody.innerHTML = "";
+        list.forEach(item => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${item.inboundId}</td>
+                <td>${item.inboundCode}</td>
+                <td>${item.materialCode || '-'}</td>
+                <td>${item.quantity}</td>
+                <td>${formatDate(item.inboundDate)}</td>
+                <td>
+                    <span class="badge bg-${getStatusColor(item.status)}">${item.status}</span>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-primary me-1" onclick="openEditModal(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                        <i class="bi bi-pencil-square"></i> 수정
+                    </button>
+                    <button class="btn btn-sm btn-danger" onclick="openDeleteModal(${item.inboundId})">
+                        <i class="bi bi-trash"></i> 삭제
+                    </button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
     }
-  });
 
-  // 수정 처리
-  document.querySelector("#editForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const form = e.target;
-
-    const payload = {
-
-      inboundId: form.editId.value,
-      materialId: form.editMaterialId.Value,
-      inboundCode: form.editInboundCode.value,
-      materialCode: form.editMaterialCode.value,
-      quantity: form.editQuantity.value,
-      inboundDate: form.editInboundDate.value,
-      status: form.editStatus.value,
-
-    };
-
-    try {
-      const response = await fetch("/raw-material/inbound/api/modify", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json", [header]: token },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) throw new Error("수정 실패");
-
-      bootstrap.Modal.getInstance(document.querySelector("#editModal")).hide();
-      fetchInboundList(currentPage, keywordInput.value.trim());
-    } catch (err) {
-      console.error("수정 오류:", err);
+    function getStatusColor(status) {
+        switch(status?.toLowerCase()) {
+            case 'complete': return 'success';
+            case 'pending': return 'warning';
+            case 'cancelled': return 'danger';
+            default: return 'secondary';
+        }
     }
-  });
 
-  // 삭제 처리
-  document.querySelector("#deleteForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const inboundId = document.querySelector("#deleteId").value;
+    function renderPagination(totalPages) {
+        pagination.innerHTML = "";
 
-    try {
-      const response = await fetch(`/raw-material/inbound/api/delete/${inboundId}`, {
-        method: "DELETE",
-      });
+        // 이전 페이지 버튼
+        const prevLi = document.createElement("li");
+        prevLi.className = `page-item ${currentPage === 0 ? "disabled" : ""}`;
+        prevLi.innerHTML = `<a class="page-link" href="#">이전</a>`;
+        prevLi.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (currentPage > 0) {
+                currentPage--;
+                fetchAndRender();
+            }
+        });
+        pagination.appendChild(prevLi);
 
-      if (!response.ok) throw new Error("삭제 실패");
+        // 페이지 버튼들
+        const maxVisiblePages = 5;
+        let startPage = Math.max(0, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages - 1, startPage + maxVisiblePages - 1);
 
-      bootstrap.Modal.getInstance(document.querySelector("#deleteModal")).hide();
-      fetchInboundList(currentPage, keywordInput.value.trim());
-    } catch (err) {
-      console.error("삭제 오류:", err);
+        if (endPage - startPage + 1 < maxVisiblePages) {
+            startPage = Math.max(0, endPage - maxVisiblePages + 1);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            const li = document.createElement("li");
+            li.className = `page-item ${i === currentPage ? "active" : ""}`;
+            li.innerHTML = `<a class="page-link" href="#">${i + 1}</a>`;
+            li.addEventListener("click", (e) => {
+                e.preventDefault();
+                currentPage = i;
+                fetchAndRender();
+            });
+            pagination.appendChild(li);
+        }
+
+        // 다음 페이지 버튼
+        const nextLi = document.createElement("li");
+        nextLi.className = `page-item ${currentPage >= totalPages - 1 ? "disabled" : ""}`;
+        nextLi.innerHTML = `<a class="page-link" href="#">다음</a>`;
+        nextLi.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                fetchAndRender();
+            }
+        });
+        pagination.appendChild(nextLi);
     }
-  });
+
+    function renderPageInfo(page, total, totalPages) {
+        pageInfo.innerText = `페이지 ${page}/${totalPages} | 총 ${total}건`;
+    }
+
+    function formatDate(dateStr) {
+        if (!dateStr) return '-';
+
+        try {
+            const date = new Date(dateStr);
+            return date.toLocaleString('ko-KR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        } catch (e) {
+            return dateStr; // 변환 실패 시 원본 문자열 반환
+        }
+    }
 });
+
+// 전역에서 사용 가능한 모달 함수
+function openEditModal(item) {
+//    document.getElementById("editId").value = item.inboundId;
+    document.getElementById("editInboundId").value = item.inboundId;
+    document.getElementById("editInboundCode").value = item.inboundCode;
+    document.getElementById("editMaterialCode").value = item.materialCode || '';
+    document.getElementById("editQuantity").value = item.quantity;
+
+    // ISO 형식으로 변환하여 datetime-local 입력에 적합하게 설정
+    if (item.inboundDate) {
+        const date = new Date(item.inboundDate);
+        if (!isNaN(date.getTime())) {
+            // YYYY-MM-DDThh:mm 형식으로 변환
+            const localDatetime = date.toISOString().slice(0, 16);
+            document.getElementById("editInboundDate").value = localDatetime;
+        }
+    }
+
+    document.getElementById("editStatus").value = item.status;
+    new bootstrap.Modal(document.getElementById("editModal")).show();
+}
+
+function openDeleteModal(id) {
+    document.getElementById("deleteId").value = id;
+    new bootstrap.Modal(document.getElementById("deleteModal")).show();
+}

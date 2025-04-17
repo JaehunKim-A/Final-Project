@@ -37,6 +37,7 @@ public class GeocodeProxyController {
 		try {
 			// 1. 헤더 설정
 			HttpHeaders headers = new HttpHeaders();
+			log.info("api: " +  clientId + clientSecret);
 			headers.set("x-ncp-apigw-api-key-id", clientId);
 			headers.set("x-ncp-apigw-api-key", clientSecret);
 			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));

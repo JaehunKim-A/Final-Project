@@ -1,7 +1,6 @@
 package com.team1.team1project.controller.rawMaterial;
 
 import com.team1.team1project.dto.*;
-import com.team1.team1project.service.finishedProduct.FinishedProductOutboundService;
 import com.team1.team1project.service.rawMaterial.RawMaterialOutboundService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -31,7 +30,7 @@ public class RawMaterialOutboundController {
     @PostMapping("/api/list")
     @ResponseBody
     public ResponseEntity<PageResponseDTO<RawMaterialOutboundDTO>> getPagedList(@RequestBody PageRequestDTO pageRequestDTO) {
-        log.info("📦 입고 리스트 요청: {}", pageRequestDTO);
+        log.info("📦 원자재 출고 리스트 요청: {}", pageRequestDTO);
         PageResponseDTO<RawMaterialOutboundDTO> response = rawMaterialOutboundService.getPagedRawMaterialOutbounds(pageRequestDTO);
         return ResponseEntity.ok(response);
     }

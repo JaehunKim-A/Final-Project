@@ -1,6 +1,5 @@
 package com.team1.team1project.repository;
 
-import com.team1.team1project.domain.FinishedProductInbound;
 import com.team1.team1project.domain.RawMaterialInbound;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

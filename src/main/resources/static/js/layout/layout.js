@@ -1,4 +1,4 @@
-const MY_API_KEY = [[${geminiAPIKey}]];
+const MY_API_KEY = "AIzaSyBB2EAHKCKZTm2cK6H1lLbAscPrJRIqS2g";
 document.addEventListener('DOMContentLoaded', function() {
     // Get references to elements
     const chatButton = document.querySelector('.chat-bot');
@@ -142,7 +142,7 @@ const INITIAL_PROMPT = `너가 가진 정보는
 사이드바 메뉴 이름 : Supplier 밑 Suppliers, http://localhost:9094/table/rawMaterialSupplier : 거래처 등록, 수정, 삭제 페이지
 사이드바 메뉴 이름 : Factory 밑 Machine, http://localhost:9094/productProcessManagement/productProcessManagement :  공장의 머신 이미지 배치 시뮬, 공장 기계별, 원자재 정보 등 시각화 차트(라인, 바, 스캐터, 도넛, 히트맵), 머신별 히스토리 제공하는 페이지
 }
-이렇게 가지고 있고 너는 이것을 물어봤을 때 도움을 주는 어시스턴트 봇 "잼민이"야.
+이렇게 가지고 있고 너는 이것을 물어봤을 때 도움을 주는 어시스턴트 봇 Alfy야.
 여기 적힌 정보의외의 질문이 들어왔을때는 간단하게만 대답해주고 이 정보에 대해서만 되도록이면 성의것 대답해줘.
 그리고 너에게 채팅을 하는 사람은 주인님이야.
 `;
@@ -303,5 +303,216 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatModal = document.getElementById('chatModal');
     chatModal.addEventListener('shown.bs.modal', function() {
         chatInput.focus();
+    });
+});
+
+// ----------- sidebar
+// 사이드바 활성화 스크립트 - layout.js 파일에 추가
+
+/**
+ * 사이드바 메뉴 활성화 스크립트
+ * 현재 페이지 URL에 따라 해당하는 사이드바 메뉴에 active 클래스를 추가합니다.
+ */
+/**
+ * 사이드바 메뉴 활성화 스크립트
+ * 현재 페이지 URL에 따라 하나의 메뉴 항목에만 active 클래스를 추가합니다.
+ */
+document.addEventListener('DOMContentLoaded', function() {
+    // 현재 페이지 URL 가져오기
+    const currentPath = window.location.pathname;
+    console.log('현재 경로:', currentPath);
+
+    // 모든 active 클래스 제거 함수
+    function removeAllActiveClasses() {
+        // 모든 sidebar-item에서 active 클래스 제거
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.classList.remove('active');
+        });
+
+        // 모든 submenu-item에서 active 클래스 제거
+        document.querySelectorAll('.submenu-item').forEach(item => {
+            item.classList.remove('active');
+        });
+    }
+
+    // submenu 항목 클릭 시 active 클래스 관리
+    const submenuLinks = document.querySelectorAll('.submenu-item a.submenu-link');
+    submenuLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            // 먼저 모든 active 클래스 제거
+            removeAllActiveClasses();
+
+            // 클릭된 링크의 부모 sidebar-item에만 active 클래스 추가
+            const parentSidebarItem = this.closest('.sidebar-item');
+            if (parentSidebarItem) {
+                parentSidebarItem.classList.add('active');
+            }
+
+            // 클릭된 submenu-item에만 active 클래스 추가
+            const submenuItem = this.closest('.submenu-item');
+            if (submenuItem) {
+                submenuItem.classList.add('active');
+            }
+
+            // 클릭된 링크 정보 저장
+            sessionStorage.setItem('activeLink', this.getAttribute('href'));
+        });
+    });
+
+    // 일반 메뉴 항목(하위 메뉴 없는 항목) 클릭 관리
+    const singleMenuLinks = document.querySelectorAll('.sidebar-item:not(.has-sub) > .sidebar-link');
+    singleMenuLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            // 모든 active 클래스 제거
+            removeAllActiveClasses();
+
+            // 현재 항목에만 active 클래스 추가
+            const parentItem = this.parentElement;
+            if (parentItem) {
+                parentItem.classList.add('active');
+            }
+
+            // 클릭된 링크 정보 저장
+            sessionStorage.setItem('activeLink', this.getAttribute('href'));
+        });
+    });
+
+    // 페이지 로드 시 현재 URL에 맞는 메뉴 항목 활성화
+    function activateMenuByUrl() {
+        // 먼저 모든 active 클래스 제거
+        removeAllActiveClasses();
+
+        let foundMatch = false;
+
+        // 1. 정확한 URL 일치 확인 (submenu 항목)
+        submenuLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === currentPath) {
+                // submenu-item에 active 클래스 추가
+                const submenuItem = link.closest('.submenu-item');
+                if (submenuItem) {
+                    submenuItem.classList.add('active');
+                }
+
+                // 부모 sidebar-item에 active 클래스 추가
+                const sidebarItem = link.closest('.sidebar-item');
+                if (sidebarItem) {
+                    sidebarItem.classList.add('active');
+                }
+
+                // submenu 표시
+                const submenu = sidebarItem.querySelector('.submenu');
+                if (submenu) {
+                    submenu.style.display = 'block';
+                }
+
+                foundMatch = true;
+            }
+        });
+
+        // 2. 정확한 URL 일치 확인 (일반 메뉴 항목)
+        if (!foundMatch) {
+            singleMenuLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === currentPath) {
+                    // sidebar-item에 active 클래스 추가
+                    const sidebarItem = link.closest('.sidebar-item');
+                    if (sidebarItem) {
+                        sidebarItem.classList.add('active');
+                    }
+                    foundMatch = true;
+                }
+            });
+        }
+
+        // 3. 정확한 일치가 없을 경우, sessionStorage에 저장된 값 확인
+        if (!foundMatch) {
+            const storedActiveLink = sessionStorage.getItem('activeLink');
+            if (storedActiveLink) {
+                // submenu 항목 확인
+                submenuLinks.forEach(link => {
+                    if (link.getAttribute('href') === storedActiveLink) {
+                        // submenu-item에 active 클래스 추가
+                        const submenuItem = link.closest('.submenu-item');
+                        if (submenuItem) {
+                            submenuItem.classList.add('active');
+                        }
+
+                        // 부모 sidebar-item에 active 클래스 추가
+                        const sidebarItem = link.closest('.sidebar-item');
+                        if (sidebarItem) {
+                            sidebarItem.classList.add('active');
+                        }
+
+                        // submenu 표시
+                        const submenu = sidebarItem.querySelector('.submenu');
+                        if (submenu) {
+                            submenu.style.display = 'block';
+                        }
+
+                        foundMatch = true;
+                    }
+                });
+
+                // 일반 메뉴 항목 확인
+                if (!foundMatch) {
+                    singleMenuLinks.forEach(link => {
+                        if (link.getAttribute('href') === storedActiveLink) {
+                            const sidebarItem = link.closest('.sidebar-item');
+                            if (sidebarItem) {
+                                sidebarItem.classList.add('active');
+                            }
+                            foundMatch = true;
+                        }
+                    });
+                }
+            }
+        }
+
+        // 4. 여전히 일치하는 것이 없으면 대시보드를 기본값으로 활성화
+        if (!foundMatch) {
+            const dashboardItem = document.querySelector('.sidebar-item a[href="/dashboard"]');
+            if (dashboardItem) {
+                const sidebarItem = dashboardItem.closest('.sidebar-item');
+                if (sidebarItem) {
+                    sidebarItem.classList.add('active');
+                }
+            }
+        }
+    }
+
+    // 페이지 로드 시 메뉴 활성화 실행
+    activateMenuByUrl();
+
+    // 사이드바 토글 기능 (has-sub 클래스가 있는 항목 클릭 시)
+    const menuItemsWithSub = document.querySelectorAll('.sidebar-item.has-sub > .sidebar-link');
+    menuItemsWithSub.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // 모든 서브메뉴 닫기
+            document.querySelectorAll('.sidebar-item.has-sub').forEach(otherItem => {
+                if (otherItem !== this.parentElement) {
+                    const otherSubmenu = otherItem.querySelector('.submenu');
+                    if (otherSubmenu) {
+                        otherSubmenu.style.display = 'none';
+                    }
+                }
+            });
+
+            const parent = this.parentElement;
+            const submenu = parent.querySelector('.submenu');
+
+            // 토글 submenu 표시/숨김
+            if (submenu) {
+                const isActive = submenu.style.display === 'block';
+
+                if (isActive) {
+                    submenu.style.display = 'none';
+                } else {
+                    submenu.style.display = 'block';
+                }
+            }
+        });
     });
 });

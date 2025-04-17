@@ -58,14 +58,14 @@ document.addEventListener("DOMContentLoaded", () => {
     list.forEach(item => {
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td>${item.supplierId ?? "-"}</td>
         <td>${item.inboundCode ?? "-"}</td>
+        <td>${item.supplierId ?? "-"}</td>
         <td>${item.quantity ?? "-"}</td>
-        <td>${item.completeTime ? item.completeTime.replace("T", " ").slice(0, 16) : "-"}</td>
         <td>${item.status ?? "-"}</td>
+        <td>${item.completeTime ? item.completeTime.replace("T", " ").slice(0, 16) : "-"}</td>
         <td>
-          <button class="btn btn-sm btn-primary" onclick="openEditModal(${item.inboundId})">수정</button>
-          <button class="btn btn-sm btn-danger" onclick="openDeleteModal(${item.inboundId})">삭제</button>
+          <button class="btn btn-sm btn-outline-primary" onclick="openEditModal(${item.inboundId})">수정</button>
+          <button class="btn btn-sm btn-outline-danger" onclick="openDeleteModal(${item.inboundId})">삭제</button>
         </td>
       `;
       tableBody.appendChild(row);
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const pageNum = parseInt(this.getAttribute('data-page'));
 
         if (!isNaN(pageNum) && pageNum > 0 && pageNum <= totalPages && pageNum !== currentPage) {
-          fetchInboundList(pageNum, keywordInput.value.trim()); // ✅ 실제 호출 함수로 연결
+          fetchInboundList(pageNum, keywordInput.value.trim());
         }
       });
     });
@@ -159,11 +159,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = e.target;
 
     const payload = {
-      quantity: form.quantity.value,
-      inboundCode: form.inboundCode.value,
-      completeTime: form.completeTime.value,
-      status: form.status.value,
-      supplierId: form.supplierId.value,
+        inboundCode: form.inboundCode.value,
+        supplierId: form.supplierId.value,
+        quantity: form.quantity.value,
+        completeTime: form.completeTime.value,
+        status: form.status.value,
     };
 
     try {
@@ -198,7 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     try {
-      const response = await fetch("/finished-product/inbound/api/modify", {
+      const response = await fetch(`/finished-product/inbound/api/update/${form.editId.value}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", [header]: token },
         body: JSON.stringify(payload),
@@ -221,6 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const response = await fetch(`/finished-product/inbound/api/delete/${inboundId}`, {
         method: "DELETE",
+        headers: { [header]: token },
       });
 
       if (!response.ok) throw new Error("삭제 실패");

@@ -23,25 +23,26 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchOutboundList(currentPage, keywordInput.value.trim());
   });
 
-  // 데이터 가져오기 함수
+  // 데이터 가져오기
   async function fetchOutboundList(page, keyword = "") {
     const pageSize = parseInt(pageSizeSelector.value);
 
     try {
       const response = await fetch("/finished-product/outbound/api/list", {
         method: "POST",
-        headers: { "Content-Type": "application/json", [header]: token},
+        headers: { "Content-Type": "application/json", [header]: token },
         body: JSON.stringify({ page, size: pageSize, keyword }),
       });
 
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
       const data = await response.json();
+      console.log("Fetched outbound data:", data);
 
       renderTable(data.dtoList || []);
-      renderPagination(data, { page, size: pageSize }); // ✅ 파라미터 수정
+      renderPagination(data, { page, size: pageSize });
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching outbound data:", error);
     }
   }
 
@@ -58,22 +59,22 @@ document.addEventListener("DOMContentLoaded", () => {
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${item.outboundCode ?? "-"}</td>
+        <td>${item.productId ?? "-"}</td>
         <td>${item.quantity ?? "-"}</td>
-        <td>${item.outboundDate ?? "-"}</td>
         <td>${item.status ?? "-"}</td>
-        <td>${item.supplierId ?? "-"}</td>
+        <td>${item.outboundDate ? item.outboundDate.replace("T", " ").slice(0, 16) : "-"}</td>
         <td>
-          <button class="btn btn-sm btn-primary" onclick="openEditModal(${item.outboundId})">수정</button>
-          <button class="btn btn-sm btn-danger" onclick="openDeleteModal(${item.outboundId})">삭제</button>
+          <button class="btn btn-sm btn-outline-primary" onclick="openEditModal(${item.outboundId})">수정</button>
+          <button class="btn btn-sm btn-outline-danger" onclick="openDeleteModal(${item.outboundId})">삭제</button>
         </td>
       `;
       tableBody.appendChild(row);
     });
   }
 
-  // 페이지네이션 렌더링 함수
+  // 페이지네이션 렌더링
   function renderPagination(data, state) {
-    const pagination = document.getElementById('outbound-pagination');
+    const pagination = document.getElementById("outbound-pagination");
 
     const totalItems = data.total || 0;
     const totalPages = Math.ceil(totalItems / state.size);
@@ -86,42 +87,41 @@ document.addEventListener("DOMContentLoaded", () => {
       startPage = Math.max(1, endPage - 4);
     }
 
-    let html = '';
+    let html = "";
 
-    // 이전 버튼
+    // 이전
     html += `<li class="page-item ${currentPage <= 1 ? 'disabled' : ''}">
-        <a class="page-link" href="#" data-page="${currentPage - 1}">
-          <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
-        </a>
-      </li>`;
+      <a class="page-link" href="#" data-page="${currentPage - 1}">
+        <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+      </a>
+    </li>`;
 
-    // 페이지 번호
+    // 숫자
     for (let i = startPage; i <= endPage; i++) {
       html += `<li class="page-item ${i === currentPage ? 'active' : ''}">
-          <a class="page-link" href="#" data-page="${i}">${i}</a>
-        </li>`;
+        <a class="page-link" href="#" data-page="${i}">${i}</a>
+      </li>`;
     }
 
-    // 다음 버튼
+    // 다음
     html += `<li class="page-item ${currentPage >= totalPages || totalPages === 0 ? 'disabled' : ''}">
-        <a class="page-link" href="#" data-page="${currentPage + 1}">
-          <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
-        </a>
-      </li>`;
+      <a class="page-link" href="#" data-page="${currentPage + 1}">
+        <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+      </a>
+    </li>`;
 
     pagination.innerHTML = html;
 
-    // 페이지 클릭 이벤트 추가
-    pagination.querySelectorAll('.page-link').forEach(link => {
-      link.addEventListener('click', function (e) {
+    pagination.querySelectorAll(".page-link").forEach(link => {
+      link.addEventListener("click", function (e) {
         e.preventDefault();
 
-        if (this.parentElement.classList.contains('disabled')) return;
+        if (this.parentElement.classList.contains("disabled")) return;
 
-        const pageNum = parseInt(this.getAttribute('data-page'));
+        const pageNum = parseInt(this.getAttribute("data-page"));
 
         if (!isNaN(pageNum) && pageNum > 0 && pageNum <= totalPages && pageNum !== currentPage) {
-          fetchOutboundList(pageNum, keywordInput.value.trim()); // ✅ 실제 호출 함수로 연결
+          fetchOutboundList(pageNum, keywordInput.value.trim());
         }
       });
     });
@@ -134,11 +134,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await response.json();
 
       document.querySelector("#editId").value = data.outboundId;
-      document.querySelector("#editQuantity").value = data.quantity;
       document.querySelector("#editOutboundCode").value = data.outboundCode;
-      document.querySelector("#editOutboundDate").value = data.completeTime?.slice(0, 16);
-      document.querySelector("#editStatus").value = data.status;
       document.querySelector("#editProductId").value = data.productId;
+      document.querySelector("#editQuantity").value = data.quantity;
+      document.querySelector("#editStatus").value = data.status;
+      document.querySelector("#editOutboundDate").value = data.outboundDate?.slice(0, 16);
 
       new bootstrap.Modal(document.querySelector("#editModal")).show();
     } catch (err) {
@@ -158,11 +158,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = e.target;
 
     const payload = {
-      quantity: form.quantity.value,
       outboundCode: form.outboundCode.value,
-      outboundDate: form.outboundDate.value,
+      productId: form.productId.value,
+      quantity: form.quantity.value,
       status: form.status.value,
-      supplierId: form.supplierId.value,
+      outboundDate: form.outboundDate.value,
     };
 
     try {
@@ -189,15 +189,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const payload = {
       outboundId: form.editId.value,
-      quantity: form.editQuantity.value,
       outboundCode: form.editOutboundCode.value,
-      outboundDate: form.editOutboundDate.value,
+      productId: form.editProductId.value,
+      quantity: form.editQuantity.value,
       status: form.editStatus.value,
-      supplierId: form.editSupplierId.value,
+      outboundDate: form.editOutboundDate.value,
     };
 
     try {
-      const response = await fetch("/finished-product/outbound/api/modify", {
+      const response = await fetch(`/finished-product/outbound/api/update/${form.editId.value}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", [header]: token },
         body: JSON.stringify(payload),
@@ -220,6 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const response = await fetch(`/finished-product/outbound/api/delete/${outboundId}`, {
         method: "DELETE",
+        headers: { [header]: token },
       });
 
       if (!response.ok) throw new Error("삭제 실패");
