@@ -1,4 +1,4 @@
-const MY_API_KEY = "AIzaSyBB2EAHKCKZTm2cK6H1lLbAscPrJRIqS2g";
+const MY_API_KEY = "";
 document.addEventListener('DOMContentLoaded', function() {
     // Get references to elements
     const chatButton = document.querySelector('.chat-bot');
