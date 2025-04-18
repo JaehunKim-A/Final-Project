@@ -2,7 +2,9 @@
 Human Final
 ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 ***
-### MES 스마트폰 제조 유통 공정 관리
+---
+#📱 MES 스마트폰 제조 유통 공정 관리
+---
 ## 📑 목차
 1.[프로젝트 개요](#프로젝트-개요)<br>
 2.[개발기간](#개발기간)<br>
@@ -12,8 +14,11 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 6.[주요기능](#주요-기능)<br>
 7.[아키텍처](#아키텍처)<br>
 8.[ERD](#ERD)
-<br><br>
+---
+
+
 ## 프로젝트 개요
+
 ## 개발기간
 + 2025년 3월 24일 ~ 2025년 4월 16일
 ## 프로젝트 소개
@@ -26,12 +31,12 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 + 유니버설 디자인으로 모든 사용자에게 친화적인 모델 만들기
 + AGILE 방법론을 통한 효율적인 프로젝트 일정관리
 ## 개발환경 및 도구
-+ JAVA 11, C#
-+ IDE: Intellij, Visual Studio
-+ Framwork: SpringBoot(2.7.3)
-+ DataBase: MariaDB
-+ DevOps: Git, GitHub
-+ Tools: ChatGPT, Claude, Copliot
++ **언어:** JAVA 11, C#
++ **IDE:** Intellij, Visual Studio
++ **Framwork:** SpringBoot(2.7.3)
++ **DataBase:** MariaDB
++ **DevOps:** Git, GitHub
++ **Tools:** ChatGPT, Claude, Copliot
 ## 멤버 구성
 <table>
   <tr>
@@ -39,23 +44,23 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
     <td>담당업무</td>
   </tr>
   <tr>
-    <td>김재훈(팀장)</td>
+    <td><b>김재훈(팀장)</b></td>
     <td>일정관리, 발표, DB관리, 완제품/원자재 제품관리, 재고, 코드관리 페이지 개발, 로그인 권한 관리</td>
   </tr>
   <tr>
-    <td>구교진(팀원)</td>
+    <td><b>구교진(팀원)</b></td>
     <td>직원관리, 로그인, 메인 페이지 개발, 일정관리, 페이지 디자인 관리, 보안설정</td>
   </tr>
   <tr>
-    <td>전유범(팀원)</td>
+    <td><b>전유범(팀원)</b></td>
     <td>가상공장관리(C#), 공장 관리, 메인 페이지 개발, 페이지 디자인 관리, API(GEMINI), 팀 전체 개발 보조</td>
   </tr>
   <tr>
-    <td>정지연(팀원)</td>
+    <td><b>정지연(팀원)</b></td>
     <td>고객/거래처 관리, 주문 페이지 개발, 엑셀 및 CSV, txt 파일 다운로드 기능 개발, 지도 API(NAVER), 페이지 디자인 관리</td>
   </tr>
   <tr>
-    <td>한소중(팀원)</td>
+    <td><b>한소중(팀원)</b></td>
     <td>완제품/원자재 입/출고 관리 페이지, 완제품 레시피 관리, 코드 모듈화 및 관리 편집 담당, 프로젝트 QM</td>
   </tr>
 </table>
@@ -115,7 +120,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
     <summary> └ Inbound[한소중]</summary>
     <br>
     <h3> - 원자재입고 : MaterialId, SupplierId 와 연동하여 상호보완, CRUD 를 api 형식으로 구현하며,
-      <br>수정/삭제 버튼은 로그인 시 관리자 ID에만 노출된다.</h3>
+      수정/삭제 버튼은 로그인 시 관리자 ID에만 노출된다.</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterialInbound.JPG" />
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterialInbound_register.JPG" />
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterialInbound_edit.JPG" />
@@ -123,8 +128,8 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   </details>
   <details>
     <summary> └ Outbound[한소중]</summary>
-    <h3> - 원자재입고 : MaterialId, SupplierId 와 연동하여 상호보완, CRUD 를 api 형식으로 구현하며,
-      <br>수정/삭제 버튼은 로그인 시 관리자 ID에만 노출된다.</h3>
+    <h3> - 원자재출고 : MaterialId, SupplierId 와 연동하여 상호보완, CRUD 를 api 형식으로 구현하며,
+      수정/삭제 버튼은 로그인 시 관리자 ID에만 노출된다.</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterialOutbound.JPG" />
   </details>
 </details>
@@ -148,13 +153,13 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <details>
     <summary> └ Inbound[한소중]</summary>
     <h3> - 완제품 입고 : ProductId, SupplierId 와 연동하여 상호보완, CRUD 를 api 형식으로 구현하며,
-      <br>수정/삭제 버튼은 로그인 시 관리자 ID에만 노출된다.</h3>
+      수정/삭제 버튼은 로그인 시 관리자 ID에만 노출된다.</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/finishedProductInbound.JPG" />
   </details>
   <details>
     <summary> └ Outbound[한소중]</summary>
     <h3> - 완제품 입고 : ProductId, SupplierId 와 연동하여 상호보완, CRUD 를 api 형식으로 구현하며,
-      <br>수정/삭제 버튼은 로그인 시 관리자 ID에만 노출된다.</h3>
+      수정/삭제 버튼은 로그인 시 관리자 ID에만 노출된다.</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/finishedProductOutbound.JPG" />
   </details>
 </details>
