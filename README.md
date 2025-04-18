@@ -90,10 +90,15 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <details>
     <summary>Raw Materials[김재훈]</summary>
     <br>
+    <h3> - 원자재 관리 : 원자재에 대한 정보를 관리하는 페이지이다.</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterials.JPG" />
+	  <p> - 원자재에 대한 정보를 관리하여 어떠한 원자재를 갖고 있는지 확인하는 페이지</p>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterial_register.JPG" />
+	  <p> - 등록시 원자재 코드와 이름 카테코리, 포장단위(ex, U001 이러식으로 등록하여 codeManagement에서 관리), 설명을 등록</p>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterial_edit.JPG" />
+	  <p> - 기존에 등록한 요소들을 수정하는 기능</p>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterial_delete.JPG" />
+	  <p> - 데이터를 삭제하는 기능</p>
   </details>
   <details>
     <summary>Stock[김재훈]</summary>
@@ -126,7 +131,9 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <br>
   <details>
     <summary>Finished Products[김재훈]</summary>
+	  <h3> - 완제품 관리 : 현재 만들어지는 제품에 대한 페이지</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/finishedProducts.JPG" />
+	  <p> - 원자재와 마찬가지로 현재 만들어지는 제품에 대한 관리와 등록, 수정, 삭제 기능 </p>
   </details>
   <details>
     <summary>Stock[김재훈]</summary>
@@ -151,7 +158,11 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 </details>
 <details>
   <summary><b>CodeManagement[김재훈]</b></summary>
+	<h3> - 포장코드 관리 페이지 : 원자재와, 완제품에 사용되는 포장 유닛을 코드화 하여 관리하는 페이지</h3>
   <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/codeManagement.JPG" />
+	<p> - 각 코드에 맞는 정보를 입력해 더 편하게 원자재 및 완제품을 관리한다.</p>
+  <img src="" />
+	<p> - 등록시 (P)Search 완제품에서 검색, (M)Search 원자재에서 검색 을 통해 다른 코드를 입력하는 실수를 방지한다.</p>
 </details>
 <details>
   <summary><b>Eployees[구교진]</b></summary>
