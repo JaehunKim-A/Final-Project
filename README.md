@@ -31,7 +31,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 + Framwork: SpringBoot(2.7.3)
 + DataBase: MariaDB
 + DevOps: Git, GitHub
-+ Tools: ChatGPT, Claude
++ Tools: ChatGPT, Claude, Copliot
 ### 멤버 구성
 <table>
   <tr>
@@ -62,7 +62,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 <h3 id="main-functions">주요 기능</h3>
 <details>
   <summary><b>로그인[구교진, 김재훈]</b></summary>
-  <br><br>
+  <br>
   <h3> - 로그인 페이지 : 로그인하지 않으면 다른 페이지 접근 불가, 특정 권한을 가진 ID만 등록, 수정, 삭제 불가 </h3>
   <br>
   <img src ="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/login.JPG" />
@@ -70,18 +70,15 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 <details>
   <summary><b>대시보드[구교진, 전유범]</b></summary>
   <br>
-  
   <h3> - 대시보드 : 사용자 친화적인 UX/UI 디자인</h3>
   <br>
   <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/dashboard.JPG" />
   <br><br>
-  
   <h3> - 사이드바 : 다크모드, 직관적인 디자인과 분류</h3>
   <br>
   <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/dashboard_sidebar.JPG" />
   <br>
-  
-  <h3> - 챗봇 : GEMINI를 활용한 웹페이지 도우미</h3>
+  <h3> - 챗봇 : GEMINI API를 활용한 웹페이지 도우미</h3>
   <br>
   <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/dashboard_chatbot.JPG" />
   <p> - 각 페이지 설명을 위한 프롬프트 작성, 페이지별 설명을 제외한 다른 설명 간략화</p>
@@ -89,50 +86,50 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 <details>
   <summary><b>Raw Material</b></summary>
   <details>
-    <summary>Raw Materials</summary>
+    <summary>Raw Materials[김재훈]</summary>
   </details>
   <details>
-    <summary>Stock</summary>
+    <summary>Stock[김재훈]</summary>
   </details>
   <details>
-    <summary>Inbound</summary>
+    <summary>Inbound[한소중]</summary>
   </details>
   <details>
-    <summary>Outbound</summary>
+    <summary>Outbound[한소중]</summary>
   </details>
 </details>
 <details>
-  <summary>Finished Product</summary>
+  <summary><b>Finished Product</b></summary>
   <details>
-    <summary>Finished Products</summary>
+    <summary>Finished Products[김재훈]</summary>
   </details>
   <details>
-    <summary>Stock</summary>
+    <summary>Stock[김재훈]</summary>
   </details>
   <details>
-    <summary>Inbound</summary>
+    <summary>Inbound[한소중]</summary>
   </details>
   <details>
-    <summary>Outbound</summary>
-  </details>
-</details>
-<details>
-  <summary>Eployees</summary>
-</details>
-<details>
-  <summary>Customer</summary>
-  <details>
-    <summary>Customers</summary>
-  </details>
-  <details>
-    <summary>CustomerOrders</summary>
+    <summary>Outbound[한소중]</summary>
   </details>
 </details>
 <details>
-  <summary>Supplier</summary>
+  <summary><b>Eployees[구교진]</b></summary>
 </details>
 <details>
-  <summary>Factory</summary>
+  <summary><b>Customer</b></summary>
+  <details>
+    <summary>Customers[정지연]</summary>
+  </details>
+  <details>
+    <summary>CustomerOrders[정지연]</summary>
+  </details>
+</details>
+<details>
+  <summary><b>Supplier[정지연]</b></summary>
+</details>
+<details>
+  <summary><b>Factory[전유범]<b></summary>
   <details>
     <summary>Machine</summary>
   </details>
