@@ -32,7 +32,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 + DataBase: MariaDB
 + DevOps: Git, GitHub
 + Tools: ChatGPT, Claude
-<h3 id="main-functions">주요 기능</h3>
+### 멤버 구성
 <table>
   <tr>
     <td>이름</td>
@@ -59,7 +59,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
     <td>완제품/원자재 입/출고 관리 페이지, 완제품 레시피 관리, 코드 모듈화 및 관리 편집 담당, 프로젝트 QM</td>
   </tr>
 </table>
-### 주요 기능
+<h3 id="main-functions">주요 기능</h3>
 <details>
   <summary>메인페이지[구교진, 전유범]</summary>
 </details>
