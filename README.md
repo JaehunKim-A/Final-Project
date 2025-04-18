@@ -129,7 +129,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   </details>
   <details>
     <summary>Outbound[한소중]</summary>
-    <img src="https://github.com/JaehunKim-A/Final-Project/blob/raw/finalProject_img/finishedProductOutbound.JPG" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/finishedProductOutbound.JPG" />
   </details>
 </details>
 <details>
