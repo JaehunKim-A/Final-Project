@@ -62,15 +62,15 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 <h3 id="main-functions">주요 기능</h3>
 <details>
   <summary>로그인[구교진, 김재훈]</summary>
-  <div markdown="1">
-    <br> - 로그인 페이지 <br>
-    <img src ="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/login.JPG" />
-  </div>
+  <img src ="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/login.JPG" />
+  <p> - 로그인 페이지 : 로그인하지 않으면 다른 페이지 접근 불가, 특정 권한을 가진 ID만 등록, 수정, 삭제 불가 </p>
 </details>
 <details>
-  <summary>메인페이지[구교진, 전유범]</summary>
+  <summary>대시보드[구교진, 전유범]</summary>
   <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/dashboard.JPG" />
+  <p> - 대시보드 : 사용자 친화적인 UX/UI 디자인</p>
   <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/dashboard_sidebar.JPG" />
+  <p></p>
   <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/dashboard_chatbot.JPG" />
 </details>
 <details>
