@@ -90,14 +90,14 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
     <summary>Raw Materials[김재훈]</summary>
     <br>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterials.JPG" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterial_register.JPG" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterial_edit.JPG" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterial_delete.JPG" />
   </details>
   <details>
     <summary>Stock[김재훈]</summary>
     <br>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterialStock.JPG" />
-    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterial_register.JPG" />
-    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterial_edit.JPG" />
-    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterial_delete.JPG" />
   </details>
   <details>
     <summary>Inbound[한소중]</summary>
