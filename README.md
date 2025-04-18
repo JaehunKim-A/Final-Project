@@ -69,22 +69,21 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 </details>
 <details>
   <summary>대시보드[구교진, 전유범]</summary>
-  <br><br>
+  <br>
   
-  <p> - 대시보드 : 사용자 친화적인 UX/UI 디자인</p>
+  <h3> - 대시보드 : 사용자 친화적인 UX/UI 디자인</h3>
   <br>
   <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/dashboard.JPG" />
   <br><br>
   
-  <p> - 사이드바 : 다크모드, 직관적인 디자인과 분류</p>
+  <h3> - 사이드바 : 다크모드, 직관적인 디자인과 분류</h3>
   <br>
   <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/dashboard_sidebar.JPG" />
-  <br><br>
+  <br>
   
-  <p> - 챗봇 : GEMINI를 활용한 웹페이지 도우미</p>
+  <h3> - 챗봇 : GEMINI를 활용한 웹페이지 도우미</h3>
   <br>
   <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/dashboard_chatbot.JPG" />
-  <br>
   <p> - 각 페이지 설명을 위한 프롬프트 작성, 페이지별 설명을 제외한 다른 설명 간략화</p>
 </details>
 <details>
