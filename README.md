@@ -60,7 +60,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   </tr>
 </table>
 
-## 주요기능
+## 주요 기능
 
 <details>
   <summary><b>로그인[구교진, 김재훈]</b></summary>
