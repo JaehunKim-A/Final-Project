@@ -15,7 +15,6 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 7.[아키텍처](#아키텍처)<br>
 8.[ERD](#ERD)
 
-
 ### 프로젝트 개요
 
 ### 개발기간
@@ -95,7 +94,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <summary><b>Raw Material[김재훈, 한소중]</b></summary>
   <br>
   <details>
-    <summary> └ Raw Materials[김재훈]</summary>
+    <summary> └ Raw Materials[김재훈]</summary>
     <br>
     <h3> - 원자재 관리 : 원자재에 대한 정보를 관리하는 페이지이다.</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterials.JPG" />
