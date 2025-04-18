@@ -61,14 +61,14 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 </table>
 <h3 id="main-functions">주요 기능</h3>
 <details>
-  <summary>로그인[구교진, 김재훈]</summary>
+  <summary><b>로그인[구교진, 김재훈]</b></summary>
   <br><br>
-  <p> - 로그인 페이지 : 로그인하지 않으면 다른 페이지 접근 불가, 특정 권한을 가진 ID만 등록, 수정, 삭제 불가 </p>
+  <h3> - 로그인 페이지 : 로그인하지 않으면 다른 페이지 접근 불가, 특정 권한을 가진 ID만 등록, 수정, 삭제 불가 </h3>
   <br>
   <img src ="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/login.JPG" />
 </details>
 <details>
-  <summary>대시보드[구교진, 전유범]</summary>
+  <summary><b>대시보드[구교진, 전유범]</b></summary>
   <br>
   
   <h3> - 대시보드 : 사용자 친화적인 UX/UI 디자인</h3>
@@ -87,7 +87,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <p> - 각 페이지 설명을 위한 프롬프트 작성, 페이지별 설명을 제외한 다른 설명 간략화</p>
 </details>
 <details>
-  <summary>Raw Material</summary>
+  <summary><b>Raw Material</b></summary>
   <details>
     <summary>Raw Materials</summary>
   </details>
