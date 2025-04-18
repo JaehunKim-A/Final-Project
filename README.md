@@ -100,8 +100,8 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
     <br>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterialStock.JPG" />
     <p> - 원자재 관리 페이지에서 등록시 현재 재고 0 으로 자동 등록</p>
-    <p> - 원자재 입고 페이지에서 Status가 Complete로 등록시 현재 재고에 + 되도록 DB에서 작동</p>
-    <p> - 원자재 출고 페이지에서 Status가 Complete로 등록시 현재 재고에 - 되도록 DB에서 작동</p>
+    <p> - 원자재 입고 페이지에서 Status가 Complete로 등록시 현재 재고에 + 되도록 DB에서 트리거 작동</p>
+    <p> - 원자재 출고 페이지에서 Status가 Complete로 등록시 현재 재고에 - 되도록 DB에서 트리거 작동</p>
   </details>
   <details>
     <summary>Inbound[한소중]</summary>
@@ -132,8 +132,8 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
     <h3> - 완제품 재고 : 재고에 대한 등록은 자동으로 등록, 수정, 삭제 기능 없이 DB정보만 보여준다.</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/finishedProductStock.JPG" />
     <p> - 완제품 관리 페이지에서 등록시 현재 재고 0 으로 자동 등록</p>
-    <p> - 완제품 입고 페이지에서 Status가 Complete로 등록시 현재 재고에 + 되도록 DB에서 작동</p>
-    <p> - 완제품 출고 페이지에서 Status가 Complete로 등록시 현재 재고에 - 되도록 DB에서 작동</p>
+    <p> - 완제품 입고 페이지에서 Status가 Complete로 등록시 현재 재고에 + 되도록 DB에서 트리거 작동</p>
+    <p> - 완제품 출고 페이지에서 Status가 Complete로 등록시 현재 재고에 - 되도록 DB에서 트리거 작동</p>
   </details>
   <details>
     <summary>Inbound[한소중]</summary>
