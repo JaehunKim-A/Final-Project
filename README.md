@@ -253,6 +253,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 
 ## 아키텍처
 <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/systemArchitecture.png" />
+
 ## ERD
 <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/final2410_ERD.png" />
 
