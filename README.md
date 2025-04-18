@@ -9,7 +9,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 3.[프로젝트 소개](#프로젝트-소개)<br>
 4.[개발환경 및 도구](#개발환경-및-도구)<br>
 5.[멤버](#멤버-구성)<br>
-6.[주요기능](#주요-기능)<br>
+6.[주요기능](#main-functions)<br>
 7.[아키텍처](#아키텍처)<br>
 8.[ERD](#ERD)
 <br><br>
@@ -32,7 +32,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 + DataBase: MariaDB
 + DevOps: Git, GitHub
 + Tools: ChatGPT, Claude
-### 멤버 구성
+<h3 id="main-functions">주요 기능</h3>
 <table>
   <tr>
     <td>이름</td>
