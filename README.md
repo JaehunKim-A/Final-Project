@@ -61,6 +61,10 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 </table>
 <h3 id="main-functions">주요 기능</h3>
 <details>
+  <summary>로그인[구교진, 김재훈]</summary>
+  ![로그인 기능 이미지](https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/login.JPG)
+</details>
+<details>
   <summary>메인페이지[구교진, 전유범]</summary>
 </details>
 <details>
