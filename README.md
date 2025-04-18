@@ -62,6 +62,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 <h3 id="main-functions">주요 기능</h3>
 <details>
   <summary>메인페이지[구교진, 전유범]</summary>
+  ![Image](https://github.com/user-attachments/assets/84405e28-e148-467d-86dd-248fd60dd9e1)
 </details>
 <details>
   <summary>Raw Material</summary>
