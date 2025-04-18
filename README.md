@@ -163,7 +163,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 	<h3> - 포장코드 관리 페이지 : 원자재와, 완제품에 사용되는 포장 유닛을 코드화 하여 관리하는 페이지</h3>
   <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/codeManagement.JPG" />
 	<p> - 각 코드에 맞는 정보를 입력해 더 편하게 원자재 및 완제품을 관리한다.</p>
-  <img src="" />
+  <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/codeManagement_reigster.JPG" />
 	<p> - 등록시 (P)Search 완제품에서 검색, (M)Search 원자재에서 검색 을 통해 다른 코드를 입력하는 실수를 방지한다.</p>
 </details>
 <details>
