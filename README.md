@@ -176,8 +176,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 	<p> - 테이블에 주소값이 있고, NCloud maps와 mapping되는 주소값인 경우 accordion에 주소 표시(geocode, dynamic map)</p>
  	<br><br>	  
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/CSVupload_download.JPG" />
-	<p> - CSV 업로드로 등록 또는 수정을 위한 샘플 CSV
-	<p>(신규는 @Id의 값 없이 등록하면 신규 등록 / 수정은 수정할 @Id의 값을 확인 후 입력하면 해당 row 값 수정)</p></p>
+	<p> - CSV 업로드로 등록 또는 수정을 위한 샘플 CSV(@Id의 값 없이 등록하면 신규 등록 / 수정할 @Id의 값을 확인 후 입력하면 해당 row 값 수정)</p>
 	<br><br>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customer_register.jpg" />
 	<p> - modal 통한 등록창</p>
