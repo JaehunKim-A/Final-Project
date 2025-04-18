@@ -90,7 +90,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <summary><b>Raw Material[김재훈, 한소중]</b></summary>
   <br>
   <details>
-    <summary>  └ Raw Materials[김재훈]</summary>
+    <summary> └ Raw Materials[김재훈]</summary>
     <br>
     <h3> - 원자재 관리 : 원자재에 대한 정보를 관리하는 페이지이다.</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterials.JPG" />
@@ -103,7 +103,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 	  <p> - 데이터를 삭제하는 기능</p>
   </details>
   <details>
-    <summary>  └ Stock[김재훈]</summary>
+    <summary> └ Stock[김재훈]</summary>
     <h3> - 원자재 재고 : 재고에 대한 등록은 자동으로 등록, 수정, 삭제 기능 없이 DB정보만 보여준다.</h3>
     <br>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterialStock.JPG" />
@@ -112,7 +112,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
     <p> - 원자재 출고 페이지에서 Status가 Complete로 등록시 현재 재고에 - 되도록 DB에서 트리거 작동</p>
   </details>
   <details>
-    <summary>  └ Inbound[한소중]</summary>
+    <summary> └ Inbound[한소중]</summary>
     <br>
     <h3> - 원자재입고 : MaterialId, SupplierId 와 연동하여 상호보완, CRUD 를 api 형식으로 구현하며,
       <br>수정/삭제 버튼은 로그인 시 관리자 ID에만 노출된다.</h3>
@@ -122,7 +122,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterialInbound_delete.JPG" />
   </details>
   <details>
-    <summary>  └ Outbound[한소중]</summary>
+    <summary> └ Outbound[한소중]</summary>
     <h3> - 원자재입고 : MaterialId, SupplierId 와 연동하여 상호보완, CRUD 를 api 형식으로 구현하며,
       <br>수정/삭제 버튼은 로그인 시 관리자 ID에만 노출된다.</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterialOutbound.JPG" />
@@ -132,13 +132,13 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <summary><b>Finished Product[김재훈, 한소중]</b></summary>
   <br>
   <details>
-    <summary>Finished Products[김재훈]</summary>
+    <summary> └ Finished Products[김재훈]</summary>
 	  <h3> - 완제품 관리 : 현재 만들어지는 제품에 대한 페이지</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/finishedProducts.JPG" />
 	  <p> - 원자재와 마찬가지로 현재 만들어지는 제품에 대한 관리와 등록, 수정, 삭제 기능 </p>
   </details>
   <details>
-    <summary>Stock[김재훈]</summary>
+    <summary> └ Stock[김재훈]</summary>
     <h3> - 완제품 재고 : 재고에 대한 등록은 자동으로 등록, 수정, 삭제 기능 없이 DB정보만 보여준다.</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/finishedProductStock.JPG" />
     <p> - 완제품 관리 페이지에서 등록시 현재 재고 0 으로 자동 등록</p>
@@ -146,13 +146,13 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
     <p> - 완제품 출고 페이지에서 Status가 Complete로 등록시 현재 재고에 - 되도록 DB에서 트리거 작동</p>
   </details>
   <details>
-    <summary>Inbound[한소중]</summary>
+    <summary> └ Inbound[한소중]</summary>
     <h3> - 완제품 입고 : ProductId, SupplierId 와 연동하여 상호보완, CRUD 를 api 형식으로 구현하며,
       <br>수정/삭제 버튼은 로그인 시 관리자 ID에만 노출된다.</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/finishedProductInbound.JPG" />
   </details>
   <details>
-    <summary>Outbound[한소중]</summary>
+    <summary> └ Outbound[한소중]</summary>
     <h3> - 완제품 입고 : ProductId, SupplierId 와 연동하여 상호보완, CRUD 를 api 형식으로 구현하며,
       <br>수정/삭제 버튼은 로그인 시 관리자 ID에만 노출된다.</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/finishedProductOutbound.JPG" />
@@ -182,7 +182,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <summary><b>Customer[정지연]</b></summary>
   <br>
   <details>
-    <summary>Customers</summary>
+    <summary> └ Customers</summary>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customers.JPG" />
 	<p> - 등록,업로드(CSV),다운로드(전체 엑셀, 전체 CSV, 검색결과 엑셀, 검색결과 CSV), 페이지 당 row(perPage), 기본 테이블, 컬럼명 클릭시 정렬</p>
 	<br><br>
@@ -208,7 +208,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 	<p> - 검색결과 다운로드의 경우 화면에 보이는 페이지로 검색되므로, 전체가 필요하면 perPage를 수정하여 다운로드</p>    
   </details>
   <details>
-    <summary>CustomerOrders</summary>
+    <summary> └ CustomerOrders</summary>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customerOrders.JPG" />
 	<p> - customer와 동일한 UI, UX의 customerOrders</p>	
   </details>
@@ -222,13 +222,13 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <summary><b>Factory(Machine)[전유범]<b></summary>
     <br>
   <details>
-    <summary>Info</summary>
+    <summary> └ Info</summary>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/factory_info.JPG" />
 	  <p> - canvas 태그를 사용하여 공장에 설치되어있는 machine을 타일형태로 배치 GUI형태로 정보를 전달함</p>
 	  <p> - Donut chart를 사용하여 목표생산량과 현재 생산량의 비율을 표시</p>
   </details>
   <details>
-    <summary>Chart</summary>
+    <summary> └ Chart</summary>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/factory_chart.JPG" />
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/factory_chart2.JPG" />
 	  <p> - apexchart를 사용하여 공장에 들어오는 각 정보들을 시각화하여 표시함.</p>
@@ -236,15 +236,16 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 	  <p> - 필요한 자료들만을 화면상에 한번에 보이게 할 수 있도록 최소화 기능 구현</p>
   </details>
   <details>
-    <summary>History</summary>
+    <summary> └ History</summary>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/factory_history.JPG" />
 	  <p> - 데이터의 규모가 커질 시 문제가 생기는 js 기반의 datatable 템플릿을 대체하기 위하여 일반 table을 사용하고 편의 검색, 정렬, 페이지네이션등의 기능을 따로 구현</p>
   </details>
+	<details>
+		<summary> └ Simulator[전유범]</summary>
+		<img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/C%23Program.png" />
+	</details>
 </details>
-<details>
-  <summary>Factory Simulator[전유범]</summary>
-  <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/C%23Program.png" />
-</details>
+
 
 ## 아키텍처
 ## ERD
