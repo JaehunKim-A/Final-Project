@@ -175,16 +175,16 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 	<p> - 테이블에 주소값이 있고, NCloud maps와 mapping되는 주소값인 경우 accordion에 주소 표시(geocode, dynamic map)</p>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/CSVupload_download.JPG" />
 	<p> - CSV 업로드로 등록 또는 수정을 위한 샘플 CSV</p>
-    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customer_register.JPG" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customer_register.jpg" />
 	<p> - modal 통한 등록창</p>
-    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customer_edit.JPG" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customer_edit.jpg" />
 	<p> - modal 통한 수정(해당 row 클릭시 확인되는 accordion에서 수정 가능)</p>
-    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customer_delete.JPG" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customer_delete.jpg" />
 	<p> - modal 통한 삭제(해당 row 클릭시 확인되는 accordion에서 삭제 가능)</p>
-    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customer_search.JPG" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customer_search.jpg" />
 	<p> - 각 컬럼당 검색 박스에 검색어 입력 후 Enter, 검색된 상태에서 다른 컬럼 검색 입력하면 AND 검색 가능
 </p>
-    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customer_search_excel.JPG" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customer_search_excel.jpg" />
 	<p> - 검색결과 다운로드의 경우 화면에 보이는 페이지로 검색되므로, 전체가 필요하면 perPage를 수정하여 다운로드</p>
     
   </details>
@@ -196,7 +196,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 </details>
 <details>
   <summary><b>Supplier[정지연]</b></summary>
-  <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/suppliers.JPG" />  
+  <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/supplier.jpg" />  
 	<p> - customer와 동일한 UI, UX의 rawMaterialSupplier</p>
 </details>
 <details>
