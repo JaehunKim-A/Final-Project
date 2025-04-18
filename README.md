@@ -14,9 +14,9 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 8.[ERD](#ERD)
 <br><br>
 ## 프로젝트 개요
-### 개발기간
+## 개발기간
 + 2025년 3월 24일 ~ 2025년 4월 16일
-### 프로젝트 소개
+## 프로젝트 소개
 + 스마트폰 제조 공정에서 사용하는 MVC 모델 설계
 + 프로젝트 일정 관리, GEMINI 사용을 통한 사용자 편의 개선, 차트 활용
 + 엑셀 및 CSV, txt 파일을 통한 업로드 및 다운로드
@@ -25,14 +25,14 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 + 데이터 정규화 과정을 통해 효율적인 데이터 관리
 + 유니버설 디자인으로 모든 사용자에게 친화적인 모델 만들기
 + AGILE 방법론을 통한 효율적인 프로젝트 일정관리
-### 개발환경 및 도구
+## 개발환경 및 도구
 + JAVA 11, C#
 + IDE: Intellij, Visual Studio
 + Framwork: SpringBoot(2.7.3)
 + DataBase: MariaDB
 + DevOps: Git, GitHub
 + Tools: ChatGPT, Claude, Copliot
-### 멤버 구성
+## 멤버 구성
 <table>
   <tr>
     <td>이름</td>
