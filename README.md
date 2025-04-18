@@ -87,10 +87,10 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <p> - 각 페이지 설명을 위한 프롬프트 작성, 페이지별 설명을 제외한 다른 설명 간략화</p>
 </details>
 <details>
-  <summary><b>Raw Material[김재훈, 한소중]</b></summary>
+  <summary>🔸 <b>Raw Material[김재훈, 한소중]</b></summary>
   <br>
   <details>
-    <summary>Raw Materials[김재훈]</summary>
+    <summary>  └ Raw Materials[김재훈]</summary>
     <br>
     <h3> - 원자재 관리 : 원자재에 대한 정보를 관리하는 페이지이다.</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterials.JPG" />
@@ -103,7 +103,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 	  <p> - 데이터를 삭제하는 기능</p>
   </details>
   <details>
-    <summary>Stock[김재훈]</summary>
+    <summary>  └ Stock[김재훈]</summary>
     <h3> - 원자재 재고 : 재고에 대한 등록은 자동으로 등록, 수정, 삭제 기능 없이 DB정보만 보여준다.</h3>
     <br>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterialStock.JPG" />
@@ -112,7 +112,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
     <p> - 원자재 출고 페이지에서 Status가 Complete로 등록시 현재 재고에 - 되도록 DB에서 트리거 작동</p>
   </details>
   <details>
-    <summary>Inbound[한소중]</summary>
+    <summary>  └ Inbound[한소중]</summary>
     <br>
     <h3> - 원자재입고 : MaterialId, SupplierId 와 연동하여 상호보완, CRUD 를 api 형식으로 구현하며,
       <br>수정/삭제 버튼은 로그인 시 관리자 ID에만 노출된다.</h3>
@@ -122,7 +122,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterialInbound_delete.JPG" />
   </details>
   <details>
-    <summary>Outbound[한소중]</summary>
+    <summary>  └ Outbound[한소중]</summary>
     <h3> - 원자재입고 : MaterialId, SupplierId 와 연동하여 상호보완, CRUD 를 api 형식으로 구현하며,
       <br>수정/삭제 버튼은 로그인 시 관리자 ID에만 노출된다.</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterialOutbound.JPG" />
