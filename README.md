@@ -66,6 +66,9 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 </details>
 <details>
   <summary>메인페이지[구교진, 전유범]</summary>
+  <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/dashboard.JPG" />
+  <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/dashboard_sidebar.JPG" />
+  <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/dashboard_chatbot.JPG" />
 </details>
 <details>
   <summary>Raw Material</summary>
