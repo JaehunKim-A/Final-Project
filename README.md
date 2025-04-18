@@ -84,7 +84,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <p> - 각 페이지 설명을 위한 프롬프트 작성, 페이지별 설명을 제외한 다른 설명 간략화</p>
 </details>
 <details>
-  <summary><b>Raw Material</b></summary>
+  <summary><b>Raw Material[김재훈, 한소중]</b></summary>
   <details>
     <summary>Raw Materials[김재훈]</summary>
   </details>
@@ -99,7 +99,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   </details>
 </details>
 <details>
-  <summary><b>Finished Product</b></summary>
+  <summary><b>Finished Product[김재훈, 한소중]</b></summary>
   <details>
     <summary>Finished Products[김재훈]</summary>
   </details>
@@ -117,12 +117,12 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <summary><b>Eployees[구교진]</b></summary>
 </details>
 <details>
-  <summary><b>Customer</b></summary>
+  <summary><b>Customer[정지연]</b></summary>
   <details>
-    <summary>Customers[정지연]</summary>
+    <summary>Customers</summary>
   </details>
   <details>
-    <summary>CustomerOrders[정지연]</summary>
+    <summary>CustomerOrders</summary>
   </details>
 </details>
 <details>
