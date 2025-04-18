@@ -79,6 +79,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/dashboard_sidebar.JPG" />
   <br>
   <h3> - 챗봇 : GEMINI API를 활용한 웹페이지 도우미</h3>
+  <p> - modal을 이용하여 구현하고 채팅내용이 길어지거나 화면상 내용을 참고하기 위하여 모달 이동기능을 구현</p>
   <br>
   <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/dashboard_chatbot.JPG" />
   <p> - 각 페이지 설명을 위한 프롬프트 작성, 페이지별 설명을 제외한 다른 설명 간략화</p>
@@ -210,17 +211,20 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <details>
     <summary>Info</summary>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/factory_info.JPG" />
+	  <p> - canvas 태그를 사용하여 공장에 설치되어있는 machine을 타일형태로 배치 GUI형태로 정보를 전달함</p>
+	  <p> - Donut chart를 사용하여 목표생산량과 현재 생산량의 비율을 표시</p>
   </details>
   <details>
     <summary>Chart</summary>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/factory_chart.JPG" />
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/factory_chart2.JPG" />
+	  <p> - apexchart를 사용하여 공장에 들어오는 각 정보들을 시각화하여 표시함.</p>
+	  <p> - 적절한 데이터 시각화를 위해 Line chart, Bar chart, Scatter chart, Donut chart, Heatmap chart등을 사용함.</p>
+	  <p> - 필요한 자료들만을 화면상에 한번에 보이게 할 수 있도록 최소화 기능 구현</p>
   </details>
   <details>
     <summary>History</summary>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/factory_history.JPG" />
+	  <p> - 데이터의 규모가 커질 시 문제가 생기는 js 기반의 datatable 템플릿을 대체하기 위하여 일반 table을 사용하고 편의 검색, 정렬, 페이지네이션등의 기능을 따로 구현</p>
   </details>
 </details>
-### 아키텍처
-### ERD
-+ <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/final2410_ERD.png" />
