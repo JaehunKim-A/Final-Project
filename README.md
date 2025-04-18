@@ -228,3 +228,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 	  <p> - 데이터의 규모가 커질 시 문제가 생기는 js 기반의 datatable 템플릿을 대체하기 위하여 일반 table을 사용하고 편의 검색, 정렬, 페이지네이션등의 기능을 따로 구현</p>
   </details>
 </details>
+<detail>
+  <summary>Factory Simulator</summary>
+  <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/C#Program.png" />
+</detail>
