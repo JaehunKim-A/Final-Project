@@ -229,6 +229,6 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   </details>
 </details>
 <details>
-  <summary>Factory Simulator</summary>
+  <summary>Factory Simulator[전유범]</summary>
   <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/C%23Program.png" />
 </details>
