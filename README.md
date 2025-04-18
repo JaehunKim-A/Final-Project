@@ -172,7 +172,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 	<p> - 등록시 (P)Search 완제품에서 검색, (M)Search 원자재에서 검색 을 통해 다른 코드를 입력하는 실수를 방지한다.</p>
 </details>
 <details>
-  <summary><b>Eployees[구교진]</b></summary>
+  <summary><b>Employees[구교진]</b></summary>
   <br>
   <h3> - 사원관리 : 검색기능, CRUD, 전체 엑셀,CSV 및 검색별 엑셀, CSV 다운로드 기능</h3>
   <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/employees.JPG" />
