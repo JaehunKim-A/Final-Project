@@ -138,10 +138,15 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 </details>
 <details>
   <summary><b>Eployees[구교진]</b></summary>
-  <img scr="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/employees.JPG" />
-  <img scr="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/employee_register.JPG" />
-  <img scr="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/employee_edit.JPG" />
-  <img scr="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/employee_delete.JPG" />
+  <br>
+  <h3> - 사원관리 : 검색기능, CRUD, 전체 엑셀,CSV 및 검색별 엑셀, CSV 다운로드 기능</h3>
+  <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/employees.JPG" />
+  <h3> - 등록 : 등록시 로그인 아이디, 비밀번호 자동생성[+김재훈]</h3>
+  <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/employee_register.JPG" />
+  <h3> - 수정 : 각 컬럼별 수정, 퇴사시 퇴사 날짜 업데이트</h3>
+  <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/employee_edit.JPG" />
+  <h3> - 삭제 : 삭제 시 정보 및 로그인 기능 삭제</h3>
+  <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/employee_delete.JPG" />
 </details>
 <details>
   <summary><b>Customer[정지연]</b></summary>
