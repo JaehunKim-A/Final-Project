@@ -80,7 +80,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <br>
   <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/dashboard_sidebar.JPG" />
   <br>
-  <h3> - 챗봇 : GEMINI API를 활용한 웹페이지 도우미</h3>
+  <h3> - 챗봇 : GEMINI API를 활용한 웹페이지 도우미[전유범]</h3>
   <p> - modal을 이용하여 구현하고 채팅내용이 길어지거나 화면상 내용을 참고하기 위하여 모달 이동기능을 구현</p>
   <br>
   <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/dashboard_chatbot.JPG" />
