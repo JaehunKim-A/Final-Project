@@ -232,3 +232,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <summary>Factory Simulator[전유범]</summary>
   <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/C%23Program.png" />
 </details>
+
+## 아키텍처
+## ERD
+<img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/final2410_ERD.png" />
