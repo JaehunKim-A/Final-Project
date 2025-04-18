@@ -85,6 +85,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 </details>
 <details>
   <summary><b>Raw Material[김재훈, 한소중]</b></summary>
+  <br>
   <details>
     <summary>Raw Materials[김재훈]</summary>
   </details>
@@ -100,6 +101,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 </details>
 <details>
   <summary><b>Finished Product[김재훈, 한소중]</b></summary>
+  <br>
   <details>
     <summary>Finished Products[김재훈]</summary>
   </details>
@@ -118,6 +120,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 </details>
 <details>
   <summary><b>Customer[정지연]</b></summary>
+  <br>
   <details>
     <summary>Customers</summary>
   </details>
@@ -130,6 +133,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 </details>
 <details>
   <summary><b>Factory[전유범]<b></summary>
+    <br>
   <details>
     <summary>Machine</summary>
   </details>
