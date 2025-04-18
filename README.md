@@ -102,7 +102,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <details>
     <summary>Inbound[한소중]</summary>
     <br>
-    <h3> - 입고 : MaterialId, SupplierId 와 연동하여 상호보완, CRUD 를 api 형식으로 구현하며,
+    <h3> - 원자재입고 : MaterialId, SupplierId 와 연동하여 상호보완, CRUD 를 api 형식으로 구현하며,
       <br>수정/삭제 버튼은 로그인 시 관리자 ID에만 노출된다.</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterialInbound.JPG" />
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterialInbound_register.JPG" />
@@ -111,6 +111,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   </details>
   <details>
     <summary>Outbound[한소중]</summary>
+    <h3> - 원자재 출고 : 입고와 같은 기능이다.</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterialOutbound.JPG" />
   </details>
 </details>
@@ -127,11 +128,12 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   </details>
   <details>
     <summary>Inbound[한소중]</summary>
+    <h3> - 완제품 입고 : 원자재 입고와 같은 기능이다.</h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/finishedProductInbound.JPG" />
   </details>
   <details>
     <summary>Outbound[한소중]</summary>
-    <h3> - </h3>
+    <h3> - 완제품 출고 : 원자재 입고와 같은 기능이다.</h3> </h3>
     <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/finishedProductOutbound.JPG" />
   </details>
 </details>
