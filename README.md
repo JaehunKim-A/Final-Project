@@ -89,7 +89,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <details>
     <summary>Raw Materials[김재훈]</summary>
     <br>
-    <img src="ttps://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterials.JPG" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/rawMaterials.JPG" />
   </details>
   <details>
     <summary>Stock[김재훈]</summary>
@@ -134,7 +134,7 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
 </details>
 <details>
   <summary><b>CodeManagement[김재훈]</b></summary>
-  <img src="" />
+  <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/codeManagement.JPG" />
 </details>
 <details>
   <summary><b>Eployees[구교진]</b></summary>
@@ -148,36 +148,39 @@ ___파이널 프로젝트의 완성본을 올려두는 main branch 입니다.___
   <br>
   <details>
     <summary>Customers</summary>
-    <img src="" />
-    <img src="" />
-    <img src="" />
-    <img src="" />
-    <img src="" />
-    <img src="" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customers.JPG" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customer_api.JPG" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/CSVupload_download.JPG" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customer_register.JPG" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customer_edit.JPG" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customer_delete.JPG" />
   </details>
   <details>
     <summary>CustomerOrders</summary>
-    <img src="" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/customerOrders.JPG" />
   </details>
 </details>
 <details>
   <summary><b>Supplier[정지연]</b></summary>
-  <img src="" />
+  <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/suppliers.JPG" />
+  <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/supplier_register.JPG" />
+  <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/supplier_edit.JPG" />
+  <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/supplier_delete.JPG" />
 </details>
 <details>
-  <summary><b>Factory[전유범]<b></summary>
+  <summary><b>Factory(Machine)[전유범]<b></summary>
     <br>
   <details>
-    <summary>Machine</summary>
-    <img src="" />
+    <summary>Info</summary>
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/factory_info.JPG" />
   </details>
   <details>
     <summary>Chart</summary>
-    <img src="" />
-    <img src="" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/factory_chart.JPG" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/factory_chart2.JPG" />
   </details>
   <details>
     <summary>History</summary>
-    <img src="" />
+    <img src="https://github.com/JaehunKim-A/Final-Project/raw/main/finalProject_img/factory_history.JPG" />
   </details>
 </details>
